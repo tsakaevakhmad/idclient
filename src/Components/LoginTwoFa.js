@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Services from "../Services/AuthorizationServices";
 
 export default function LoginTwoFa() {
   const navigate = useNavigate();
@@ -15,13 +16,9 @@ export default function LoginTwoFa() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post(
-        "https://localhost:7253/api/Authorization/LoginTwoFa",
-        { identifier },
-        { headers: { "Content-Type": "application/json-patch+json" } }
-      );
+      const response = await Services.loginTwoFaAsync(identifier)
       console.log("Success:", response.data);
-      const { id } = response.data; // Предположим, что API возвращает объект с полем id
+      const { id } = response.data;
       navigate(`/LoginTwoFaVerify/${id}`);
     } catch (err) {
       setError("Ошибка авторизации. Попробуйте снова.");

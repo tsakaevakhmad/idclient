@@ -4,23 +4,22 @@ import { Button } from "@mui/material";
 import { Card, CardContent, CardHeader} from "@mui/material";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { loginTwoFaVerifyAsync } from '../Services/AuthorizationServices'
 
 export default function LoginTwoFaVerify() {
   const { id }= useParams();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   const handleVerify = async () => {
+
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post(
-        "https://localhost:7253/api/Authorization/VerifyLoginTwoFa",
-        { id, code },
-        { headers: { "Content-Type": "application/json-patch+json" }, withCredentials: true }
-      );
+      const response = await loginTwoFaVerifyAsync(id, code)
       console.log("Success:", response.data);
+      navigate("/");
     } catch (err) {
       setError("Ошибка при подтверждении. Попробуйте снова.");
       console.error(err);
