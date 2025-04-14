@@ -1,48 +1,56 @@
-import { Button } from "@mui/material";
-import { Card, CardContent, CardHeader } from "@mui/material";
-import { useNavigate, useParams } from 'react-router-dom';
+import { Button, ButtonGroup } from "@mui/material";
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import LoginTwoFa from "./LoginTwoFa";
 import { Base64UrlDecode } from "../Services/Helper";
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
+
 
 export default function Login() {
     const navigate = useNavigate();
-    const query = useQuery();
-    let params = query.get("params");
+
+    const cookies = document.cookie.split("; ");
+    const hasAuthCookie = cookies.some((cookie) =>
+        cookie.startsWith(".AspNetCore.Identity.Application=")
+    );
+
+    const [isAuth, setIsAuth] = useState(!!hasAuthCookie);
+    const [queryParams] = useSearchParams()
+    let params = queryParams.get("params");
     if (!params)
         params = localStorage.getItem("params");
 
     useEffect(() => {
-        const cookies = document.cookie.split("; ");
-        const hasAuthCookie = cookies.some((cookie) =>
-            cookie.startsWith(".AspNetCore.Identity.Application=")
-        );
-        if (hasAuthCookie && params) {
+        if (isAuth && params) {
             localStorage.removeItem("params");
             window.location.href = `${process.env.REACT_APP_BASE_URI}/connect/authorize/?${Base64UrlDecode(params)}`;
         }
-        else if (params) {
+        else if (params && !isAuth) {
             localStorage.setItem("params", params);
         }
-        else if (hasAuthCookie) {
+        else if (isAuth && !params) {
             navigate("/Profile");
         }
-    }, [navigate, params]);
+    }, [isAuth, params, navigate]);
 
 
     return (
-        <Card className="w-96 mx-auto mt-10 p-4 shadow-lg">
-            <CardHeader>
-                <Button>2FA Login</Button>
-            </CardHeader>
-            <CardContent>
-                <LoginTwoFa />
-            </CardContent>
-        </Card>
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="flex flex-col items-center gap-4 w-full">
+                <h1 className="text-2xl font-bold">ID</h1>
+
+                <div className="flex flex-col items-center gap-4 w-full max-w-md">
+                    <ButtonGroup variant="contained" aria-label="Basic button group">
+                        <Button>2FA</Button>
+                        <Button>PassKey</Button>
+                        <Button>QR</Button>
+                    </ButtonGroup>
+
+                    <div className="mt-5 w-full">
+                        <LoginTwoFa setIsAuth={setIsAuth} />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
