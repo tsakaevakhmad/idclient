@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "@mui/material";
 import { Button } from "@mui/material";
 import { Card, CardContent, CardHeader} from "@mui/material";
-import { loginTwoFaVerifyAsync } from '../Services/AuthorizationServices'
+import { loginTwoFaVerifyAsync } from '../../Services/AuthorizationServices'
 
 export default function LoginTwoFaVerify({id, onSuccess}) {
   //const { id }= useParams();

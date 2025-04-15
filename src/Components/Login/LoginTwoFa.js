@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "@mui/material";
 import { Button } from "@mui/material";
 import { Card, CardContent, CardHeader } from "@mui/material";
-import Services from "../Services/AuthorizationServices";
+import Services from "../../Services/AuthorizationServices";
 import LoginTwoFaVerify from "./LoginTwoFaVerify";
 
 export default function LoginTwoFa({setIsAuth}) {

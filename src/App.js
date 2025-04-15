@@ -1,7 +1,7 @@
 import './App.css';
-import LoginTwoFa from './Components/LoginTwoFa';
+import LoginTwoFa from './Components/Login/LoginTwoFa';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './Components/Login';
+import Login from './Components/Login/Login';
 import Profile from './Components/Profile';
 
 function App() {

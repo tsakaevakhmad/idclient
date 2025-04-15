@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from "@mui/material";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import LoginTwoFa from "./LoginTwoFa";
-import { Base64UrlDecode } from "../Services/Helper";
+import { Base64UrlDecode } from "../../Services/Helper";
 import { useEffect, useState } from "react";
 
 

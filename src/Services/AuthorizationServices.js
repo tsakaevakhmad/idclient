@@ -19,8 +19,8 @@ export async function loginTwoFaVerifyAsync(id, code){
         return await axios.post(
             `${process.env.REACT_APP_BASE_URI}/api/Authorization/VerifyLoginTwoFa`,
             { id, code },
-            { headers: { "Content-Type": "application/json-patch+json" }, withCredentials: true
-        });
+            { headers: { "Content-Type": "application/json-patch+json" }, withCredentials: true }
+        );
     }
     catch(error){
         console.error(error)
