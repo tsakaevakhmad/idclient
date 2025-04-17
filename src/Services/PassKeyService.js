@@ -13,11 +13,11 @@ export async function registerPasskey() {
         );
 
         const publicKey = await optionsResponse.data;
-        
+
         // Преобразовать из base64url в нужные форматы
-         publicKey.challenge = base64UrlToUint8Array(publicKey.challenge);
-         publicKey.user.id = base64UrlToUint8Array(publicKey.user.id);
-         const algMap = {
+        publicKey.challenge = base64UrlToUint8Array(publicKey.challenge);
+        publicKey.user.id = base64UrlToUint8Array(publicKey.user.id);
+        const algMap = {
             ES256: -7,
             RS256: -257,
             PS256: -37,
@@ -28,58 +28,89 @@ export async function registerPasskey() {
             RS512: -259,
             PS512: -39,
             EdDSA: -8
-          };
-          publicKey.pubKeyCredParams = publicKey.pubKeyCredParams.map(param => ({
+        };
+        publicKey.pubKeyCredParams = publicKey.pubKeyCredParams.map(param => ({
             type: param.type,
             alg: algMap[param.alg] || param.alg // Оставляем оригинал, если алгоритм неизвестен
-          }));
-        
+        }));
+
         for (const exCred of publicKey.excludeCredentials) {
             exCred.id = base64UrlToUint8Array(exCred.id);
         }
 
-        if(publicKey.authenticatorSelection.authenticatorAttachment === null)
+        if (publicKey.authenticatorSelection.authenticatorAttachment === null)
             publicKey.authenticatorSelection.authenticatorAttachment = undefined;
 
         const credential = await navigator.credentials.create({
             publicKey
         });
-        
-        const attestationResponse = {
-            id: credential.id, // The unique ID for the credential
-            rawId: Array.from(new Uint8Array(credential.rawId)), // Convert rawId to an array of bytes
-            type: credential.type, // The type of credential (usually "public-key")
-            response: {
-                attestationObject: Array.from(new Uint8Array(credential.response.attestationObject)), // Convert attestation object to an array of bytes
-                clientDataJSON: Array.from(new Uint8Array(credential.response.clientDataJSON)) // Convert client data JSON to an array of bytes
-            }
-        };
 
-        console.log(credential);
-        console.log(JSON.stringify(attestationResponse));
-        
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishRegistration`,
+        await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishRegistration`,
             credential,
             {
                 headers: { "Content-Type": "application/json" },
             });
-
-        const result = await response;
-        alert(result.status === 'ok' ? 'Passkey registered successfully!' : 'Registration failed.');
     } catch (error) {
         console.error('Passkey registration error:', error);
         alert('Something went wrong.');
     }
 };
 
-function base64url_encode(buffer){
+
+export async function LoginPasskey(identifire) {
+    try {
+        const optionsResponse = await axios.post(
+            `${process.env.REACT_APP_BASE_URI}/api/passkey/BeginLogin`,
+            { identifire },
+            {
+                headers: { "Content-Type": "application/json-patch+json" },
+                withCredentials: true
+            }
+        );
+
+        const options = optionsResponse.data;
+        console.log("Options:", options);
+
+        options.challenge = Uint8Array.from(atob(options.challenge), c => c.charCodeAt(0));
+        if (options.allowCredentials) {
+            options.allowCredentials = options.allowCredentials.map(cred => {
+                const mapped = {
+                    ...cred,
+                    id: Uint8Array.from(atob(cred.id), c => c.charCodeAt(0))
+                };
+                if (!Array.isArray(mapped.transports)) {
+                    delete mapped.transports;
+                }
+                return mapped;
+            });
+        }
+        console.log("2: Options:", options);
+
+        const credential = await navigator.credentials.get({ publicKey: options });
+
+        console.log("3: Credential:", credential);
+        await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishLogin`,
+            credential,
+            {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true
+            });
+
+    } catch (error) {
+        console.error('Passkey login error:', error);
+        alert('Something went wrong.');
+    }
+};
+
+
+function base64url_encode(buffer) {
     return btoa(Array.from(new Uint8Array(buffer), b => String.fromCharCode(b)).join(''))
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=+$/, '');
 }
 
-function base64url_decode(value){
+function base64url_decode(value) {
     const m = value.length % 4;
     return Uint8Array.from(atob(
         value.replace(/-/g, '+')

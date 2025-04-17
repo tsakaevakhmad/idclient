@@ -3,19 +3,20 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import LoginTwoFa from "./LoginTwoFa";
 import { Base64UrlDecode } from "../../Services/Helper";
 import { useEffect, useState } from "react";
+import PassKeyLogin from "./PassKeyLogin";
 
 
 
 export default function Login() {
     const navigate = useNavigate();
-
+    let loginComponent;
+    const [queryParams] = useSearchParams()
+    const [authMethod, setAuthMethod] = useState("2FA");
     const cookies = document.cookie.split("; ");
     const hasAuthCookie = cookies.some((cookie) =>
         cookie.startsWith(".AspNetCore.Identity.Application=")
     );
-
     const [isAuth, setIsAuth] = useState(!!hasAuthCookie);
-    const [queryParams] = useSearchParams()
     let params = queryParams.get("params");
     if (!params)
         params = localStorage.getItem("params");
@@ -31,8 +32,18 @@ export default function Login() {
         else if (isAuth && !params) {
             navigate("/Profile");
         }
-    }, [isAuth, params, navigate]);
+    }, [isAuth, params, navigate, setIsAuth]);
 
+    switch (authMethod) {
+
+        case 'PassKey':
+            console.log("PassKey");
+
+            loginComponent = <PassKeyLogin setIsAuth={setIsAuth} />;
+            break;
+        default:
+            loginComponent = <LoginTwoFa setIsAuth={setIsAuth} />;
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen">
@@ -41,13 +52,13 @@ export default function Login() {
 
                 <div className="flex flex-col items-center gap-4 w-full max-w-md">
                     <ButtonGroup variant="contained" aria-label="Basic button group">
-                        <Button>2FA</Button>
-                        <Button>PassKey</Button>
-                        <Button>QR</Button>
+                        <Button onClick={() => setAuthMethod("2FA")}>2FA</Button>
+                        <Button onClick={() => setAuthMethod("PassKey")}>PassKey</Button>
+                        <Button onClick={() => setAuthMethod("QR")}>QR</Button>
                     </ButtonGroup>
 
                     <div className="mt-5 w-full">
-                        <LoginTwoFa setIsAuth={setIsAuth} />
+                        {loginComponent}
                     </div>
                 </div>
             </div>
