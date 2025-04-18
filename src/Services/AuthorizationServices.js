@@ -28,6 +28,19 @@ export async function loginTwoFaVerifyAsync(id, code){
     }
 }
 
+export async function lsAuthorized(){
+    try{
+        return await axios.get(
+            `${process.env.REACT_APP_BASE_URI}/api/Authorization/IsAuthorized`,
+            { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        );
+    }
+    catch(error){
+        console.error(error)
+        throw error
+    }
+}
+
 const AuthorizationServices = {
     loginTwoFaAsync,
     loginTwoFaVerifyAsync

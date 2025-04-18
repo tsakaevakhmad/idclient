@@ -4,13 +4,11 @@ import { Button } from "@mui/material";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { LoginPasskey } from "../../Services/PassKeyService";
 
-export default function PassKeyLogin({setIsAuth}) {
+export default function PassKeyLogin({ setIsAuth }) {
   const [identifier, setIdentifier] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [verify, setVerify] = useState(false);
-  const [id, setId] = useState(null);
-  
+
   const handleVerifySuccess = () => {
     setIsAuth(true);
   };
@@ -19,10 +17,12 @@ export default function PassKeyLogin({setIsAuth}) {
     setLoading(true);
     setError(null);
     try {
-      const response = await LoginPasskey(identifier)
-      console.log("Success:", response.data);
-      setId(response.data.id);
-      setVerify(true);
+      const response = await LoginPasskey(identifier);
+      console.log(response);
+
+      if (response.status === 200) {
+        handleVerifySuccess(true);
+      }
     } catch (err) {
       setError("Ошибка авторизации. Попробуйте снова.");
       console.error(err);
@@ -38,7 +38,7 @@ export default function PassKeyLogin({setIsAuth}) {
       </CardHeader>
       <CardContent>
         <Input
-        className="w-full"
+          className="w-full"
           type="text"
           placeholder="Введите номер телефона или почту"
           value={identifier}

@@ -2,10 +2,9 @@ import axios, { all } from "axios";
 
 export async function registerPasskey() {
     try {
-        // 1. Получить options с сервера
         const optionsResponse = await axios.post(
             `${process.env.REACT_APP_BASE_URI}/api/passkey/BeginRegistration`,
-            null, // тело запроса (если нужно — вставь сюда userId и username)
+            null,
             {
                 headers: { "Content-Type": "application/json-patch+json" },
                 withCredentials: true
@@ -14,7 +13,6 @@ export async function registerPasskey() {
 
         const publicKey = await optionsResponse.data;
 
-        // Преобразовать из base64url в нужные форматы
         publicKey.challenge = base64UrlToUint8Array(publicKey.challenge);
         publicKey.user.id = base64UrlToUint8Array(publicKey.user.id);
         const algMap = {
@@ -84,40 +82,20 @@ export async function LoginPasskey(identifire) {
                 return mapped;
             });
         }
-        console.log("2: Options:", options);
-
         const credential = await navigator.credentials.get({ publicKey: options });
 
-        console.log("3: Credential:", credential);
-        await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishLogin`,
+        const result = await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishLogin`,
             credential,
             {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true
             });
-
+        return result;
     } catch (error) {
         console.error('Passkey login error:', error);
         alert('Something went wrong.');
     }
 };
-
-
-function base64url_encode(buffer) {
-    return btoa(Array.from(new Uint8Array(buffer), b => String.fromCharCode(b)).join(''))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
-}
-
-function base64url_decode(value) {
-    const m = value.length % 4;
-    return Uint8Array.from(atob(
-        value.replace(/-/g, '+')
-            .replace(/_/g, '/')
-            .padEnd(value.length + (m === 0 ? 0 : 4 - m), '=')
-    ), c => c.charCodeAt(0)).buffer
-}
 
 function base64UrlToUint8Array(base64Url) {
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

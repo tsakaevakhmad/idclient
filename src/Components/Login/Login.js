@@ -4,6 +4,7 @@ import LoginTwoFa from "./LoginTwoFa";
 import { Base64UrlDecode } from "../../Services/Helper";
 import { useEffect, useState } from "react";
 import PassKeyLogin from "./PassKeyLogin";
+import { lsAuthorized } from "../../Services/AuthorizationServices";
 
 
 
@@ -12,16 +13,19 @@ export default function Login() {
     let loginComponent;
     const [queryParams] = useSearchParams()
     const [authMethod, setAuthMethod] = useState("2FA");
-    const cookies = document.cookie.split("; ");
-    const hasAuthCookie = cookies.some((cookie) =>
-        cookie.startsWith(".AspNetCore.Identity.Application=")
-    );
-    const [isAuth, setIsAuth] = useState(!!hasAuthCookie);
+    const [isAuth, setIsAuth] = useState(false);
+    
+
     let params = queryParams.get("params");
     if (!params)
         params = localStorage.getItem("params");
 
     useEffect(() => {
+        (async () => {
+            const result = await lsAuthorized();
+            if (result.data.status === "Success")
+                setIsAuth(true);
+        })();
         if (isAuth && params) {
             localStorage.removeItem("params");
             window.location.href = `${process.env.REACT_APP_BASE_URI}/connect/authorize/?${Base64UrlDecode(params)}`;
@@ -35,10 +39,7 @@ export default function Login() {
     }, [isAuth, params, navigate, setIsAuth]);
 
     switch (authMethod) {
-
         case 'PassKey':
-            console.log("PassKey");
-
             loginComponent = <PassKeyLogin setIsAuth={setIsAuth} />;
             break;
         default:
