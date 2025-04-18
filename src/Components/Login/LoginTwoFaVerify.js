@@ -19,7 +19,7 @@ export default function LoginTwoFaVerify({id, onSuccess}) {
         onSuccess()
       }
     } catch (err) {
-      setError("Ошибка при подтверждении. Попробуйте снова.");
+      setError("Error during verification. Please try again.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -31,17 +31,25 @@ export default function LoginTwoFaVerify({id, onSuccess}) {
       <CardHeader>
         <h1>Verify</h1>
       </CardHeader>
-      <CardContent className="flex flex-col items-center">
+      <CardContent className="flex flex-col items-center ">
         <Input
+          className="w-full mb-5 text-center"
           type="text"
-          placeholder="Введите код"
+          placeholder="Enter code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className="mb-4"
+          sx={{
+            input: {
+              textAlign: 'center',
+              '&::placeholder': {
+                textAlign: 'center',
+              },
+            },
+          }}
         />
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
         <Button onClick={handleVerify} disabled={loading} >
-          {loading ? "Загрузка..." : "Подтвердить"}
+          {loading ?  "Loading..." : "Login"}
         </Button>
       </CardContent>
     </Card>

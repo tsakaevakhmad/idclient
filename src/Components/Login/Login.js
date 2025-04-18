@@ -14,7 +14,7 @@ export default function Login() {
     const [queryParams] = useSearchParams()
     const [authMethod, setAuthMethod] = useState("2FA");
     const [isAuth, setIsAuth] = useState(false);
-    
+
 
     let params = queryParams.get("params");
     if (!params)
@@ -52,12 +52,27 @@ export default function Login() {
                 <h1 className="text-2xl font-bold">ID</h1>
 
                 <div className="flex flex-col items-center gap-4 w-full max-w-md">
-                    <ButtonGroup variant="contained" aria-label="Basic button group">
-                        <Button onClick={() => setAuthMethod("2FA")}>2FA</Button>
-                        <Button onClick={() => setAuthMethod("PassKey")}>PassKey</Button>
-                        <Button onClick={() => setAuthMethod("QR")}>QR</Button>
+                    <ButtonGroup>
+                        <Button
+                            variant={authMethod === "2FA" ? "contained" : "outlined"}
+                            onClick={() => setAuthMethod("2FA")}
+                        >
+                            2FA
+                        </Button>
+                        <Button
+                            variant={authMethod === "PassKey" ? "contained" : "outlined"}
+                            onClick={() => setAuthMethod("PassKey")}
+                        >
+                            PassKey
+                        </Button>
+                        <Button
+                            variant={authMethod === "QR" ? "contained" : "outlined"}
+                            onClick={() => setAuthMethod("QR")}
+                            disabled={true} // Disable QR option for now
+                        >
+                            QR
+                        </Button>
                     </ButtonGroup>
-
                     <div className="mt-5 w-full">
                         {loginComponent}
                     </div>

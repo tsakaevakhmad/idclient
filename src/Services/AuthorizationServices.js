@@ -37,7 +37,6 @@ export async function lsAuthorized(){
     }
     catch(error){
         console.error(error)
-        throw error
     }
 }
 

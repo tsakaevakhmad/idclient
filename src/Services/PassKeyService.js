@@ -50,7 +50,6 @@ export async function registerPasskey() {
             });
     } catch (error) {
         console.error('Passkey registration error:', error);
-        alert('Something went wrong.');
     }
 };
 
@@ -93,7 +92,6 @@ export async function LoginPasskey(identifire) {
         return result;
     } catch (error) {
         console.error('Passkey login error:', error);
-        alert('Something went wrong.');
     }
 };
 

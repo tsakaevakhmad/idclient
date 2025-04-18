@@ -24,7 +24,7 @@ export default function PassKeyLogin({ setIsAuth }) {
         handleVerifySuccess(true);
       }
     } catch (err) {
-      setError("Ошибка авторизации. Попробуйте снова.");
+      setError("Authorization error. Please try again.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -36,17 +36,25 @@ export default function PassKeyLogin({ setIsAuth }) {
       <CardHeader>
         <h1>PassKey</h1>
       </CardHeader>
-      <CardContent>
-        <Input
-          className="w-full"
-          type="text"
-          placeholder="Введите номер телефона или почту"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-        />
+      <CardContent className="flex flex-col items-center ">
+      <Input
+            className="w-full mb-5 text-center"
+            type="text"
+            placeholder="Enter Phone number or Email"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            sx={{
+              input: {
+                textAlign: 'center',
+                '&::placeholder': {
+                  textAlign: 'center',
+                },
+              },
+            }}
+          />
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <Button style={{ marginTop: "20px" }} onClick={handleLogin} disabled={loading}>
-          {loading ? "Загрузка..." : "Начать"}
+        <Button onClick={handleLogin} disabled={loading}>
+          {loading ? "Loading..." : "Login"}
         </Button>
       </CardContent>
     </Card>
