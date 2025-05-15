@@ -54,11 +54,11 @@ export async function registerPasskey() {
 };
 
 
-export async function LoginPasskey(identifire) {
+export async function LoginPasskey() {
     try {
         const optionsResponse = await axios.post(
             `${process.env.REACT_APP_BASE_URI}/api/passkey/BeginLogin`,
-            { identifire },
+            {},
             {
                 headers: { "Content-Type": "application/json-patch+json" },
                 withCredentials: true

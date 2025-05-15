@@ -5,6 +5,7 @@ import { Base64UrlDecode } from "../../Services/Helper";
 import { useEffect, useState } from "react";
 import PassKeyLogin from "./PassKeyLogin";
 import { lsAuthorized } from "../../Services/AuthorizationServices";
+import { LoginPasskey } from "../../Services/PassKeyService";
 
 
 
@@ -45,7 +46,17 @@ export default function Login() {
         default:
             loginComponent = <LoginTwoFa setIsAuth={setIsAuth} />;
     }
+    const handlePKLogin = async () => {
+        try {
+        const response = await LoginPasskey();
 
+        if (response.status === 200) {
+            setIsAuth(true);
+        }
+        } catch (err) {
+            console.error(err);
+        }
+    };
     return (
         <div className="flex items-center justify-center min-h-screen">
             <div className="flex flex-col items-center gap-4 w-full">
@@ -61,7 +72,7 @@ export default function Login() {
                         </Button>
                         <Button
                             variant={authMethod === "PassKey" ? "contained" : "outlined"}
-                            onClick={() => setAuthMethod("PassKey")}
+                            onClick={handlePKLogin}
                         >
                             PassKey
                         </Button>

@@ -37,7 +37,7 @@ export default function PassKeyLogin({ setIsAuth }) {
         <h1>PassKey</h1>
       </CardHeader>
       <CardContent className="flex flex-col items-center ">
-      <Input
+      {/* <Input
             className="w-full mb-5 text-center"
             type="text"
             placeholder="Enter Phone number or Email"
@@ -52,7 +52,7 @@ export default function PassKeyLogin({ setIsAuth }) {
               },
             }}
           />
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} */}
         <Button onClick={handleLogin} disabled={loading}>
           {loading ? "Loading..." : "Login"}
         </Button>
