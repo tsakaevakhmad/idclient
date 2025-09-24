@@ -13,7 +13,7 @@ export default function Login() {
     const [queryParams] = useSearchParams()
     const [authMethod, setAuthMethod] = useState("2FA");
     const [isAuth, setIsAuth] = useState(false);
-    const [providers, setProviders] = useState([]); // список провайдеров
+    const [providers, setProviders] = useState([]); // список провайдеров`
 
     let params = window.location.search.slice(1); // убираем '?'
     if (!params) {
