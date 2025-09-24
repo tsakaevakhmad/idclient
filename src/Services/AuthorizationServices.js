@@ -40,9 +40,29 @@ export async function lsAuthorized(){
     }
 }
 
+export async function getExternalProviders(params) { 
+    try {
+        console.log(params);
+        const queryParams = params ? { queryParams: params } : {};
+        return await axios.get(
+            `${process.env.REACT_APP_BASE_URI}/api/Authorization/GetProvidersLink`,
+            { 
+                headers: { "Content-Type": "application/json" }, 
+                withCredentials: true,
+                params: queryParams // сюда axios автоматически сериализует query string
+            }
+        );
+    } catch (error) {
+        console.error("Ошибка при получении провайдеров:", error);
+        throw error; 
+    }
+}
+
 const AuthorizationServices = {
     loginTwoFaAsync,
-    loginTwoFaVerifyAsync
+    loginTwoFaVerifyAsync,
+    getExternalProviders,
+    lsAuthorized
   };
 
 export default AuthorizationServices
