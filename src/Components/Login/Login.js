@@ -10,19 +10,11 @@ import { LoginPasskey } from "../../Services/PassKeyService";
 export default function Login() {
     const navigate = useNavigate();
     let loginComponent;
-    const [queryParams] = useSearchParams()
     const [authMethod, setAuthMethod] = useState("2FA");
     const [isAuth, setIsAuth] = useState(false);
     const [providers, setProviders] = useState([]); // список провайдеров`
 
     let params = window.location.search.slice(1); // убираем '?'
-    if (!params) {
-        // если в URL пусто, берём из localStorage
-        params = localStorage.getItem("params") || "";
-    } else {
-        // если есть параметры в URL — сохраняем в localStorage на будущее
-        localStorage.setItem("params", params);
-    }
 
     useEffect(() => {
         (async () => {
@@ -31,16 +23,14 @@ export default function Login() {
         })();
 
         if (isAuth && params) {
+            console.log(localStorage.getItem("params"));
             localStorage.removeItem("params");
             window.location.href = `${process.env.REACT_APP_BASE_URI}/connect/authorize/?${params}`;
-        }
-        else if (params && !isAuth) {
-            localStorage.setItem("params", params);
         }
         else if (isAuth && !params) {
             navigate("/Profile");
         }
-    }, [isAuth, params, navigate, setIsAuth]);
+    }, [isAuth, navigate, setIsAuth]);
 
     switch (authMethod) {
         case 'PassKey':
