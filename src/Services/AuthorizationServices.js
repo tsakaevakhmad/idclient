@@ -3,7 +3,7 @@ import axios, { all } from "axios";
 export async function loginTwoFaAsync(identifier){
     try{
         return await axios.post(
-            `${process.env.REACT_APP_BASE_URI}/api/Authorization/LoginTwoFa`,
+            `/api/Authorization/LoginTwoFa`,
             { identifier },
             { headers: { "Content-Type": "application/json" } 
         });
@@ -17,7 +17,7 @@ export async function loginTwoFaAsync(identifier){
 export async function loginTwoFaVerifyAsync(id, code){
     try{
         return await axios.post(
-            `${process.env.REACT_APP_BASE_URI}/api/Authorization/VerifyLoginTwoFa`,
+            `/api/Authorization/VerifyLoginTwoFa`,
             { id, code },
             { headers: { "Content-Type": "application/json" }, withCredentials: true }
         );
@@ -31,7 +31,7 @@ export async function loginTwoFaVerifyAsync(id, code){
 export async function lsAuthorized(){
     try{
         return await axios.get(
-            `${process.env.REACT_APP_BASE_URI}/api/Authorization/IsAuthorized`,
+            `/api/Authorization/IsAuthorized`,
             { headers: { "Content-Type": "application/json" }, withCredentials: true }
         );
     }
@@ -45,7 +45,7 @@ export async function getExternalProviders(params) {
         console.log(params);
         const queryParams = params ? { queryParams: params } : {};
         return await axios.get(
-            `${process.env.REACT_APP_BASE_URI}/api/Authorization/GetProvidersLink`,
+            `/api/Authorization/GetProvidersLink`,
             { 
                 headers: { "Content-Type": "application/json" }, 
                 withCredentials: true,

@@ -3,7 +3,7 @@ import axios, { all } from "axios";
 export async function registerPasskey() {
     try {
         const optionsResponse = await axios.post(
-            `${process.env.REACT_APP_BASE_URI}/api/passkey/BeginRegistration`,
+            `/api/passkey/BeginRegistration`,
             null,
             {
                 headers: { "Content-Type": "application/json-patch+json" },
@@ -43,7 +43,7 @@ export async function registerPasskey() {
             publicKey
         });
 
-        await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishRegistration`,
+        await axios.post(`/api/passkey/FinishRegistration`,
             credential,
             {
                 headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ export async function registerPasskey() {
 export async function LoginPasskey() {
     try {
         const optionsResponse = await axios.post(
-            `${process.env.REACT_APP_BASE_URI}/api/passkey/BeginLogin`,
+            `/api/passkey/BeginLogin`,
             {},
             {
                 headers: { "Content-Type": "application/json-patch+json" },
@@ -83,7 +83,7 @@ export async function LoginPasskey() {
         }
         const credential = await navigator.credentials.get({ publicKey: options });
 
-        const result = await axios.post(`${process.env.REACT_APP_BASE_URI}/api/passkey/FinishLogin`,
+        const result = await axios.post(`/api/passkey/FinishLogin`,
             credential,
             {
                 headers: { "Content-Type": "application/json" },
