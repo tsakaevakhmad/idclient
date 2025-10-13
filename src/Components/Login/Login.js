@@ -1,11 +1,11 @@
 import { Button, ButtonGroup } from "@mui/material";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import LoginTwoFa from "./LoginTwoFa";
-import { Base64UrlDecode } from "../../Services/Helper";
 import { useEffect, useState } from "react";
 import PassKeyLogin from "./PassKeyLogin";
 import { lsAuthorized, getExternalProviders } from "../../Services/AuthorizationServices";
 import { LoginPasskey } from "../../Services/PassKeyService";
+import QrLogin from "./QrLogin";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -35,6 +35,9 @@ export default function Login() {
     switch (authMethod) {
         case 'PassKey':
             loginComponent = <PassKeyLogin setIsAuth={setIsAuth} />;
+            break;
+        case 'QR':
+            loginComponent = <QrLogin setIsAuth={setIsAuth} />;
             break;
         default:
             loginComponent = <LoginTwoFa setIsAuth={setIsAuth} />;
@@ -97,7 +100,7 @@ export default function Login() {
                         <Button
                             variant={authMethod === "QR" ? "contained" : "outlined"}
                             onClick={() => setAuthMethod("QR")}
-                            disabled={true} // пока выключено
+                            //disabled={true} // пока выключено
                         >
                             QR
                         </Button>
