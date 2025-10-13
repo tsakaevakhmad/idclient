@@ -40,6 +40,19 @@ export async function lsAuthorized(){
     }
 }
 
+export async function logOut(){
+    try{
+        console.log("Logging out...");
+        return await axios.get(
+            `/api/Authorization/LogOut`,
+            { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        );
+    }
+    catch(error){
+        console.error(error)
+    }
+}
+
 export async function getExternalProviders(params) { 
     try {
         console.log(params);
@@ -62,7 +75,8 @@ const AuthorizationServices = {
     loginTwoFaAsync,
     loginTwoFaVerifyAsync,
     getExternalProviders,
-    lsAuthorized
+    lsAuthorized,
+    logOut
   };
 
 export default AuthorizationServices
