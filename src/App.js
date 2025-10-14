@@ -3,6 +3,7 @@ import LoginTwoFa from './Components/Login/LoginTwoFa';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Components/Login/Login';
 import Profile from './Components/Profile';
+import Registration from './Components/Login/Registration';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/LoginTwoFa" element={<LoginTwoFa />} />
         <Route path="/" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/registration" element={<Registration />} />
       </Routes>
     </BrowserRouter>
   );

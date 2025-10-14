@@ -27,19 +27,45 @@ export default function LoginTwoFa({ setIsAuth }) {
     setError("");
     try {
       const response = await Services.loginTwoFaAsync(identifier);
-      if (response.data.status === "SendedLoginCodeToEmail") {
-        console.log("Success:", response.data);
-        setId(response.data.id);
-        setVerify(true)
-      }
-      if (response.data.status === "SendedLoginCodeToPhoneNumber") {
-        console.log("Success:", response.data);
-        setId(response.data.id);
-        setVerify(true)
-      }
-      if (response.data.status === "UserNotFound") {
-        setError("Пользователь не найден. Проверьте введённые данные.");
-        setVerify(false);
+
+      switch (response.data.status) {
+        case "SendedLoginCodeToEmail":
+        case "SendedLoginCodeToPhoneNumber":
+          setId(response.data.id);
+          setVerify(true);
+          break;
+
+        case "UserNotFound":
+          setError("Пользователь не найден. Проверьте введённые данные.");
+          break;
+
+        case "UserMailNotConfirmed":
+          setError("Ваша почта не подтверждена. Проверьте email для подтверждения.");
+          break;
+
+        case "UserPhoneNotConfirmed":
+          setError("Ваш номер телефона не подтверждён. Подтвердите номер перед входом.");
+          break;
+
+        case "UserAlreadyExists":
+          setError("Пользователь уже существует. Попробуйте войти.");
+          break;
+
+        case "UserMailAlreadyExists":
+          setError("Аккаунт с такой почтой уже существует.");
+          break;
+
+        case "UserPhoneAlreadyExists":
+          setError("Аккаунт с таким номером телефона уже существует.");
+          break;
+
+        case "InvalidToken":
+          setError("Недействительный токен. Повторите попытку входа.");
+          break;
+
+        default:
+          setError("Произошла неизвестная ошибка. Попробуйте ещё раз.");
+          break;
       }
     } catch (err) {
       console.error(err);

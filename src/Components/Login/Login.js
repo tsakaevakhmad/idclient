@@ -1,12 +1,13 @@
 import { Button, ButtonGroup, Card, CardContent, Typography } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginTwoFa from "./LoginTwoFa";
 import { useEffect, useState } from "react";
 import PassKeyLogin from "./PassKeyLogin";
 import { lsAuthorized, getExternalProviders } from "../../Services/AuthorizationServices";
 import { LoginPasskey } from "../../Services/PassKeyService";
 import QrLogin from "./QrLogin";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import Registration from "./Registration";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -121,8 +122,21 @@ export default function Login() {
                     </ButtonGroup>
 
                     {/* Выбранный метод аутентификации */}
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="w-full mt-4"
+                        >
+                            {loginComponent}
+                        </motion.div>
+                    </AnimatePresence>
+
                     <div className="w-full mt-4">
-                        {loginComponent}
+                        <Link to="/registration" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: '500', textAlign: 'end', display: 'block' }}>
+                            Регистрация
+                        </Link>
                     </div>
 
                     {/* Внешние провайдеры */}

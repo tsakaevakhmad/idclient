@@ -14,6 +14,21 @@ export async function loginTwoFaAsync(identifier){
     }
 }
 
+export async function RegisterAsync(data){
+    try{
+        console.log("Registering user with data:", data);
+        return await axios.post(
+            `/api/Authorization/Register`,
+            data,
+            { headers: { "Content-Type": "application/json" } 
+        });
+    }
+    catch(error){
+        console.error(error)
+        throw error
+    }
+}
+
 export async function loginTwoFaVerifyAsync(id, code){
     try{
         return await axios.post(
