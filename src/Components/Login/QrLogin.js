@@ -9,6 +9,7 @@ import {
     Typography,
     CircularProgress,
 } from "@mui/material";
+import { motion } from "framer-motion";
 
 export default function QrLogin({ setIsAuth }) {
     const [sessionId, setSessionId] = useState(null);
@@ -85,58 +86,64 @@ export default function QrLogin({ setIsAuth }) {
     }, []);
 
     return (
-        <Card
-            sx={{
-                maxWidth: 400,
-                mx: "auto",
-                mt: 8,
-                p: 2,
-                borderRadius: 3,
-                boxShadow: 4,
-                textAlign: "center",
-            }}
+        <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
         >
-            <CardHeader
-                title={
-                    <Typography variant="h6" align="center">
-                        Вход по QR-коду
-                    </Typography>
-                }
-            />
-
-            <CardContent
+            <Card
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 2,
+                    maxWidth: 400,
+                    mx: "auto",
+                    mt: 8,
+                    p: 2,
+                    borderRadius: 3,
+                    boxShadow: 4,
+                    textAlign: "center",
                 }}
             >
-                {loading ? (
-                    <CircularProgress />
-                ) : sessionId ? (
-                    <>
-                        <QRCode
-                            value={sessionId}
-                            size={200}
-                            style={{ borderRadius: "8px" }}
-                            fgColor="#007bff" // синий
-                            bgColor="transparent"
-                        />
-                        <Typography variant="body2" color="text.secondary">
-                            {status}
+                <CardHeader
+                    title={
+                        <Typography variant="h6" align="center">
+                            Вход по QR-коду
                         </Typography>
-                    </>
-                ) : (
-                    <Typography color="text.secondary">{status}</Typography>
-                )}
+                    }
+                />
 
-                {token && (
-                    <Typography variant="body2" sx={{ mt: 2 }}>
-                        Проверка данных...
-                    </Typography>
-                )}
-            </CardContent>
-        </Card>
+                <CardContent
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 2,
+                    }}
+                >
+                    {loading ? (
+                        <CircularProgress />
+                    ) : sessionId ? (
+                        <>
+                            <QRCode
+                                value={sessionId}
+                                size={200}
+                                style={{ borderRadius: "8px" }}
+                                fgColor="#007bff" // синий
+                                bgColor="transparent"
+                            />
+                            <Typography variant="body2" color="text.secondary">
+                                {status}
+                            </Typography>
+                        </>
+                    ) : (
+                        <Typography color="text.secondary">{status}</Typography>
+                    )}
+
+                    {token && (
+                        <Typography variant="body2" sx={{ mt: 2 }}>
+                            Проверка данных...
+                        </Typography>
+                    )}
+                </CardContent>
+            </Card>
+        </motion.div>
     );
 }

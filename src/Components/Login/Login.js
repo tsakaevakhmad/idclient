@@ -127,33 +127,40 @@ export default function Login() {
 
                     {/* Внешние провайдеры */}
                     {providers.length > 0 && (
-                        <div className="w-full mt-6">
-                            <Typography
-                                variant="subtitle1"
-                                align="center"
-                                color="text.secondary"
-                                gutterBottom
-                            >
-                                Войти через
-                            </Typography>
-                            <div className="flex flex-col gap-3">
-                                {providers.map((p) => (
-                                    <Button
-                                        key={p.name}
-                                        variant="outlined"
-                                        fullWidth
-                                        onClick={() => (window.location.href = p.url)}
-                                        sx={{
-                                            borderRadius: '10px',
-                                            textTransform: 'none',
-                                            fontWeight: 600,
-                                        }}
-                                    >
-                                        {p.displayName ?? p.name}
-                                    </Button>
-                                ))}
+                        <motion.div
+                            initial={{ opacity: 0, y: -30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1 }}
+                            className="w-full mt-6"
+                        >
+                            <div >
+                                <Typography
+                                    variant="subtitle1"
+                                    align="center"
+                                    color="text.secondary"
+                                    gutterBottom
+                                >
+                                    Войти через
+                                </Typography>
+                                <div className="flex flex-col gap-3">
+                                    {providers.map((p) => (
+                                        <Button
+                                            key={p.name}
+                                            variant="outlined"
+                                            fullWidth
+                                            onClick={() => (window.location.href = p.url)}
+                                            sx={{
+                                                borderRadius: '10px',
+                                                textTransform: 'none',
+                                                fontWeight: 600,
+                                            }}
+                                        >
+                                            {p.displayName ?? p.name}
+                                        </Button>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
                 </CardContent>
             </Card>
