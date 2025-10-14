@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 export default function QrLogin({ setIsAuth }) {
     const [sessionId, setSessionId] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [logining, setLogining] = useState(false);
     const [token, setToken] = useState(null);
     const [status, setStatus] = useState("Подключение к серверу...");
 
@@ -54,6 +55,7 @@ export default function QrLogin({ setIsAuth }) {
             if (!token) return;
 
             try {
+                setLogining(true);
                 const response = await axios.post(
                     `/api/Authorization/QrSignIn`,
                     {},
@@ -71,6 +73,7 @@ export default function QrLogin({ setIsAuth }) {
                     handleVerifySuccess();
                 } else {
                     setStatus("Ошибка авторизации. Попробуйте снова.");
+                    setLogining(false);
                 }
             } catch (err) {
                 console.error("Ошибка входа через QR:", err);
@@ -122,13 +125,15 @@ export default function QrLogin({ setIsAuth }) {
                         <CircularProgress />
                     ) : sessionId ? (
                         <>
-                            <QRCode
-                                value={sessionId}
-                                size={200}
-                                style={{ borderRadius: "8px" }}
-                                fgColor="#007bff" // синий
-                                bgColor="transparent"
-                            />
+                            {
+                                logining ? <CircularProgress size={200} fgColor="#007bff" /> : <QRCode
+                                    value={sessionId}
+                                    size={200}
+                                    style={{ borderRadius: "8px" }}
+                                    fgColor="#007bff"
+                                    bgColor="transparent"
+                                />
+                            }
                             <Typography variant="body2" color="text.secondary">
                                 {status}
                             </Typography>
