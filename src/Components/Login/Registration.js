@@ -50,8 +50,7 @@ export default function Registration({ setIsAuth }) {
     try {
       const response = await RegisterAsync(registerData);
       switch (response.data.status) {
-        case "SendedLoginCodeToEmail":
-        case "SendedLoginCodeToPhoneNumber":
+        case "SendedMailConfirmationCode":
           navigate("/");
           break;
 

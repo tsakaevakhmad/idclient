@@ -4,7 +4,9 @@ import UserManagerServices from '../Services/UserManagerServices';
 import { useNavigate } from 'react-router-dom';
 import { logOut } from '../Services/AuthorizationServices';
 import { motion, AnimatePresence } from 'framer-motion';
+import OtpInput from "react-otp-input";
 import { CheckCircle, Cancel } from '@mui/icons-material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from '@mui/material';
 
 const Profile = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -12,6 +14,9 @@ const Profile = () => {
     const [error, setError] = useState(null);
     const [registering, setRegistering] = useState(false);
     const [hovered, setHovered] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [loadingPhone, setLoadingPhone] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,7 +34,7 @@ const Profile = () => {
         };
 
         fetchUserInfo();
-    }, [navigate]);
+    }, [navigate, open]);
 
     const handleLogOut = async () => {
         try {
@@ -37,6 +42,27 @@ const Profile = () => {
             navigate('/');
         } catch (error) {
             console.error("Error logging out:", error);
+        }
+    };
+
+    const handlePhoneConfirmation = async () => {
+        try {
+            await UserManagerServices.sendPhoneConfirmationCode();
+            setOpen(true);
+        } catch (error) {
+            console.error("Error sending phone confirmation code:", error);
+        }
+    };
+
+    const handleVerifyPhoneConfirmation = async () => {
+        try {
+            setLoadingPhone(true);
+            await UserManagerServices.verifiPhoneConfirmationCode(otp); // <-- свой метод в API
+            setOpen(false);
+        } catch (error) {
+            console.error("Verification failed:", error);
+        } finally {
+            setLoadingPhone(false);
         }
     };
 
@@ -71,6 +97,39 @@ const Profile = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
+            <Dialog open={open} onClose={() => setOpen(false)}>
+                <DialogTitle>Введите код подтверждения</DialogTitle>
+                <DialogContent>
+                    <OtpInput
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        inputType="tel"
+                        shouldAutoFocus
+                        renderSeparator={<span style={{ width: "8px" }}></span>}
+                        renderInput={(props) => (
+                            <input
+                                {...props}
+                                style={{
+                                    width: "40px",
+                                    height: "50px",
+                                    fontSize: "20px",
+                                    borderRadius: "8px",
+                                    border: "1px solid #ccc",
+                                    textAlign: "center",
+                                }}
+                            />
+                        )}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpen(false)}>Отмена</Button>
+                    <Button onClick={handleVerifyPhoneConfirmation} variant="contained" color="primary" disabled={loadingPhone || otp.length !== 6}>
+                        {loadingPhone ? <CircularProgress size={24} /> : "Подтвердить"}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -142,6 +201,19 @@ const Profile = () => {
                 <div className="border-t border-gray-200 my-6"></div>
 
                 <div className="space-y-4">
+                    {!userInfo?.phoneNumberConfirmed && (
+                        <motion.button
+                            whileTap={{ scale: 0.97 }}
+                            onClick={handlePhoneConfirmation}
+                            disabled={registering}
+                            className={`w-full py-3 rounded-xl text-white font-medium transition ${registering
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-blue-600 hover:bg-blue-700'
+                                }`}
+                        >
+                            {loading ? <CircularProgress size={24} /> : "Подтвердить"}
+                        </motion.button>
+                    )}
                     <motion.button
                         whileTap={{ scale: 0.97 }}
                         onClick={handleRegisterPasskey}
