@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { IconButton, Menu, MenuItem, Box, Typography, Tooltip } from '@mui/material';
 import {
   Palette as PaletteIcon,
-  WbSunny as LightIcon,
+  Park as EcoIcon,
   WaterDrop as OceanIcon,
   DarkMode as DarkIcon,
   NightsStay as MidnightIcon,
@@ -15,7 +15,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { ThemeName } from '../../types/theme';
 
 const themeIcons: Record<ThemeName, React.ReactElement> = {
-  lightGlass: <LightIcon />,
+  warmRustic: <EcoIcon />,
   oceanGlass: <OceanIcon />,
   darkGlass: <DarkIcon />,
   midnightGlass: <MidnightIcon />,
@@ -24,7 +24,7 @@ const themeIcons: Record<ThemeName, React.ReactElement> = {
 };
 
 const themeColors: Record<ThemeName, { primary: string; secondary: string }> = {
-  lightGlass: { primary: '#6366f1', secondary: '#8b5cf6' },
+  warmRustic: { primary: '#805A3B', secondary: '#FD974F' },
   oceanGlass: { primary: '#06b6d4', secondary: '#0ea5e9' },
   darkGlass: { primary: '#a78bfa', secondary: '#c084fc' },
   midnightGlass: { primary: '#60a5fa', secondary: '#3b82f6' },
@@ -125,7 +125,7 @@ export const ThemeSwitcher: React.FC = () => {
 
             <Box sx={{ flex: 1 }}>
               <Typography variant="body2" fontWeight={themeName === themeKey ? 600 : 400}>
-                {themeKey === 'lightGlass' && 'Light Glass'}
+                {themeKey === 'warmRustic' && 'Warm Rustic'}
                 {themeKey === 'oceanGlass' && 'Ocean Glass'}
                 {themeKey === 'darkGlass' && 'Dark Glass'}
                 {themeKey === 'midnightGlass' && 'Midnight Glass'}

@@ -6,29 +6,30 @@ export const oceanGlassConfig: GlassTheme = {
   displayName: 'Ocean Glass',
   mode: 'light',
   colors: {
-    primary: '#06b6d4',
+    primary: '#217074',
     secondary: '#0ea5e9',
     accent: '#3b82f6',
     background: {
       main: '#e0f2fe',
-      gradient: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
+      gradient: 'linear-gradient(135deg, #0ea5e9 0%, #217074 100%)',
     },
     glass: {
-      background: 'rgba(224, 242, 254, 0.15)',
-      border: 'rgba(255, 255, 255, 0.4)',
+      background: 'rgba(14, 165, 233, 0.15)',
+      border: 'rgba(14, 165, 233, 0.1)',
       shadow: 'rgba(14, 165, 233, 0.15)',
       blur: '12px',
     },
     text: {
-      primary: '#0c4a6e',
-      secondary: '#0369a1',
+      primary: '#FFFFFF',
+      secondary: '#FFFFFF',
       disabled: '#94a3b8',
     },
   },
   gradients: {
-    background: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
+    background:
+      'linear-gradient(135deg, rgba(224, 242, 254, 0.9) 0%, rgba(224, 242, 254, 0.15) 100%)',
     card: 'linear-gradient(135deg, rgba(224, 242, 254, 0.25) 0%, rgba(224, 242, 254, 0.15) 100%)',
-    button: 'linear-gradient(135deg, #06b6d4 0%, #0ea5e9 100%)',
+    button: 'linear-gradient(135deg, #217074 0%, #0ea5e9 100%)',
   },
 };
 

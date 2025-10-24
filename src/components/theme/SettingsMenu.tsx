@@ -15,7 +15,7 @@ import {
   Settings as SettingsIcon,
   Palette as PaletteIcon,
   Language as LanguageIcon,
-  Eco as EcoIcon,
+  Park as EcoIcon,
   WaterDrop as OceanIcon,
   DarkMode as DarkIcon,
   NightsStay as MidnightIcon,

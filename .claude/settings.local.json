@@ -4,7 +4,8 @@
       "Bash(npm install:*)",
       "Bash(npx husky init)",
       "Bash(npm run build:*)",
-      "Bash(taskkill //F //PID 19020)"
+      "Bash(taskkill //F //PID 19020)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
