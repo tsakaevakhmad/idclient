@@ -1,0 +1,87 @@
+{
+  "common": {
+    "settings": "Жөндөөлөр",
+    "theme": "Тема",
+    "language": "Тил",
+    "close": "Жабуу"
+  },
+  "themes": {
+    "lightGlass": "Ачык айнек",
+    "oceanGlass": "Океан",
+    "darkGlass": "Караңгы айнек",
+    "midnightGlass": "Түн ортосу",
+    "classicLight": "Классикалык ачык",
+    "classicDark": "Классикалык караңгы"
+  },
+  "languages": {
+    "en": "Англисче",
+    "ru": "Орусча",
+    "kg": "Кыргызча"
+  },
+  "auth": {
+    "login": {
+      "title": "Кош келиңиз",
+      "subtitle": "Аутентификация ыкмасын тандаңыз",
+      "methods": {
+        "2fa": "2FA",
+        "passkey": "PassKey",
+        "qr": "QR"
+      },
+      "noAccount": "Аккаунтуңуз жокпу? Катталуу",
+      "orContinueWith": "же улантуу"
+    },
+    "registration": {
+      "title": "Аккаунт түзүү",
+      "subtitle": "Баштоо үчүн катталыңыз",
+      "hasAccount": "Аккаунтуңуз барбы? Кирүү"
+    },
+    "twoFa": {
+      "title": "Эки факторлуу аутентификация",
+      "username": "Колдонуучу аты",
+      "password": "Сырсөз",
+      "loginButton": "Кирүү",
+      "enterCredentials": "Маалыматтарыңызды киргизиңиз"
+    },
+    "twoFaVerify": {
+      "title": "Тастыктоо кодун киргизиңиз",
+      "code": "6 саннуу код",
+      "verifyButton": "Тастыктоо",
+      "resendCode": "Кодду кайра жөнөтүү",
+      "codeResent": "Код кайра жөнөтүлдү"
+    },
+    "qr": {
+      "title": "QR код аркылуу кирүү",
+      "subtitle": "Мобилдик тиркеме менен QR кодду скандаңыз",
+      "waiting": "Скандоону күтүүдө...",
+      "refresh": "QR кодду жаңыртуу"
+    },
+    "profile": {
+      "title": "Профиль",
+      "userInfo": "Колдонуучу жөнүндө маалымат",
+      "security": "Коопсуздук",
+      "logout": "Чыгуу",
+      "username": "Колдонуучу аты",
+      "email": "Электрондук почта",
+      "twoFaStatus": "Эки факторлуу аутентификация",
+      "enabled": "Күйгүзүлгөн",
+      "disabled": "Өчүрүлгөн",
+      "passkeyStatus": "PassKey",
+      "registered": "Катталган",
+      "notRegistered": "Катталган эмес",
+      "registerPasskey": "PassKey каттоо",
+      "deletePasskey": "PassKey өчүрүү"
+    }
+  },
+  "errors": {
+    "invalidCredentials": "Туура эмес колдонуучу аты же сырсөз",
+    "invalidCode": "Туура эмес тастыктоо коду",
+    "networkError": "Тармак катасы. Кайра аракет кылыңыз",
+    "unknownError": "Белгисиз ката пайда болду"
+  },
+  "success": {
+    "loginSuccess": "Ийгиликтүү кирдиңиз",
+    "registrationSuccess": "Ийгиликтүү катталдыңыз",
+    "passkeyRegistered": "PassKey ийгиликтүү катталды",
+    "passkeyDeleted": "PassKey ийгиликтүү өчүрүлдү"
+  }
+}

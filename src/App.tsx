@@ -4,9 +4,10 @@ import { AuthProvider } from './contexts/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary, LoadingSpinner } from './components/common';
-import { ThemeSwitcher } from './components/theme/ThemeSwitcher';
+import { SettingsMenu } from './components/theme/SettingsMenu';
 import { PageTransition } from './components/animations';
 import { ROUTES } from './constants';
+import './i18n/config'; // Initialize i18n
 import './App.css';
 
 // Lazy load route components (using new glassmorphism designs)
@@ -22,7 +23,7 @@ const AppRoutes: React.FC = () => {
 
   return (
     <>
-      <ThemeSwitcher />
+      <SettingsMenu />
       <Suspense fallback={<LoadingSpinner message="Loading..." />}>
         <PageTransition>
           <Routes location={location} key={location.pathname}>

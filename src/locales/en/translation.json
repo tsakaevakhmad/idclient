@@ -1,0 +1,87 @@
+{
+  "common": {
+    "settings": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "close": "Close"
+  },
+  "themes": {
+    "lightGlass": "Light Glass",
+    "oceanGlass": "Ocean Glass",
+    "darkGlass": "Dark Glass",
+    "midnightGlass": "Midnight Glass",
+    "classicLight": "Classic Light",
+    "classicDark": "Classic Dark"
+  },
+  "languages": {
+    "en": "English",
+    "ru": "Russian",
+    "kg": "Kyrgyz"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Choose your authentication method",
+      "methods": {
+        "2fa": "2FA",
+        "passkey": "PassKey",
+        "qr": "QR"
+      },
+      "noAccount": "Don't have an account? Register",
+      "orContinueWith": "Or continue with"
+    },
+    "registration": {
+      "title": "Create Account",
+      "subtitle": "Sign up to get started",
+      "hasAccount": "Already have an account? Login"
+    },
+    "twoFa": {
+      "title": "Two-Factor Authentication",
+      "username": "Username",
+      "password": "Password",
+      "loginButton": "Login",
+      "enterCredentials": "Enter your credentials"
+    },
+    "twoFaVerify": {
+      "title": "Enter Verification Code",
+      "code": "6-digit code",
+      "verifyButton": "Verify",
+      "resendCode": "Resend Code",
+      "codeResent": "Code has been resent"
+    },
+    "qr": {
+      "title": "QR Code Login",
+      "subtitle": "Scan this QR code with your mobile app",
+      "waiting": "Waiting for scan...",
+      "refresh": "Refresh QR Code"
+    },
+    "profile": {
+      "title": "Profile",
+      "userInfo": "User Information",
+      "security": "Security",
+      "logout": "Logout",
+      "username": "Username",
+      "email": "Email",
+      "twoFaStatus": "Two-Factor Authentication",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "passkeyStatus": "PassKey",
+      "registered": "Registered",
+      "notRegistered": "Not Registered",
+      "registerPasskey": "Register PassKey",
+      "deletePasskey": "Delete PassKey"
+    }
+  },
+  "errors": {
+    "invalidCredentials": "Invalid username or password",
+    "invalidCode": "Invalid verification code",
+    "networkError": "Network error. Please try again",
+    "unknownError": "An unknown error occurred"
+  },
+  "success": {
+    "loginSuccess": "Successfully logged in",
+    "registrationSuccess": "Successfully registered",
+    "passkeyRegistered": "PassKey successfully registered",
+    "passkeyDeleted": "PassKey successfully deleted"
+  }
+}

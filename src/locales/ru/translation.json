@@ -1,0 +1,87 @@
+{
+  "common": {
+    "settings": "Настройки",
+    "theme": "Тема",
+    "language": "Язык",
+    "close": "Закрыть"
+  },
+  "themes": {
+    "lightGlass": "Светлое стекло",
+    "oceanGlass": "Океан",
+    "darkGlass": "Темное стекло",
+    "midnightGlass": "Полночь",
+    "classicLight": "Классическая светлая",
+    "classicDark": "Классическая темная"
+  },
+  "languages": {
+    "en": "Английский",
+    "ru": "Русский",
+    "kg": "Кыргызский"
+  },
+  "auth": {
+    "login": {
+      "title": "Добро пожаловать",
+      "subtitle": "Выберите метод аутентификации",
+      "methods": {
+        "2fa": "2FA",
+        "passkey": "PassKey",
+        "qr": "QR"
+      },
+      "noAccount": "Нет аккаунта? Зарегистрироваться",
+      "orContinueWith": "Или продолжить с"
+    },
+    "registration": {
+      "title": "Создать аккаунт",
+      "subtitle": "Зарегистрируйтесь, чтобы начать",
+      "hasAccount": "Уже есть аккаунт? Войти"
+    },
+    "twoFa": {
+      "title": "Двухфакторная аутентификация",
+      "username": "Имя пользователя",
+      "password": "Пароль",
+      "loginButton": "Войти",
+      "enterCredentials": "Введите ваши данные"
+    },
+    "twoFaVerify": {
+      "title": "Введите код подтверждения",
+      "code": "6-значный код",
+      "verifyButton": "Подтвердить",
+      "resendCode": "Отправить код повторно",
+      "codeResent": "Код отправлен повторно"
+    },
+    "qr": {
+      "title": "Вход по QR-коду",
+      "subtitle": "Отсканируйте QR-код мобильным приложением",
+      "waiting": "Ожидание сканирования...",
+      "refresh": "Обновить QR-код"
+    },
+    "profile": {
+      "title": "Профиль",
+      "userInfo": "Информация о пользователе",
+      "security": "Безопасность",
+      "logout": "Выйти",
+      "username": "Имя пользователя",
+      "email": "Электронная почта",
+      "twoFaStatus": "Двухфакторная аутентификация",
+      "enabled": "Включена",
+      "disabled": "Отключена",
+      "passkeyStatus": "PassKey",
+      "registered": "Зарегистрирован",
+      "notRegistered": "Не зарегистрирован",
+      "registerPasskey": "Зарегистрировать PassKey",
+      "deletePasskey": "Удалить PassKey"
+    }
+  },
+  "errors": {
+    "invalidCredentials": "Неверное имя пользователя или пароль",
+    "invalidCode": "Неверный код подтверждения",
+    "networkError": "Ошибка сети. Попробуйте снова",
+    "unknownError": "Произошла неизвестная ошибка"
+  },
+  "success": {
+    "loginSuccess": "Вход выполнен успешно",
+    "registrationSuccess": "Регистрация выполнена успешно",
+    "passkeyRegistered": "PassKey успешно зарегистрирован",
+    "passkeyDeleted": "PassKey успешно удален"
+  }
+}

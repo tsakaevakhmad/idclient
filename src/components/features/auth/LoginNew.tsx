@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { usePasskey } from '../../../hooks/usePasskey';
 import { useTheme } from '../../../hooks/useTheme';
+import { useLanguage } from '../../../hooks/useLanguage';
 import { getOAuthRedirectUrl } from '../../../utils';
 import { AuthMethod } from '../../../types';
 import { ROUTES } from '../../../constants';
@@ -25,6 +26,7 @@ const Login: React.FC = () => {
   const { isAuthenticated, externalProviders, login, loadExternalProviders } = useAuth();
   const { loginWithPasskey } = usePasskey();
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('2FA');
   const params = window.location.search.slice(1);
 
@@ -128,10 +130,10 @@ const Login: React.FC = () => {
                   mb: 1,
                 }}
               >
-                Welcome Back
+                {t('auth.login.title')}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Choose your authentication method
+                {t('auth.login.subtitle')}
               </Typography>
             </Box>
           </motion.div>
@@ -193,7 +195,7 @@ const Login: React.FC = () => {
                   }}
                 >
                   <LoginIcon fontSize="small" />
-                  <span>2FA</span>
+                  <span>{t('auth.login.methods.2fa')}</span>
                 </Box>
               </motion.button>
 
@@ -224,7 +226,7 @@ const Login: React.FC = () => {
                   }}
                 >
                   <FingerprintIcon fontSize="small" />
-                  <span>PassKey</span>
+                  <span>{t('auth.login.methods.passkey')}</span>
                 </Box>
               </motion.button>
 
@@ -256,7 +258,7 @@ const Login: React.FC = () => {
                   }}
                 >
                   <QrCodeIcon fontSize="small" />
-                  <span>QR</span>
+                  <span>{t('auth.login.methods.qr')}</span>
                 </Box>
               </motion.button>
             </ButtonGroup>
@@ -290,7 +292,7 @@ const Login: React.FC = () => {
                 }}
               >
                 <motion.span whileHover={{ scale: 1.05 }} style={{ display: 'inline-block' }}>
-                  Don't have an account? Register →
+                  {t('auth.login.noAccount')} →
                 </motion.span>
               </Link>
             </Box>
@@ -305,7 +307,7 @@ const Login: React.FC = () => {
             >
               <Box sx={{ mt: 4 }}>
                 <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-                  Or continue with
+                  {t('auth.login.orContinueWith')}
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                   {externalProviders.map((provider, index) => (
