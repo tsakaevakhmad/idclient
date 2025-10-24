@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import QRCode from 'react-qr-code';
 import { useQRLogin } from '../../../hooks/useQRLogin';
 import { useTheme } from '../../../hooks/useTheme';
+import { useLanguage } from '../../../hooks/useLanguage';
 
 interface QrLoginProps {
   onSuccess: () => void;
@@ -11,6 +12,7 @@ interface QrLoginProps {
 const QrLogin: React.FC<QrLoginProps> = ({ onSuccess }) => {
   const { sessionId, status, isLoading, isAuthenticating } = useQRLogin(onSuccess);
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -28,7 +30,7 @@ const QrLogin: React.FC<QrLoginProps> = ({ onSuccess }) => {
         }}
       >
         <Typography variant="body2" color="text.secondary" align="center">
-          Scan the QR code with your mobile device
+          {t('auth.qr.subtitle')}
         </Typography>
 
         <Box
@@ -93,7 +95,7 @@ const QrLogin: React.FC<QrLoginProps> = ({ onSuccess }) => {
                     }}
                   >
                     <Typography variant="body2" color="text.primary" fontWeight={600}>
-                      Authenticating...
+                      {t('auth.twoFaVerify.authenticating')}
                     </Typography>
                   </Box>
                 </Box>

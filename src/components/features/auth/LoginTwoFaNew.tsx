@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { authService } from '../../../services/authService';
+import { useLanguage } from '../../../hooks/useLanguage';
 import { GlassInput } from '../../glass/GlassInput';
 import { GlassButton } from '../../glass/GlassButton';
 import LoginTwoFaVerify from './LoginTwoFaVerifyNew';
@@ -10,6 +11,7 @@ interface LoginTwoFaProps {
 }
 
 const LoginTwoFa: React.FC<LoginTwoFaProps> = ({ onSuccess }) => {
+  const { t } = useLanguage();
   const [identifier, setIdentifier] = useState('');
   const [verifyId, setVerifyId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ const LoginTwoFa: React.FC<LoginTwoFaProps> = ({ onSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!identifier.trim()) {
-      setError('Please enter email or phone number');
+      setError(t('auth.twoFa.enterIdentifier'));
       return;
     }
 
@@ -30,7 +32,7 @@ const LoginTwoFa: React.FC<LoginTwoFaProps> = ({ onSuccess }) => {
       setVerifyId(response.data.id);
     } catch (err) {
       console.error(err);
-      setError('Failed to send verification code');
+      setError(t('auth.twoFa.sendCodeFailed'));
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,7 @@ const LoginTwoFa: React.FC<LoginTwoFaProps> = ({ onSuccess }) => {
       style={{ width: '100%' }}
     >
       <GlassInput
-        label="Email or Phone"
+        label={t('auth.twoFa.emailOrPhone')}
         variant="outlined"
         fullWidth
         value={identifier}
@@ -58,7 +60,7 @@ const LoginTwoFa: React.FC<LoginTwoFaProps> = ({ onSuccess }) => {
         sx={{ mb: 3 }}
       />
       <GlassButton type="submit" variant="contained" fullWidth loading={loading}>
-        Continue
+        {t('auth.twoFa.continueButton')}
       </GlassButton>
     </motion.form>
   );

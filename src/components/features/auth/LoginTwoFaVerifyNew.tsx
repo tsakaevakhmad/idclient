@@ -5,6 +5,7 @@ import OtpInput from 'react-otp-input';
 import { authService } from '../../../services/authService';
 import { GlassButton } from '../../glass/GlassButton';
 import { useTheme } from '../../../hooks/useTheme';
+import { useLanguage } from '../../../hooks/useLanguage';
 
 interface LoginTwoFaVerifyProps {
   id: string;
@@ -16,10 +17,11 @@ const LoginTwoFaVerify: React.FC<LoginTwoFaVerifyProps> = ({ id, onSuccess }) =>
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const handleVerify = async () => {
     if (otp.length !== 6) {
-      setError('Please enter a 6-digit code');
+      setError(t('auth.twoFaVerify.codeRequired'));
       return;
     }
 
@@ -31,11 +33,11 @@ const LoginTwoFaVerify: React.FC<LoginTwoFaVerifyProps> = ({ id, onSuccess }) =>
       if (response.data.status === 'Success') {
         onSuccess();
       } else {
-        setError('Invalid verification code');
+        setError(t('auth.twoFaVerify.invalidCode'));
       }
     } catch (err) {
       console.error(err);
-      setError('Verification failed. Please try again.');
+      setError(t('auth.twoFaVerify.verificationFailed'));
     } finally {
       setLoading(false);
     }
@@ -44,7 +46,7 @@ const LoginTwoFaVerify: React.FC<LoginTwoFaVerifyProps> = ({ id, onSuccess }) =>
   return (
     <Box sx={{ width: '100%' }}>
       <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-        Enter the 6-digit code sent to your device
+        {t('auth.twoFaVerify.subtitle')}
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
@@ -92,7 +94,7 @@ const LoginTwoFaVerify: React.FC<LoginTwoFaVerifyProps> = ({ id, onSuccess }) =>
         loading={loading}
         disabled={otp.length !== 6}
       >
-        Verify
+        {t('auth.twoFaVerify.verifyButton')}
       </GlassButton>
     </Box>
   );

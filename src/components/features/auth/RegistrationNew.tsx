@@ -11,10 +11,12 @@ import { GlassInput } from '../../glass/GlassInput';
 import { BackgroundGradient } from '../../theme/BackgroundGradient';
 import { ROUTES } from '../../../constants';
 import { useTheme } from '../../../hooks/useTheme';
+import { useLanguage } from '../../../hooks/useLanguage';
 
 const Registration: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -36,11 +38,11 @@ const Registration: React.FC = () => {
     const { email, userName, phoneNumber } = formData;
 
     if (!email && !phoneNumber) {
-      setError('Please enter email or phone number');
+      setError(t('auth.registration.errors.emailOrPhoneRequired'));
       return;
     }
     if (!userName.trim()) {
-      setError('Please enter username');
+      setError(t('auth.registration.errors.usernameRequired'));
       return;
     }
 
@@ -55,45 +57,45 @@ const Registration: React.FC = () => {
           navigate(ROUTES.LOGIN);
           break;
         case 'UserNotFound':
-          setError('User not found. Please check your details.');
+          setError(t('auth.registration.errors.userNotFound'));
           break;
         case 'UserMailNotConfirmed':
-          setError('Email not confirmed. Please check your email.');
+          setError(t('auth.registration.errors.emailNotConfirmed'));
           break;
         case 'UserPhoneNotConfirmed':
-          setError('Phone number not confirmed.');
+          setError(t('auth.registration.errors.phoneNotConfirmed'));
           break;
         case 'UserAlreadyExists':
-          setError('User already exists. Try logging in.');
+          setError(t('auth.registration.errors.userExists'));
           break;
         case 'UserMailAlreadyExists':
-          setError('An account with this email already exists.');
+          setError(t('auth.registration.errors.emailExists'));
           break;
         case 'UserPhoneAlreadyExists':
-          setError('An account with this phone number already exists.');
+          setError(t('auth.registration.errors.phoneExists'));
           break;
         case 'InvalidToken':
-          setError('Invalid token. Please try again.');
+          setError(t('auth.registration.errors.invalidToken'));
           break;
         default:
-          setError('An unknown error occurred. Please try again.');
+          setError(t('auth.registration.errors.unknown'));
           break;
       }
     } catch (err) {
       console.error(err);
-      setError('Registration failed. Please try again.');
+      setError(t('auth.registration.errors.registrationFailed'));
     } finally {
       setLoading(false);
     }
   };
 
-  const fields: Array<{ label: string; name: keyof RegisterRequest; required?: boolean }> = [
-    { label: 'Email', name: 'email', required: true },
-    { label: 'Phone Number', name: 'phoneNumber' },
-    { label: 'Username', name: 'userName', required: true },
-    { label: 'First Name', name: 'firstName', required: true },
-    { label: 'Last Name', name: 'lastName', required: true },
-    { label: 'Middle Name', name: 'middleName' },
+  const fields: Array<{ labelKey: string; name: keyof RegisterRequest; required?: boolean }> = [
+    { labelKey: 'auth.registration.fields.email', name: 'email', required: true },
+    { labelKey: 'auth.registration.fields.phoneNumber', name: 'phoneNumber' },
+    { labelKey: 'auth.registration.fields.username', name: 'userName', required: true },
+    { labelKey: 'auth.registration.fields.firstName', name: 'firstName', required: true },
+    { labelKey: 'auth.registration.fields.lastName', name: 'lastName', required: true },
+    { labelKey: 'auth.registration.fields.middleName', name: 'middleName' },
   ];
 
   return (
@@ -153,10 +155,10 @@ const Registration: React.FC = () => {
                   mb: 1,
                 }}
               >
-                Create Account
+                {t('auth.registration.title')}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Fill in your details to get started
+                {t('auth.registration.subtitle')}
               </Typography>
             </Box>
           </motion.div>
@@ -184,7 +186,7 @@ const Registration: React.FC = () => {
                   transition={{ delay: 0.3 + index * 0.1 }}
                 >
                   <GlassInput
-                    label={field.label}
+                    label={t(field.labelKey)}
                     variant="outlined"
                     fullWidth
                     required={field.required}
@@ -218,7 +220,7 @@ const Registration: React.FC = () => {
               loading={loading}
               sx={{ mb: 2 }}
             >
-              Register
+              {t('auth.registration.registerButton')}
             </GlassButton>
           </motion.div>
 
@@ -237,7 +239,7 @@ const Registration: React.FC = () => {
                 }}
                 onClick={() => navigate(ROUTES.LOGIN)}
               >
-                Already have an account? Sign in →
+                {t('auth.registration.hasAccount')} →
               </Typography>
             </Box>
           </motion.div>

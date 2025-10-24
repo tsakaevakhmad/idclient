@@ -32,27 +32,52 @@
     },
     "registration": {
       "title": "Create Account",
-      "subtitle": "Sign up to get started",
-      "hasAccount": "Already have an account? Login"
+      "subtitle": "Fill in your details to get started",
+      "hasAccount": "Already have an account? Sign in",
+      "registerButton": "Register",
+      "fields": {
+        "email": "Email",
+        "phoneNumber": "Phone Number",
+        "username": "Username",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "middleName": "Middle Name"
+      },
+      "errors": {
+        "emailOrPhoneRequired": "Please enter email or phone number",
+        "usernameRequired": "Please enter username",
+        "userNotFound": "User not found. Please check your details.",
+        "emailNotConfirmed": "Email not confirmed. Please check your email.",
+        "phoneNotConfirmed": "Phone number not confirmed.",
+        "userExists": "User already exists. Try logging in.",
+        "emailExists": "An account with this email already exists.",
+        "phoneExists": "An account with this phone number already exists.",
+        "invalidToken": "Invalid token. Please try again.",
+        "unknown": "An unknown error occurred. Please try again.",
+        "registrationFailed": "Registration failed. Please try again."
+      }
     },
     "twoFa": {
       "title": "Two-Factor Authentication",
-      "username": "Username",
-      "password": "Password",
-      "loginButton": "Login",
-      "enterCredentials": "Enter your credentials"
+      "emailOrPhone": "Email or Phone",
+      "continueButton": "Continue",
+      "enterIdentifier": "Please enter email or phone number",
+      "sendCodeFailed": "Failed to send verification code"
     },
     "twoFaVerify": {
       "title": "Enter Verification Code",
-      "code": "6-digit code",
+      "subtitle": "Enter the 6-digit code sent to your device",
       "verifyButton": "Verify",
-      "resendCode": "Resend Code",
-      "codeResent": "Code has been resent"
+      "codeRequired": "Please enter a 6-digit code",
+      "invalidCode": "Invalid verification code",
+      "verificationFailed": "Verification failed. Please try again.",
+      "authenticating": "Authenticating..."
     },
     "qr": {
       "title": "QR Code Login",
-      "subtitle": "Scan this QR code with your mobile app",
+      "subtitle": "Scan the QR code with your mobile device",
       "waiting": "Waiting for scan...",
+      "authenticating": "Authenticating...",
       "refresh": "Refresh QR Code"
     },
     "profile": {
