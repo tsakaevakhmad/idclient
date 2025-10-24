@@ -8,6 +8,8 @@ import {
   DarkMode as DarkIcon,
   NightsStay as MidnightIcon,
   Check as CheckIcon,
+  AutoAwesome as ClassicLightIcon,
+  Stars as ClassicDarkIcon,
 } from '@mui/icons-material';
 import { useTheme } from '../../hooks/useTheme';
 import { ThemeName } from '../../types/theme';
@@ -17,6 +19,8 @@ const themeIcons: Record<ThemeName, React.ReactElement> = {
   oceanGlass: <OceanIcon />,
   darkGlass: <DarkIcon />,
   midnightGlass: <MidnightIcon />,
+  classicLight: <ClassicLightIcon />,
+  classicDark: <ClassicDarkIcon />,
 };
 
 const themeColors: Record<ThemeName, { primary: string; secondary: string }> = {
@@ -24,6 +28,8 @@ const themeColors: Record<ThemeName, { primary: string; secondary: string }> = {
   oceanGlass: { primary: '#06b6d4', secondary: '#0ea5e9' },
   darkGlass: { primary: '#a78bfa', secondary: '#c084fc' },
   midnightGlass: { primary: '#60a5fa', secondary: '#3b82f6' },
+  classicLight: { primary: '#f59e0b', secondary: '#f97316' },
+  classicDark: { primary: '#818cf8', secondary: '#a78bfa' },
 };
 
 export const ThemeSwitcher: React.FC = () => {
@@ -123,6 +129,8 @@ export const ThemeSwitcher: React.FC = () => {
                 {themeKey === 'oceanGlass' && 'Ocean Glass'}
                 {themeKey === 'darkGlass' && 'Dark Glass'}
                 {themeKey === 'midnightGlass' && 'Midnight Glass'}
+                {themeKey === 'classicLight' && 'Classic Light'}
+                {themeKey === 'classicDark' && 'Classic Dark'}
               </Typography>
             </Box>
 
