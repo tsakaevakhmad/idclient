@@ -15,7 +15,7 @@ import {
   Settings as SettingsIcon,
   Palette as PaletteIcon,
   Language as LanguageIcon,
-  WbSunny as LightIcon,
+  Eco as EcoIcon,
   WaterDrop as OceanIcon,
   DarkMode as DarkIcon,
   NightsStay as MidnightIcon,
@@ -29,7 +29,7 @@ import { ThemeName } from '../../types/theme';
 import { SupportedLanguage } from '../../types/i18n';
 
 const themeIcons: Record<ThemeName, React.ReactElement> = {
-  lightGlass: <LightIcon fontSize="small" />,
+  warmRustic: <EcoIcon fontSize="small" />,
   oceanGlass: <OceanIcon fontSize="small" />,
   darkGlass: <DarkIcon fontSize="small" />,
   midnightGlass: <MidnightIcon fontSize="small" />,
@@ -38,7 +38,7 @@ const themeIcons: Record<ThemeName, React.ReactElement> = {
 };
 
 const themeColors: Record<ThemeName, { primary: string; secondary: string }> = {
-  lightGlass: { primary: '#6366f1', secondary: '#8b5cf6' },
+  warmRustic: { primary: '#805A3B', secondary: '#FD974F' },
   oceanGlass: { primary: '#06b6d4', secondary: '#0ea5e9' },
   darkGlass: { primary: '#a78bfa', secondary: '#c084fc' },
   midnightGlass: { primary: '#60a5fa', secondary: '#3b82f6' },

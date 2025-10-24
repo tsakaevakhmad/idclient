@@ -1,5 +1,5 @@
 export type ThemeName =
-  | 'lightGlass'
+  | 'warmRustic'
   | 'oceanGlass'
   | 'darkGlass'
   | 'midnightGlass'

@@ -1,5 +1,5 @@
 import { Theme } from '@mui/material/styles';
-import { lightGlassTheme, lightGlassConfig } from './lightGlass';
+import { warmRusticTheme, warmRusticConfig } from './warmRustic';
 import { oceanGlassTheme, oceanGlassConfig } from './oceanGlass';
 import { darkGlassTheme, darkGlassConfig } from './darkGlass';
 import { midnightGlassTheme, midnightGlassConfig } from './midnightGlass';
@@ -8,7 +8,7 @@ import { classicDarkTheme, classicDarkConfig } from './classicDark';
 import { ThemeName, GlassTheme } from '../types/theme';
 
 export const themes: Record<ThemeName, Theme> = {
-  lightGlass: lightGlassTheme,
+  warmRustic: warmRusticTheme,
   oceanGlass: oceanGlassTheme,
   darkGlass: darkGlassTheme,
   midnightGlass: midnightGlassTheme,
@@ -17,7 +17,7 @@ export const themes: Record<ThemeName, Theme> = {
 };
 
 export const themeConfigs: Record<ThemeName, GlassTheme> = {
-  lightGlass: lightGlassConfig,
+  warmRustic: warmRusticConfig,
   oceanGlass: oceanGlassConfig,
   darkGlass: darkGlassConfig,
   midnightGlass: midnightGlassConfig,
@@ -26,7 +26,7 @@ export const themeConfigs: Record<ThemeName, GlassTheme> = {
 };
 
 export {
-  lightGlassTheme,
+  warmRusticTheme,
   oceanGlassTheme,
   darkGlassTheme,
   midnightGlassTheme,
@@ -34,7 +34,7 @@ export {
   classicDarkTheme,
 };
 export {
-  lightGlassConfig,
+  warmRusticConfig,
   oceanGlassConfig,
   darkGlassConfig,
   midnightGlassConfig,
