@@ -78,7 +78,19 @@
       "subtitle": "Scan the QR code with your mobile device",
       "waiting": "Waiting for scan...",
       "authenticating": "Authenticating...",
-      "refresh": "Refresh QR Code"
+      "refresh": "Refresh QR Code",
+      "status": {
+        "connecting": "Connecting to server...",
+        "waitingForQR": "Waiting for QR code...",
+        "scanWithApp": "Scan QR code with your mobile app",
+        "authenticating": "Authenticating...",
+        "success": "Login successful ✅",
+        "authFailed": "Authentication failed. Please try again.",
+        "loginError": "Login error occurred.",
+        "connectionError": "Connection error. Please try again.",
+        "failedToConnect": "Failed to connect to server",
+        "failedToAuth": "Failed to authenticate with QR code"
+      }
     },
     "profile": {
       "title": "Profile",
@@ -93,8 +105,18 @@
       "passkeyStatus": "PassKey",
       "registered": "Registered",
       "notRegistered": "Not Registered",
-      "registerPasskey": "Register PassKey",
-      "deletePasskey": "Delete PassKey"
+      "registerPasskey": "Register Passkey",
+      "deletePasskey": "Delete PassKey",
+      "confirmPhone": "Confirm Phone Number",
+      "backToLogin": "Back to Login",
+      "loadFailed": "Failed to load user data",
+      "footer": "© {{year}} ID. All rights reserved.",
+      "phoneVerification": {
+        "title": "Enter Verification Code",
+        "subtitle": "Enter the 6-digit code sent to {{phone}}",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      }
     }
   },
   "errors": {

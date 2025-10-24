@@ -78,7 +78,19 @@
       "subtitle": "Отсканируйте QR-код мобильным устройством",
       "waiting": "Ожидание сканирования...",
       "authenticating": "Аутентификация...",
-      "refresh": "Обновить QR-код"
+      "refresh": "Обновить QR-код",
+      "status": {
+        "connecting": "Подключение к серверу...",
+        "waitingForQR": "Ожидание QR-кода...",
+        "scanWithApp": "Отсканируйте QR-код мобильным приложением",
+        "authenticating": "Аутентификация...",
+        "success": "Вход выполнен успешно ✅",
+        "authFailed": "Аутентификация не удалась. Попробуйте снова.",
+        "loginError": "Произошла ошибка входа.",
+        "connectionError": "Ошибка подключения. Попробуйте снова.",
+        "failedToConnect": "Не удалось подключиться к серверу",
+        "failedToAuth": "Не удалось аутентифицироваться с QR-кодом"
+      }
     },
     "profile": {
       "title": "Профиль",
@@ -94,7 +106,17 @@
       "registered": "Зарегистрирован",
       "notRegistered": "Не зарегистрирован",
       "registerPasskey": "Зарегистрировать PassKey",
-      "deletePasskey": "Удалить PassKey"
+      "deletePasskey": "Удалить PassKey",
+      "confirmPhone": "Подтвердить номер телефона",
+      "backToLogin": "Вернуться ко входу",
+      "loadFailed": "Не удалось загрузить данные пользователя",
+      "footer": "© {{year}} ID. Все права защищены.",
+      "phoneVerification": {
+        "title": "Введите код подтверждения",
+        "subtitle": "Введите 6-значный код, отправленный на {{phone}}",
+        "cancel": "Отмена",
+        "confirm": "Подтвердить"
+      }
     }
   },
   "errors": {

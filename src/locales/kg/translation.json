@@ -78,7 +78,19 @@
       "subtitle": "Мобилдик түзмөгүңүз менен QR кодду скандаңыз",
       "waiting": "Скандоону күтүүдө...",
       "authenticating": "Аутентификация...",
-      "refresh": "QR кодду жаңыртуу"
+      "refresh": "QR кодду жаңыртуу",
+      "status": {
+        "connecting": "Серверге туташууда...",
+        "waitingForQR": "QR кодду күтүүдө...",
+        "scanWithApp": "Мобилдик тиркемеңиз менен QR кодду скандаңыз",
+        "authenticating": "Аутентификация...",
+        "success": "Кирүү ийгиликтүү ✅",
+        "authFailed": "Аутентификация ишке ашкан жок. Кайра аракет кылыңыз.",
+        "loginError": "Кирүү катасы пайда болду.",
+        "connectionError": "Туташуу катасы. Кайра аракет кылыңыз.",
+        "failedToConnect": "Серверге туташуу мүмкүн болгон жок",
+        "failedToAuth": "QR код менен аутентификация өтө албады"
+      }
     },
     "profile": {
       "title": "Профиль",
@@ -94,7 +106,17 @@
       "registered": "Катталган",
       "notRegistered": "Катталган эмес",
       "registerPasskey": "PassKey каттоо",
-      "deletePasskey": "PassKey өчүрүү"
+      "deletePasskey": "PassKey өчүрүү",
+      "confirmPhone": "Телефон номерин тастыктоо",
+      "backToLogin": "Кирүүгө кайтуу",
+      "loadFailed": "Колдонуучу маалыматтарын жүктөө мүмкүн болгон жок",
+      "footer": "© {{year}} ID. Бардык укуктар корголгон.",
+      "phoneVerification": {
+        "title": "Тастыктоо кодун киргизиңиз",
+        "subtitle": "{{phone}} номерине жөнөтүлгөн 6 саннуу кодду киргизиңиз",
+        "cancel": "Жокко чыгаруу",
+        "confirm": "Тастыктоо"
+      }
     }
   },
   "errors": {

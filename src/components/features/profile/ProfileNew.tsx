@@ -23,6 +23,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useUser } from '../../../hooks/useUser';
 import { usePasskey } from '../../../hooks/usePasskey';
 import { useTheme } from '../../../hooks/useTheme';
+import { useLanguage } from '../../../hooks/useLanguage';
 import { GlassCard } from '../../glass/GlassCard';
 import { GlassButton } from '../../glass/GlassButton';
 import { BackgroundGradient } from '../../theme/BackgroundGradient';
@@ -36,6 +37,7 @@ const Profile: React.FC = () => {
     useUser();
   const { isRegistering, registerPasskey } = usePasskey();
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   const [hovered, setHovered] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -127,10 +129,10 @@ const Profile: React.FC = () => {
         <BackgroundGradient />
         <GlassCard sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" color="error">
-            {error || 'Failed to load user data'}
+            {error || t('auth.profile.loadFailed')}
           </Typography>
           <GlassButton sx={{ mt: 3 }} onClick={() => navigate(ROUTES.LOGIN)}>
-            Back to Login
+            {t('auth.profile.backToLogin')}
           </GlassButton>
         </GlassCard>
       </Box>
@@ -174,11 +176,11 @@ const Profile: React.FC = () => {
             fontWeight: 700,
           }}
         >
-          Enter Verification Code
+          {t('auth.profile.phoneVerification.title')}
         </DialogTitle>
         <DialogContent sx={{ py: 4 }}>
           <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-            Enter the 6-digit code sent to {user.phoneNumber}
+            {t('auth.profile.phoneVerification.subtitle', { phone: user.phoneNumber })}
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <OtpInput
@@ -212,10 +214,10 @@ const Profile: React.FC = () => {
         </DialogContent>
         <DialogActions sx={{ p: 3, pt: 0 }}>
           <GlassButton gradient={false} onClick={() => setDialogOpen(false)}>
-            Cancel
+            {t('auth.profile.phoneVerification.cancel')}
           </GlassButton>
           <GlassButton onClick={handleVerifyPhone} loading={verifying} disabled={otp.length !== 6}>
-            Confirm
+            {t('auth.profile.phoneVerification.confirm')}
           </GlassButton>
         </DialogActions>
       </Dialog>
@@ -406,7 +408,7 @@ const Profile: React.FC = () => {
                   loading={sendingCode}
                   startIcon={<PhoneIcon />}
                 >
-                  Confirm Phone Number
+                  {t('auth.profile.confirmPhone')}
                 </GlassButton>
               )}
 
@@ -416,7 +418,7 @@ const Profile: React.FC = () => {
                 loading={isRegistering}
                 startIcon={<FingerprintIcon />}
               >
-                Register Passkey
+                {t('auth.profile.registerPasskey')}
               </GlassButton>
 
               <GlassButton
@@ -433,7 +435,7 @@ const Profile: React.FC = () => {
                   },
                 }}
               >
-                Logout
+                {t('auth.profile.logout')}
               </GlassButton>
             </Box>
           </motion.div>
@@ -448,7 +450,7 @@ const Profile: React.FC = () => {
           align="center"
           sx={{ mt: 4, opacity: 0.6 }}
         >
-          © {new Date().getFullYear()} ID. All rights reserved.
+          {t('auth.profile.footer', { year: new Date().getFullYear() })}
         </Typography>
       </motion.div>
     </Box>
