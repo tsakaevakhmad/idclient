@@ -1,0 +1,135 @@
+{
+  "common": {
+    "settings": "Ayarlar",
+    "theme": "Tema",
+    "language": "Dil",
+    "close": "Kapat"
+  },
+  "themes": {
+    "warmRustic": "Sıcak Rustik",
+    "oceanGlass": "Okyanus Camı",
+    "darkGlass": "Koyu Cam",
+    "midnightGlass": "Gece Yarısı Camı",
+    "classicLight": "Klasik Açık",
+    "classicDark": "Klasik Koyu"
+  },
+  "languages": {
+    "en": "İngilizce",
+    "ru": "Rusça",
+    "kg": "Kırgızca",
+    "tr": "Türkçe"
+  },
+  "auth": {
+    "login": {
+      "title": "Tekrar Hoş Geldiniz",
+      "subtitle": "Kimlik doğrulama yönteminizi seçin",
+      "methods": {
+        "2fa": "2FA",
+        "passkey": "Anahtar",
+        "qr": "QR"
+      },
+      "noAccount": "Hesabınız yok mu? Kayıt olun",
+      "orContinueWith": "Veya şununla devam edin"
+    },
+    "registration": {
+      "title": "Hesap Oluştur",
+      "subtitle": "Başlamak için bilgilerinizi doldurun",
+      "hasAccount": "Zaten hesabınız var mı? Giriş yapın",
+      "registerButton": "Kayıt Ol",
+      "fields": {
+        "email": "E-posta",
+        "phoneNumber": "Telefon Numarası",
+        "username": "Kullanıcı Adı",
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "middleName": "İkinci Ad"
+      },
+      "errors": {
+        "emailOrPhoneRequired": "Lütfen e-posta veya telefon numarası girin",
+        "usernameRequired": "Lütfen kullanıcı adı girin",
+        "userNotFound": "Kullanıcı bulunamadı. Lütfen bilgilerinizi kontrol edin.",
+        "emailNotConfirmed": "E-posta onaylanmadı. Lütfen e-postanızı kontrol edin.",
+        "phoneNotConfirmed": "Telefon numarası onaylanmadı.",
+        "userExists": "Kullanıcı zaten mevcut. Giriş yapmayı deneyin.",
+        "emailExists": "Bu e-posta adresiyle kayıtlı bir hesap zaten var.",
+        "phoneExists": "Bu telefon numarasıyla kayıtlı bir hesap zaten var.",
+        "invalidToken": "Geçersiz token. Lütfen tekrar deneyin.",
+        "unknown": "Bilinmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+        "registrationFailed": "Kayıt başarısız oldu. Lütfen tekrar deneyin."
+      }
+    },
+    "twoFa": {
+      "title": "İki Faktörlü Kimlik Doğrulama",
+      "emailOrPhone": "E-posta veya Telefon",
+      "continueButton": "Devam Et",
+      "enterIdentifier": "Lütfen e-posta veya telefon numarası girin",
+      "sendCodeFailed": "Doğrulama kodu gönderilemedi"
+    },
+    "twoFaVerify": {
+      "title": "Doğrulama Kodunu Girin",
+      "subtitle": "Cihazınıza gönderilen 6 haneli kodu girin",
+      "verifyButton": "Doğrula",
+      "codeRequired": "Lütfen 6 haneli bir kod girin",
+      "invalidCode": "Geçersiz doğrulama kodu",
+      "verificationFailed": "Doğrulama başarısız oldu. Lütfen tekrar deneyin.",
+      "authenticating": "Doğrulanıyor..."
+    },
+    "qr": {
+      "title": "QR Kod ile Giriş",
+      "subtitle": "QR kodunu mobil cihazınızla tarayın",
+      "waiting": "Tarama bekleniyor...",
+      "authenticating": "Doğrulanıyor...",
+      "refresh": "QR Kodunu Yenile",
+      "status": {
+        "connecting": "Sunucuya bağlanılıyor...",
+        "waitingForQR": "QR kodu bekleniyor...",
+        "scanWithApp": "QR kodunu mobil uygulamanızla tarayın",
+        "authenticating": "Doğrulanıyor...",
+        "success": "Giriş başarılı ✅",
+        "authFailed": "Kimlik doğrulama başarısız oldu. Lütfen tekrar deneyin.",
+        "loginError": "Giriş hatası oluştu.",
+        "connectionError": "Bağlantı hatası. Lütfen tekrar deneyin.",
+        "failedToConnect": "Sunucuya bağlanılamadı",
+        "failedToAuth": "QR kodu ile kimlik doğrulama başarısız oldu"
+      }
+    },
+    "profile": {
+      "title": "Profil",
+      "userInfo": "Kullanıcı Bilgileri",
+      "security": "Güvenlik",
+      "logout": "Çıkış Yap",
+      "username": "Kullanıcı Adı",
+      "email": "E-posta",
+      "twoFaStatus": "İki Faktörlü Kimlik Doğrulama",
+      "enabled": "Etkin",
+      "disabled": "Devre Dışı",
+      "passkeyStatus": "Anahtar",
+      "registered": "Kayıtlı",
+      "notRegistered": "Kayıtlı Değil",
+      "registerPasskey": "Anahtar Kaydı",
+      "deletePasskey": "Anahtarı Sil",
+      "confirmPhone": "Telefon Numarasını Onayla",
+      "backToLogin": "Girişe Dön",
+      "loadFailed": "Kullanıcı verileri yüklenemedi",
+      "footer": "© {{year}} ID. Tüm hakları saklıdır.",
+      "phoneVerification": {
+        "title": "Doğrulama Kodunu Girin",
+        "subtitle": "{{phone}} numarasına gönderilen 6 haneli kodu girin",
+        "cancel": "İptal",
+        "confirm": "Onayla"
+      }
+    }
+  },
+  "errors": {
+    "invalidCredentials": "Geçersiz kullanıcı adı veya şifre",
+    "invalidCode": "Geçersiz doğrulama kodu",
+    "networkError": "Ağ hatası. Lütfen tekrar deneyin",
+    "unknownError": "Bilinmeyen bir hata oluştu"
+  },
+  "success": {
+    "loginSuccess": "Başarıyla giriş yapıldı",
+    "registrationSuccess": "Başarıyla kayıt olundu",
+    "passkeyRegistered": "Anahtar başarıyla kaydedildi",
+    "passkeyDeleted": "Anahtar başarıyla silindi"
+  }
+}

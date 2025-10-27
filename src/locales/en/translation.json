@@ -16,7 +16,8 @@
   "languages": {
     "en": "English",
     "ru": "Russian",
-    "kg": "Kyrgyz"
+    "kg": "Kyrgyz",
+    "tr": "Turkish"
   },
   "auth": {
     "login": {

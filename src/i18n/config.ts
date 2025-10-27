@@ -5,8 +5,9 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import enTranslation from '../locales/en/translation.json';
 import ruTranslation from '../locales/ru/translation.json';
 import kgTranslation from '../locales/kg/translation.json';
+import trTranslation from '../locales/tr/translation.json';
 
-export const SUPPORTED_LANGUAGES = ['en', 'ru', 'kg'] as const;
+export const SUPPORTED_LANGUAGES = ['en', 'ru', 'kg', 'tr'] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
 export const LANGUAGE_STORAGE_KEY = 'app-language';
@@ -21,6 +22,9 @@ const resources = {
   },
   kg: {
     translation: kgTranslation,
+  },
+  tr: {
+    translation: trTranslation,
   },
 };
 

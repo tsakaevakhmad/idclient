@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a TypeScript + React authentication frontend (`idclient`) that integrates with an ASP.NET Core backend. Built with modern best practices including TypeScript strict mode, Context API for state management, custom hooks, comprehensive error handling, and full test coverage.
 
-**Key Technologies**: React 19, TypeScript, Material-UI, Tailwind CSS, Framer Motion, SignalR, WebAuthn
+**Key Technologies**: React 19, TypeScript, Material-UI, Tailwind CSS, Framer Motion, SignalR, WebAuthn, i18next (4 languages)
 
 ## Development Commands
 
@@ -52,14 +52,20 @@ src/
 │   ├── features/          # Feature-specific components
 │   │   ├── auth/          # Login, Registration, 2FA, QR
 │   │   └── profile/       # Profile management
+│   ├── animations/        # PageTransition, SkeletonLoader
+│   ├── glass/             # Glassmorphism components
+│   └── theme/             # Theme-related UI components
 ├── contexts/              # React Context providers
 │   ├── AuthContext.tsx    # Authentication state
-│   └── UserContext.tsx    # User profile state
+│   ├── UserContext.tsx    # User profile state
+│   └── ThemeContext.tsx   # Theme and styling state
 ├── hooks/                 # Custom hooks
 │   ├── useAuth.ts         # Access auth context
 │   ├── useUser.ts         # Access user context
 │   ├── useQRLogin.ts      # SignalR QR login logic
-│   └── usePasskey.ts      # WebAuthn operations
+│   ├── usePasskey.ts      # WebAuthn operations
+│   ├── useTheme.ts        # Theme configuration access
+│   └── useLanguage.ts     # i18n language switching
 ├── services/              # API service layer
 │   ├── authService.ts     # Auth endpoints
 │   ├── passkeyService.ts  # WebAuthn API calls
@@ -67,6 +73,10 @@ src/
 ├── types/                 # Shared TypeScript types
 ├── utils/                 # Helper functions
 ├── constants/             # API endpoints, routes, etc.
+├── i18n/                  # Internationalization
+│   ├── config.ts          # i18next configuration
+│   └── locales/           # Translation files (en, ru, kg)
+├── themes/                # Theme definitions
 └── __tests__/            # Test files
 ```
 
@@ -74,8 +84,9 @@ src/
 
 **AuthContext** manages authentication state (isAuthenticated, login, logout, checkAuth, externalProviders)
 **UserContext** manages user profile data and verification (user, fetchUserInfo, verifyPhoneCode)
+**ThemeContext** manages UI themes with 6 variants (warmRustic, oceanGlass, classicLight, darkGlass, midnightGlass, classicDark)
 
-Access via custom hooks: `useAuth()` and `useUser()`. All components consume these hooks instead of prop drilling.
+Access via custom hooks: `useAuth()`, `useUser()`, and `useTheme()`. All components consume these hooks instead of prop drilling.
 
 ### Service Layer Architecture
 
@@ -101,6 +112,8 @@ Business logic extracted into reusable hooks:
 - **useQRLogin**: Encapsulates entire SignalR connection lifecycle, session management, and authentication flow
 - **usePasskey**: Handles WebAuthn registration and login with loading states
 - **useAuth/useUser**: Context accessors with error handling if used outside provider
+- **useTheme**: Access theme configuration for glassmorphism effects
+- **useLanguage**: Manage i18n language switching with persistence
 
 ### Authentication Flows
 
@@ -136,6 +149,29 @@ All route components use `React.lazy()` with `Suspense` showing `LoadingSpinner`
 - Process `excludeCredentials` with base64url decoding
 - Handle `authenticatorAttachment: null` → `undefined`
 - Send serialized credential to backend for validation
+
+### Internationalization (i18n)
+
+**Supported Languages**: English (en), Russian (ru), Kyrgyz (kg), Turkish (tr)
+
+- Configured with `i18next` and `react-i18next`
+- Language detection via browser and localStorage persistence
+- All UI strings in `src/locales/[lang]/translation.json`
+- Access translations via `useTranslation()` hook
+- Language switching via `useLanguage()` custom hook
+
+### Theme System
+
+**6 Glassmorphism Themes** with smooth transitions:
+
+- `warmRustic` - Default warm theme with natural tones
+- `oceanGlass` - Cool blue oceanic theme
+- `classicLight` - Clean light theme
+- `darkGlass` - Modern dark glass theme
+- `midnightGlass` - Deep blue midnight theme
+- `classicDark` - Classic dark theme
+
+Each theme defines colors, glass effects (blur, opacity), gradients, and animations. Theme state persisted in localStorage.
 
 ### TypeScript Configuration
 
@@ -178,6 +214,7 @@ Run tests: `npm test`
 - **Tailwind CSS**: Utility classes for layouts and spacing
 - **Framer Motion**: `motion.div`, `AnimatePresence` for transitions
 - **Custom Components**: `LoadingButton`, `LoadingSpinner`, `AnimatedCard`, `ErrorBoundary`
+- **Glassmorphism**: `GlassCard`, `GlassButton`, `GlassInput` with backdrop blur effects
 
 ### Environment Variables
 

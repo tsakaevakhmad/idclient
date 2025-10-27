@@ -1,4 +1,4 @@
-export type SupportedLanguage = 'en' | 'ru' | 'kg';
+export type SupportedLanguage = 'en' | 'ru' | 'kg' | 'tr';
 
 export interface LanguageInfo {
   code: SupportedLanguage;
@@ -25,5 +25,11 @@ export const LANGUAGES: Record<SupportedLanguage, LanguageInfo> = {
     name: 'Kyrgyz',
     nativeName: 'Кыргызча',
     flag: '🇰🇬',
+  },
+  tr: {
+    code: 'tr',
+    name: 'Turkish',
+    nativeName: 'Türkçe',
+    flag: '🇹🇷',
   },
 };

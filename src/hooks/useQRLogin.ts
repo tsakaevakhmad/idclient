@@ -82,7 +82,7 @@ export const useQRLogin = (onSuccess: () => void): UseQRLoginReturn => {
     return () => {
       connection.stop();
     };
-  }, [handleQRScanned]);
+  }, [handleQRScanned, t]);
 
   return {
     sessionId,
