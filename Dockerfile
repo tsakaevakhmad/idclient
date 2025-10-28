@@ -6,8 +6,8 @@ WORKDIR /app
 # Копируем package.json и package-lock.json
 COPY package*.json ./
 
-# Устанавливаем зависимости
-RUN npm install
+# Устанавливаем зависимости (используем legacy-peer-deps для совместимости TypeScript 5.x с react-scripts)
+RUN npm install --legacy-peer-deps
 
 # Копируем всё приложение
 COPY . .
