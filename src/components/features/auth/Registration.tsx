@@ -48,6 +48,11 @@ const Registration: React.FC = () => {
 
       switch (response.data.status) {
         case 'SendedMailConfirmationCode':
+        case 'SendedPhoneNumberConfirmationCode':
+        case 'SendedLoginCodeToEmail':
+        case 'SendedLoginCodeToPhoneNumber':
+        case 'Success':
+          // All success cases - redirect to login
           navigate(ROUTES.LOGIN);
           break;
         case 'UserNotFound':
@@ -70,6 +75,9 @@ const Registration: React.FC = () => {
           break;
         case 'InvalidToken':
           setError('Invalid token. Please try again.');
+          break;
+        case 'UserIsBlocked':
+          setError('Your account has been blocked. Please contact support.');
           break;
         default:
           setError('An unknown error occurred. Please try again.');

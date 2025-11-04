@@ -63,7 +63,20 @@
       "emailOrPhone": "E-posta veya Telefon",
       "continueButton": "Devam Et",
       "enterIdentifier": "Lütfen e-posta veya telefon numarası girin",
-      "sendCodeFailed": "Doğrulama kodu gönderilemedi"
+      "sendCodeFailed": "Doğrulama kodu gönderilemedi",
+      "SendedMailConfirmationCode": "Doğrulama kodu e-postanıza gönderildi",
+      "SendedPhoneNumberConfirmationCode": "Doğrulama kodu telefonunuza gönderildi",
+      "SendedLoginCodeToEmail": "Giriş kodu e-postanıza gönderildi",
+      "SendedLoginCodeToPhoneNumber": "Giriş kodu telefonunuza gönderildi",
+      "UserAlreadyExists": "Kullanıcı zaten mevcut. Giriş yapmayı deneyin.",
+      "UserNotFound": "Kullanıcı bulunamadı. Bilgilerinizi kontrol edin.",
+      "UserMailNotConfirmed": "E-posta onaylanmadı. Önce e-postanızı doğrulayın.",
+      "UserPhoneNotConfirmed": "Telefon numarası onaylanmadı. Önce telefonunuzu doğrulayın.",
+      "UserPhoneAlreadyExists": "Bu telefon numarası zaten kayıtlı.",
+      "UserMailAlreadyExists": "Bu e-posta zaten kayıtlı.",
+      "InvalidToken": "Geçersiz veya süresi dolmuş token. Lütfen tekrar deneyin.",
+      "UserIsBlocked": "Hesabınız engellenmiş. Lütfen destekle iletişime geçin.",
+      "Success": "Kimlik doğrulama başarılı!"
     },
     "twoFaVerify": {
       "title": "Doğrulama Kodunu Girin",

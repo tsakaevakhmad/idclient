@@ -22,6 +22,9 @@ export type AuthMethod = '2FA' | 'PassKey' | 'QR';
 export type AuthStatus =
   | 'Success'
   | 'SendedMailConfirmationCode'
+  | 'SendedPhoneNumberConfirmationCode'
+  | 'SendedLoginCodeToEmail'
+  | 'SendedLoginCodeToPhoneNumber'
   | 'UserNotFound'
   | 'UserMailNotConfirmed'
   | 'UserPhoneNotConfirmed'
@@ -29,4 +32,5 @@ export type AuthStatus =
   | 'UserMailAlreadyExists'
   | 'UserPhoneAlreadyExists'
   | 'InvalidToken'
-  | 'Error';
+  | 'Error'
+  | 'UserIsBlocked';

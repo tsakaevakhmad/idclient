@@ -54,6 +54,11 @@ const Registration: React.FC = () => {
 
       switch (response.data.status) {
         case 'SendedMailConfirmationCode':
+        case 'SendedPhoneNumberConfirmationCode':
+        case 'SendedLoginCodeToEmail':
+        case 'SendedLoginCodeToPhoneNumber':
+        case 'Success':
+          // All success cases - redirect to login
           navigate(ROUTES.LOGIN);
           break;
         case 'UserNotFound':
@@ -76,6 +81,9 @@ const Registration: React.FC = () => {
           break;
         case 'InvalidToken':
           setError(t('auth.registration.errors.invalidToken'));
+          break;
+        case 'UserIsBlocked':
+          setError(t('auth.twoFa.UserIsBlocked'));
           break;
         default:
           setError(t('auth.registration.errors.unknown'));

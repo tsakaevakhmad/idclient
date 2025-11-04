@@ -74,8 +74,12 @@ src/
 ├── utils/                 # Helper functions
 ├── constants/             # API endpoints, routes, etc.
 ├── i18n/                  # Internationalization
-│   ├── config.ts          # i18next configuration
-│   └── locales/           # Translation files (en, ru, kg)
+│   └── config.ts          # i18next configuration
+├── locales/               # Translation files (en, ru, kg, tr)
+│   ├── en/                # English translations
+│   ├── ru/                # Russian translations
+│   ├── kg/                # Kyrgyz translations
+│   └── tr/                # Turkish translations
 ├── themes/                # Theme definitions
 └── __tests__/            # Test files
 ```
@@ -154,11 +158,11 @@ All route components use `React.lazy()` with `Suspense` showing `LoadingSpinner`
 
 **Supported Languages**: English (en), Russian (ru), Kyrgyz (kg), Turkish (tr)
 
-- Configured with `i18next` and `react-i18next`
+- Configured with `i18next` and `react-i18next` in `i18n/config.ts`
 - Language detection via browser and localStorage persistence
-- All UI strings in `src/locales/[lang]/translation.json`
+- All UI strings in `locales/[lang]/translation.json` (4 languages: en, ru, kg, tr)
 - Access translations via `useTranslation()` hook
-- Language switching via `useLanguage()` custom hook
+- Language switching via `useLanguage()` custom hook with localStorage persistence
 
 ### Theme System
 

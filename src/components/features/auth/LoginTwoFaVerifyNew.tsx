@@ -33,7 +33,7 @@ const LoginTwoFaVerify: React.FC<LoginTwoFaVerifyProps> = ({ id, onSuccess }) =>
       if (response.data.status === 'Success') {
         onSuccess();
       } else {
-        setError(t('auth.twoFaVerify.invalidCode'));
+        setError(t(`auth.twoFa.${response.data.status}`));
       }
     } catch (err) {
       console.error(err);

@@ -63,7 +63,20 @@
       "emailOrPhone": "Email or Phone",
       "continueButton": "Continue",
       "enterIdentifier": "Please enter email or phone number",
-      "sendCodeFailed": "Failed to send verification code"
+      "sendCodeFailed": "Failed to send verification code",
+      "SendedMailConfirmationCode": "Verification code sent to your email",
+      "SendedPhoneNumberConfirmationCode": "Verification code sent to your phone",
+      "SendedLoginCodeToEmail": "Login code sent to your email",
+      "SendedLoginCodeToPhoneNumber": "Login code sent to your phone",
+      "UserAlreadyExists": "User already exists. Please try logging in.",
+      "UserNotFound": "User not found. Please check your credentials.",
+      "UserMailNotConfirmed": "Email not confirmed. Please verify your email first.",
+      "UserPhoneNotConfirmed": "Phone number not confirmed. Please verify your phone first.",
+      "UserPhoneAlreadyExists": "This phone number is already registered.",
+      "UserMailAlreadyExists": "This email is already registered.",
+      "InvalidToken": "Invalid or expired token. Please try again.",
+      "UserIsBlocked": "Your account has been blocked. Please contact support.",
+      "Success": "Authentication successful!"
     },
     "twoFaVerify": {
       "title": "Enter Verification Code",

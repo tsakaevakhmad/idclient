@@ -29,7 +29,22 @@ const LoginTwoFa: React.FC<LoginTwoFaProps> = ({ onSuccess }) => {
 
     try {
       const response = await authService.loginTwoFa(identifier);
-      setVerifyId(response.data.id);
+
+      // Success statuses that require verification code input
+      const successStatuses = [
+        'SendedMailConfirmationCode',
+        'SendedPhoneNumberConfirmationCode',
+        'SendedLoginCodeToEmail',
+        'SendedLoginCodeToPhoneNumber',
+      ];
+
+      if (successStatuses.includes(response.data.status)) {
+        setVerifyId(response.data.id);
+        return;
+      }
+
+      // All other statuses are errors
+      setError(`Error: ${response.data.status}`);
     } catch (err) {
       console.error(err);
       setError('Failed to send verification code');

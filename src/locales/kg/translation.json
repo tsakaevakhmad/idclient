@@ -63,7 +63,20 @@
       "emailOrPhone": "Email же телефон",
       "continueButton": "Улантуу",
       "enterIdentifier": "Сураныч, email же телефон номерин киргизиңиз",
-      "sendCodeFailed": "Тастыктоо кодун жөнөтүү мүмкүн болгон жок"
+      "sendCodeFailed": "Тастыктоо кодун жөнөтүү мүмкүн болгон жок",
+      "SendedMailConfirmationCode": "Тастыктоо коду почтаңызга жөнөтүлдү",
+      "SendedPhoneNumberConfirmationCode": "Тастыктоо коду телефонуңузга жөнөтүлдү",
+      "SendedLoginCodeToEmail": "Кирүү коду почтаңызга жөнөтүлдү",
+      "SendedLoginCodeToPhoneNumber": "Кирүү коду телефонуңузга жөнөтүлдү",
+      "UserAlreadyExists": "Колдонуучу мурунтан бар. Кирүүгө аракет кылыңыз.",
+      "UserNotFound": "Колдонуучу табылган жок. Маалыматыңызды текшериңиз.",
+      "UserMailNotConfirmed": "Email тастыкталган эмес. Адегенде почтаңызды тастыктаңыз.",
+      "UserPhoneNotConfirmed": "Телефон номери тастыкталган эмес. Адегенде телефонуңузду тастыктаңыз.",
+      "UserPhoneAlreadyExists": "Бул телефон номери мурунтан катталган.",
+      "UserMailAlreadyExists": "Бул email мурунтан катталган.",
+      "InvalidToken": "Жараксыз же мөөнөтү өткөн токен. Кайра аракет кылыңыз.",
+      "UserIsBlocked": "Аккаунтуңуз бөгөттөлгөн. Колдоо кызматына кайрылыңыз.",
+      "Success": "Аутентификация ийгиликтүү!"
     },
     "twoFaVerify": {
       "title": "Тастыктоо кодун киргизиңиз",

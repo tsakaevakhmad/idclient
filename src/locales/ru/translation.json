@@ -63,7 +63,20 @@
       "emailOrPhone": "Email или телефон",
       "continueButton": "Продолжить",
       "enterIdentifier": "Пожалуйста, введите email или номер телефона",
-      "sendCodeFailed": "Не удалось отправить код подтверждения"
+      "sendCodeFailed": "Не удалось отправить код подтверждения",
+      "SendedMailConfirmationCode": "Код подтверждения отправлен на вашу почту",
+      "SendedPhoneNumberConfirmationCode": "Код подтверждения отправлен на ваш телефон",
+      "SendedLoginCodeToEmail": "Код для входа отправлен на вашу почту",
+      "SendedLoginCodeToPhoneNumber": "Код для входа отправлен на ваш телефон",
+      "UserAlreadyExists": "Пользователь уже существует. Попробуйте войти.",
+      "UserNotFound": "Пользователь не найден. Проверьте ваши данные.",
+      "UserMailNotConfirmed": "Email не подтвержден. Сначала подтвердите вашу почту.",
+      "UserPhoneNotConfirmed": "Номер телефона не подтвержден. Сначала подтвердите ваш телефон.",
+      "UserPhoneAlreadyExists": "Этот номер телефона уже зарегистрирован.",
+      "UserMailAlreadyExists": "Этот email уже зарегистрирован.",
+      "InvalidToken": "Недействительный или истекший токен. Попробуйте снова.",
+      "UserIsBlocked": "Ваш аккаунт заблокирован. Свяжитесь с поддержкой.",
+      "Success": "Аутентификация успешна!"
     },
     "twoFaVerify": {
       "title": "Введите код подтверждения",
