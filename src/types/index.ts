@@ -33,4 +33,5 @@ export type AuthStatus =
   | 'UserPhoneAlreadyExists'
   | 'InvalidToken'
   | 'Error'
-  | 'UserIsBlocked';
+  | 'UserIsBlocked'
+  | 'RegistrationDisabled';

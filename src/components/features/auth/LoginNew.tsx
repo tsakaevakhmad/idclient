@@ -7,6 +7,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { usePasskey } from '../../../hooks/usePasskey';
 import { useTheme } from '../../../hooks/useTheme';
 import { useLanguage } from '../../../hooks/useLanguage';
+import { useSettings } from '../../../contexts/SettingsContext';
 import { getOAuthRedirectUrl } from '../../../utils';
 import { AuthMethod } from '../../../types';
 import { ROUTES } from '../../../constants';
@@ -27,6 +28,7 @@ const Login: React.FC = () => {
   const { loginWithPasskey } = usePasskey();
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const { settings } = useSettings();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('2FA');
   const params = window.location.search.slice(1);
 
@@ -280,23 +282,29 @@ const Login: React.FC = () => {
           )}
 
           {/* Registration Link */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-            <Box sx={{ mt: 3, textAlign: 'center' }}>
-              <Link
-                to={ROUTES.REGISTRATION}
-                style={{
-                  textDecoration: 'none',
-                  color: theme.colors.primary,
-                  fontWeight: '600',
-                  fontSize: '0.95rem',
-                }}
-              >
-                <motion.span whileHover={{ scale: 1.05 }} style={{ display: 'inline-block' }}>
-                  {t('auth.login.noAccount')} →
-                </motion.span>
-              </Link>
-            </Box>
-          </motion.div>
+          {settings?.registrationEnabled && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Box sx={{ mt: 3, textAlign: 'center' }}>
+                <Link
+                  to={ROUTES.REGISTRATION}
+                  style={{
+                    textDecoration: 'none',
+                    color: theme.colors.primary,
+                    fontWeight: '600',
+                    fontSize: '0.95rem',
+                  }}
+                >
+                  <motion.span whileHover={{ scale: 1.05 }} style={{ display: 'inline-block' }}>
+                    {t('auth.login.noAccount')} →
+                  </motion.span>
+                </Link>
+              </Box>
+            </motion.div>
+          )}
 
           {/* External Providers */}
           {externalProviders.length > 0 && (

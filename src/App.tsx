@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 import { ErrorBoundary, LoadingSpinner } from './components/common';
 import { SettingsMenu } from './components/theme/SettingsMenu';
 import { PageTransition } from './components/animations';
@@ -20,6 +21,7 @@ const Profile = lazy(() => import('./components/features/profile/ProfileNew'));
  */
 const AppRoutes: React.FC = () => {
   const location = useLocation();
+  const { settings } = useSettings();
 
   return (
     <>
@@ -28,7 +30,9 @@ const AppRoutes: React.FC = () => {
         <PageTransition>
           <Routes location={location} key={location.pathname}>
             <Route path={ROUTES.LOGIN} element={<Login />} />
-            <Route path={ROUTES.REGISTRATION} element={<Registration />} />
+            {settings?.registrationEnabled && (
+              <Route path={ROUTES.REGISTRATION} element={<Registration />} />
+            )}
             <Route path={ROUTES.PROFILE} element={<Profile />} />
           </Routes>
         </PageTransition>
@@ -44,13 +48,15 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <AuthProvider>
-          <UserProvider>
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
-          </UserProvider>
-        </AuthProvider>
+        <SettingsProvider>
+          <AuthProvider>
+            <UserProvider>
+              <BrowserRouter>
+                <AppRoutes />
+              </BrowserRouter>
+            </UserProvider>
+          </AuthProvider>
+        </SettingsProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

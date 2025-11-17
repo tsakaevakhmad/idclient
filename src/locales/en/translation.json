@@ -55,7 +55,8 @@
         "phoneExists": "An account with this phone number already exists.",
         "invalidToken": "Invalid token. Please try again.",
         "unknown": "An unknown error occurred. Please try again.",
-        "registrationFailed": "Registration failed. Please try again."
+        "registrationFailed": "Registration failed. Please try again.",
+        "registrationDisabled": "Registration is currently disabled. Please contact administrator."
       }
     },
     "twoFa": {
@@ -76,6 +77,7 @@
       "UserMailAlreadyExists": "This email is already registered.",
       "InvalidToken": "Invalid or expired token. Please try again.",
       "UserIsBlocked": "Your account has been blocked. Please contact support.",
+      "RegistrationDisabled": "Registration is currently disabled. Please contact administrator.",
       "Success": "Authentication successful!"
     },
     "twoFaVerify": {

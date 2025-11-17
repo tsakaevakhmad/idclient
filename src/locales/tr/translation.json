@@ -55,7 +55,8 @@
         "phoneExists": "Bu telefon numarasıyla kayıtlı bir hesap zaten var.",
         "invalidToken": "Geçersiz token. Lütfen tekrar deneyin.",
         "unknown": "Bilinmeyen bir hata oluştu. Lütfen tekrar deneyin.",
-        "registrationFailed": "Kayıt başarısız oldu. Lütfen tekrar deneyin."
+        "registrationFailed": "Kayıt başarısız oldu. Lütfen tekrar deneyin.",
+        "registrationDisabled": "Kayıt geçici olarak devre dışı. Lütfen yöneticiyle iletişime geçin."
       }
     },
     "twoFa": {
@@ -76,6 +77,7 @@
       "UserMailAlreadyExists": "Bu e-posta zaten kayıtlı.",
       "InvalidToken": "Geçersiz veya süresi dolmuş token. Lütfen tekrar deneyin.",
       "UserIsBlocked": "Hesabınız engellenmiş. Lütfen destekle iletişime geçin.",
+      "RegistrationDisabled": "Kayıt geçici olarak devre dışı. Lütfen yöneticiyle iletişime geçin.",
       "Success": "Kimlik doğrulama başarılı!"
     },
     "twoFaVerify": {
