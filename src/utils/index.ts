@@ -53,6 +53,6 @@ export function formatErrorMessage(error: unknown): string {
  * @returns Full redirect URL
  */
 export function getOAuthRedirectUrl(params: string): string {
-  const baseUri = process.env.REACT_APP_BASE_URI || '';
+  const baseUri = window.location.origin;
   return `${baseUri}/connect/authorize/?${params}`;
 }
