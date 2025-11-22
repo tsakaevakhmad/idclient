@@ -3,7 +3,13 @@
     "settings": "Жөндөөлөр",
     "theme": "Тема",
     "language": "Тил",
-    "close": "Жабуу"
+    "close": "Жабуу",
+    "cancel": "Жокко чыгаруу",
+    "revoke": "Жокко чыгаруу",
+    "revoking": "Жокко чыгарылууда...",
+    "loading": "Жүктөлүүдө...",
+    "viewAll": "Баарын көрүү",
+    "details": "Деталдар"
   },
   "themes": {
     "warmRustic": "Жылуу рустик",
@@ -132,7 +138,22 @@
         "subtitle": "{{phone}} номерине жөнөтүлгөн 6 саннуу кодду киргизиңиз",
         "cancel": "Жокко чыгаруу",
         "confirm": "Тастыктоо"
-      }
+      },
+      "activeSessions": "Активдүү сеанстар",
+      "noActiveSessions": "Активдүү сеанстар табылган жок",
+      "sessionCreated": "Түзүлдү",
+      "client": "Клиент",
+      "device": "Түзмөк",
+      "ipAddress": "IP дареги",
+      "created": "Түзүлдү",
+      "revokeSession": "Сеансты жокко чыгаруу",
+      "revokeSessionConfirm": "Бул сеансты жокко чыгарууга ишенесизби? Бул аракетти артка кайтаруу мүмкүн эмес.",
+      "sessionDetails": "Сеанс деталдары",
+      "browser": "Браузер",
+      "operatingSystem": "Операциялык система",
+      "location": "Жайгашкан жер",
+      "loadingLocation": "Жайгашкан жер жүктөлүүдө...",
+      "allSessions": "Бардык сеанстар"
     }
   },
   "errors": {

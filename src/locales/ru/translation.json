@@ -3,7 +3,13 @@
     "settings": "Настройки",
     "theme": "Тема",
     "language": "Язык",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "cancel": "Отмена",
+    "revoke": "Отозвать",
+    "revoking": "Отзыв...",
+    "loading": "Загрузка...",
+    "viewAll": "Показать все",
+    "details": "Подробности"
   },
   "themes": {
     "warmRustic": "Теплый рустик",
@@ -132,7 +138,22 @@
         "subtitle": "Введите 6-значный код, отправленный на {{phone}}",
         "cancel": "Отмена",
         "confirm": "Подтвердить"
-      }
+      },
+      "activeSessions": "Активные сессии",
+      "noActiveSessions": "Активные сессии не найдены",
+      "sessionCreated": "Создано",
+      "client": "Клиент",
+      "device": "Устройство",
+      "ipAddress": "IP адрес",
+      "created": "Создано",
+      "revokeSession": "Отозвать сессию",
+      "revokeSessionConfirm": "Вы уверены, что хотите отозвать эту сессию? Это действие нельзя отменить.",
+      "sessionDetails": "Детали сессии",
+      "browser": "Браузер",
+      "operatingSystem": "Операционная система",
+      "location": "Местоположение",
+      "loadingLocation": "Загрузка местоположения...",
+      "allSessions": "Все сессии"
     }
   },
   "errors": {

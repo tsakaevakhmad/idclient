@@ -113,3 +113,22 @@ export interface ApiError {
   status?: number;
   code?: string;
 }
+
+// Authorization/Session Types
+export interface AuthorizationSession {
+  id: string;
+  subject?: string;
+  applicationId?: string;
+  creationDate?: string;
+  status?: string;
+  scopes?: string[];
+  clientId?: string;
+  userEmail?: string;
+  ipAddress?: string;
+  deviceName?: string;
+  deviceType?: string;
+}
+
+export interface GetMyAuthorizationsResponse {
+  data: AuthorizationSession[];
+}

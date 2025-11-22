@@ -3,7 +3,13 @@
     "settings": "Settings",
     "theme": "Theme",
     "language": "Language",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "revoke": "Revoke",
+    "revoking": "Revoking...",
+    "loading": "Loading...",
+    "viewAll": "View All",
+    "details": "Details"
   },
   "themes": {
     "warmRustic": "Warm Rustic",
@@ -132,7 +138,22 @@
         "subtitle": "Enter the 6-digit code sent to {{phone}}",
         "cancel": "Cancel",
         "confirm": "Confirm"
-      }
+      },
+      "activeSessions": "Active Sessions",
+      "noActiveSessions": "No active sessions found",
+      "sessionCreated": "Created",
+      "client": "Client",
+      "device": "Device",
+      "ipAddress": "IP Address",
+      "created": "Created",
+      "revokeSession": "Revoke Session",
+      "revokeSessionConfirm": "Are you sure you want to revoke this session? This action cannot be undone.",
+      "sessionDetails": "Session Details",
+      "browser": "Browser",
+      "operatingSystem": "Operating System",
+      "location": "Location",
+      "loadingLocation": "Loading location...",
+      "allSessions": "All Sessions"
     }
   },
   "errors": {

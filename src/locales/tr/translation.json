@@ -3,7 +3,13 @@
     "settings": "Ayarlar",
     "theme": "Tema",
     "language": "Dil",
-    "close": "Kapat"
+    "close": "Kapat",
+    "cancel": "İptal",
+    "revoke": "İptal Et",
+    "revoking": "İptal Ediliyor...",
+    "loading": "Yükleniyor...",
+    "viewAll": "Tümünü Gör",
+    "details": "Detaylar"
   },
   "themes": {
     "warmRustic": "Sıcak Rustik",
@@ -132,7 +138,22 @@
         "subtitle": "{{phone}} numarasına gönderilen 6 haneli kodu girin",
         "cancel": "İptal",
         "confirm": "Onayla"
-      }
+      },
+      "activeSessions": "Aktif Oturumlar",
+      "noActiveSessions": "Aktif oturum bulunamadı",
+      "sessionCreated": "Oluşturuldu",
+      "client": "İstemci",
+      "device": "Cihaz",
+      "ipAddress": "IP Adresi",
+      "created": "Oluşturuldu",
+      "revokeSession": "Oturumu İptal Et",
+      "revokeSessionConfirm": "Bu oturumu iptal etmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "sessionDetails": "Oturum Detayları",
+      "browser": "Tarayıcı",
+      "operatingSystem": "İşletim Sistemi",
+      "location": "Konum",
+      "loadingLocation": "Konum yükleniyor...",
+      "allSessions": "Tüm Oturumlar"
     }
   },
   "errors": {
