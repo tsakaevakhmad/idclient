@@ -36,6 +36,7 @@ export const ROUTES = {
   LOGIN_TWO_FA: '/LoginTwoFa',
   REGISTRATION: '/registration',
   PROFILE: '/profile',
+  DEVICES: '/devices',
 } as const;
 
 export const AUTH_METHODS = {

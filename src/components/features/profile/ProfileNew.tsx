@@ -241,7 +241,8 @@ const Profile: React.FC = () => {
     >
       <BackgroundGradient />
 
-      {/* Session Revoke Confirmation Dialog */}
+      {/* Session Revoke Confirmation Dialog - HIDDEN */}
+
       <Dialog
         open={!!selectedSession}
         onClose={() => setSelectedSession(null)}
@@ -540,6 +541,8 @@ const Profile: React.FC = () => {
             </Box>
           </motion.div>
 
+          {/* Active Sessions Section - HIDDEN */}
+
           <Divider
             sx={{
               my: 4,
@@ -548,7 +551,6 @@ const Profile: React.FC = () => {
             }}
           />
 
-          {/* Active Sessions Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -733,6 +735,15 @@ const Profile: React.FC = () => {
               <GlassButton
                 fullWidth
                 gradient={false}
+                onClick={() => navigate(ROUTES.DEVICES)}
+                startIcon={<DevicesIcon />}
+              >
+                {t('auth.profile.myDevices') || 'My Devices'}
+              </GlassButton>
+
+              <GlassButton
+                fullWidth
+                gradient={false}
                 onClick={handleLogout}
                 startIcon={<LogoutIcon />}
                 sx={{
@@ -751,7 +762,9 @@ const Profile: React.FC = () => {
         </GlassCard>
       </motion.div>
 
-      {/* Session Details Dialog */}
+      {/* Session Details Dialog - HIDDEN */}
+      {/* All Sessions Dialog - HIDDEN */}
+
       <Dialog
         open={!!detailsSession}
         onClose={handleCloseDetails}
@@ -793,14 +806,12 @@ const Profile: React.FC = () => {
         <DialogContent>
           {detailsSession && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {/* Device Icon */}
               <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
                 <Box sx={{ color: theme.colors.primary, fontSize: 64 }}>
                   {getDeviceIcon(detailsSession.deviceType)}
                 </Box>
               </Box>
 
-              {/* Device Name */}
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   {t('auth.profile.device')}
@@ -810,7 +821,6 @@ const Profile: React.FC = () => {
                 </Typography>
               </Box>
 
-              {/* Browser */}
               {detailsSession.deviceName?.includes('Chrome') && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">
@@ -822,7 +832,6 @@ const Profile: React.FC = () => {
                 </Box>
               )}
 
-              {/* Operating System */}
               {detailsSession.deviceName?.includes(' on ') && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">
@@ -834,7 +843,6 @@ const Profile: React.FC = () => {
                 </Box>
               )}
 
-              {/* IP Address */}
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   {t('auth.profile.ipAddress')}
@@ -844,7 +852,6 @@ const Profile: React.FC = () => {
                 </Typography>
               </Box>
 
-              {/* Location */}
               <Box>
                 <Typography
                   variant="caption"
@@ -870,7 +877,6 @@ const Profile: React.FC = () => {
                 )}
               </Box>
 
-              {/* Created Date */}
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   {t('auth.profile.created')}
@@ -880,7 +886,6 @@ const Profile: React.FC = () => {
                 </Typography>
               </Box>
 
-              {/* Client */}
               {detailsSession.clientId && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">
@@ -918,7 +923,6 @@ const Profile: React.FC = () => {
         </DialogActions>
       </Dialog>
 
-      {/* All Sessions Dialog */}
       <Dialog
         open={allSessionsOpen}
         onClose={() => setAllSessionsOpen(false)}

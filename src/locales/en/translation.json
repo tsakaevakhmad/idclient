@@ -5,11 +5,13 @@
     "language": "Language",
     "close": "Close",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "revoke": "Revoke",
     "revoking": "Revoking...",
     "loading": "Loading...",
     "viewAll": "View All",
-    "details": "Details"
+    "details": "Details",
+    "backToProfile": "Back to Profile"
   },
   "themes": {
     "warmRustic": "Warm Rustic",
@@ -153,7 +155,8 @@
       "operatingSystem": "Operating System",
       "location": "Location",
       "loadingLocation": "Loading location...",
-      "allSessions": "All Sessions"
+      "allSessions": "All Sessions",
+      "myDevices": "My Devices"
     }
   },
   "errors": {
@@ -167,5 +170,24 @@
     "registrationSuccess": "Successfully registered",
     "passkeyRegistered": "PassKey successfully registered",
     "passkeyDeleted": "PassKey successfully deleted"
+  },
+  "sessions": {
+    "myDevices": "My Devices",
+    "created": "Created",
+    "lastActivity": "Last Activity",
+    "devicesDescription": "Manage your active login sessions. You can revoke sessions from devices you no longer use.",
+    "noActiveSessions": "No active sessions found",
+    "device": "Device",
+    "ipAddress": "IP Address",
+    "activeApps": "active apps",
+    "revokeSession": "Revoke Session",
+    "revokeSessionConfirm": "Are you sure you want to revoke this session? You will be logged out from this device.",
+    "revokeSuccess": "Session revoked successfully",
+    "revokeError": "Failed to revoke session",
+    "logoutOtherDevices": "Logout from Other Devices",
+    "revokeAllWarning": "This will log you out from all other devices. Your current session will remain active.",
+    "revokeAllConfirm": "Are you sure you want to logout from other devices?",
+    "revokeAllSuccess": "Sessions revoked successfully",
+    "revokeAllError": "Failed to revoke sessions"
   }
 }

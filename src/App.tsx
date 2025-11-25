@@ -15,6 +15,7 @@ import './App.css';
 const Login = lazy(() => import('./components/features/auth/LoginNew'));
 const Registration = lazy(() => import('./components/features/auth/RegistrationNew'));
 const Profile = lazy(() => import('./components/features/profile/ProfileNew'));
+const MyDevices = lazy(() => import('./components/features/profile/MyDevices'));
 
 /**
  * Router wrapper component to access useLocation hook
@@ -34,6 +35,7 @@ const AppRoutes: React.FC = () => {
               <Route path={ROUTES.REGISTRATION} element={<Registration />} />
             )}
             <Route path={ROUTES.PROFILE} element={<Profile />} />
+            <Route path={ROUTES.DEVICES} element={<MyDevices />} />
           </Routes>
         </PageTransition>
       </Suspense>

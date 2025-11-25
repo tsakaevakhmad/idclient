@@ -132,3 +132,39 @@ export interface AuthorizationSession {
 export interface GetMyAuthorizationsResponse {
   data: AuthorizationSession[];
 }
+
+// User Session Types (Login Sessions)
+export type DeviceType = 'Desktop' | 'Mobile' | 'Tablet' | 'Unknown';
+
+export interface DeviceInfo {
+  ipAddress?: string;
+  userAgent?: string;
+  deviceName?: string;
+  browser?: string;
+  browserVersion?: string;
+  os?: string;
+  osVersion?: string;
+  deviceType?: DeviceType;
+  deviceFingerprint?: string;
+}
+
+export interface UserSessionDto {
+  id: string;
+  userId: string;
+  userEmail?: string;
+  userName?: string;
+  createdAt: string;
+  lastActivityAt: string;
+  expiresAt?: string;
+  isRevoked: boolean;
+  ipAddress: string;
+  userAgent: string;
+  deviceFingerprint: string;
+  deviceInfo: DeviceInfo;
+  activeAuthorizationsCount: number;
+}
+
+export interface RevokeAllSessionsResponse {
+  message: string;
+  count: number;
+}

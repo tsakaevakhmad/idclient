@@ -5,11 +5,13 @@
     "language": "Dil",
     "close": "Kapat",
     "cancel": "İptal",
+    "confirm": "Onayla",
     "revoke": "İptal Et",
     "revoking": "İptal Ediliyor...",
     "loading": "Yükleniyor...",
     "viewAll": "Tümünü Gör",
-    "details": "Detaylar"
+    "details": "Detaylar",
+    "backToProfile": "Profile Dön"
   },
   "themes": {
     "warmRustic": "Sıcak Rustik",
@@ -153,7 +155,8 @@
       "operatingSystem": "İşletim Sistemi",
       "location": "Konum",
       "loadingLocation": "Konum yükleniyor...",
-      "allSessions": "Tüm Oturumlar"
+      "allSessions": "Tüm Oturumlar",
+      "myDevices": "Cihazlarım"
     }
   },
   "errors": {
@@ -167,5 +170,24 @@
     "registrationSuccess": "Başarıyla kayıt olundu",
     "passkeyRegistered": "Anahtar başarıyla kaydedildi",
     "passkeyDeleted": "Anahtar başarıyla silindi"
+  },
+  "sessions": {
+    "myDevices": "Cihazlarım",
+    "created": "Oluşturuldu",
+    "lastActivity": "Son Etkinlik",
+    "devicesDescription": "Aktif oturum girişlerinizi yönetin. Artık kullanmadığınız cihazlardan oturumları iptal edebilirsiniz.",
+    "noActiveSessions": "Aktif oturum bulunamadı",
+    "device": "Cihaz",
+    "ipAddress": "IP Adresi",
+    "activeApps": "aktif uygulamalar",
+    "revokeSession": "Oturumu İptal Et",
+    "revokeSessionConfirm": "Bu oturumu iptal etmek istediğinizden emin misiniz? Bu cihazdan çıkış yapılacaktır.",
+    "revokeSuccess": "Oturum başarıyla iptal edildi",
+    "revokeError": "Oturum iptal edilemedi",
+    "logoutOtherDevices": "Diğer Cihazlardan Çıkış Yap",
+    "revokeAllWarning": "Bu, diğer tüm cihazlardan çıkış yapmanıza neden olacaktır. Mevcut oturumunuz aktif kalacaktır.",
+    "revokeAllConfirm": "Diğer cihazlardan çıkış yapmak istediğinizden emin misiniz?",
+    "revokeAllSuccess": "Oturumlar başarıyla iptal edildi",
+    "revokeAllError": "Oturumlar iptal edilemedi"
   }
 }

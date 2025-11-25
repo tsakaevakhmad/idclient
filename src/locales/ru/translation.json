@@ -5,11 +5,13 @@
     "language": "Язык",
     "close": "Закрыть",
     "cancel": "Отмена",
+    "confirm": "Подтвердить",
     "revoke": "Отозвать",
     "revoking": "Отзыв...",
     "loading": "Загрузка...",
     "viewAll": "Показать все",
-    "details": "Подробности"
+    "details": "Подробности",
+    "backToProfile": "Вернуться к профилю"
   },
   "themes": {
     "warmRustic": "Теплый рустик",
@@ -153,7 +155,8 @@
       "operatingSystem": "Операционная система",
       "location": "Местоположение",
       "loadingLocation": "Загрузка местоположения...",
-      "allSessions": "Все сессии"
+      "allSessions": "Все сессии",
+      "myDevices": "Мои устройства"
     }
   },
   "errors": {
@@ -167,5 +170,24 @@
     "registrationSuccess": "Регистрация выполнена успешно",
     "passkeyRegistered": "PassKey успешно зарегистрирован",
     "passkeyDeleted": "PassKey успешно удален"
+  },
+  "sessions": {
+    "myDevices": "Мои устройства",
+    "created": "Создано",
+    "lastActivity": "Последняя активность",
+    "devicesDescription": "Управляйте активными сеансами входа. Вы можете отозвать сеансы с устройств, которые больше не используете.",
+    "noActiveSessions": "Активные сеансы не найдены",
+    "device": "Устройство",
+    "ipAddress": "IP адрес",
+    "activeApps": "активных приложений",
+    "revokeSession": "Отозвать сеанс",
+    "revokeSessionConfirm": "Вы уверены, что хотите отозвать этот сеанс? Вы будете выведены из системы на этом устройстве.",
+    "revokeSuccess": "Сеанс успешно отозван",
+    "revokeError": "Не удалось отозвать сеанс",
+    "logoutOtherDevices": "Выйти с других устройств",
+    "revokeAllWarning": "Это приведет к выходу со всех других устройств. Ваш текущий сеанс останется активным.",
+    "revokeAllConfirm": "Вы уверены, что хотите выйти с других устройств?",
+    "revokeAllSuccess": "Сеансы успешно отозваны",
+    "revokeAllError": "Не удалось отозвать сеансы"
   }
 }
