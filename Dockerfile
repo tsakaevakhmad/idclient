@@ -1,19 +1,17 @@
-FROM node:20
-
-# Рабочая директория
+# Stage 1: Build
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Копируем package.json и package-lock.json
 COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
-# Устанавливаем зависимости (используем legacy-peer-deps для совместимости TypeScript 5.x с react-scripts)
-RUN npm install --legacy-peer-deps
-
-# Копируем всё приложение
 COPY . .
+RUN npm run build
 
-# Открываем порт CRA
-EXPOSE 3000
+# Stage 2: Serve
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Запускаем dev-сервер
-CMD ["npm", "start"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

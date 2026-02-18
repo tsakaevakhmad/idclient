@@ -5,7 +5,10 @@
       "Bash(npx husky init)",
       "Bash(npm run build:*)",
       "Bash(taskkill //F //PID 19020)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node_modules/.bin/tsc:*)",
+      "Bash(npx prettier:*)"
     ],
     "deny": [],
     "ask": []

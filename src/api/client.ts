@@ -1,5 +1,14 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ApiError } from './types';
+import i18n from '../i18n/config';
+
+// Map internal app language codes to BCP 47 codes for Accept-Language header
+const LANG_TO_BCP47: Record<string, string> = {
+  en: 'en',
+  ru: 'ru',
+  kg: 'ky',
+  tr: 'tr',
+};
 
 /**
  * Creates and configures the Axios instance with interceptors
@@ -26,7 +35,8 @@ class ApiClient {
     // Request interceptor
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        // You can add auth tokens or modify config here
+        const lang = i18n.language || 'en';
+        config.headers['Accept-Language'] = LANG_TO_BCP47[lang] ?? lang;
         return config;
       },
       (error: AxiosError) => {
