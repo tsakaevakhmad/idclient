@@ -50,6 +50,14 @@ class ApiClient {
         return response;
       },
       (error: AxiosError) => {
+        if (error.response?.status === 401) {
+          const url = error.config?.url ?? '';
+          // Skip redirect for auth endpoints — the login page uses them itself
+          const isAuthEndpoint = url.includes('/api/Authorization/');
+          if (!isAuthEndpoint && window.location.pathname !== '/') {
+            window.location.href = '/';
+          }
+        }
         return Promise.reject(this.handleError(error));
       }
     );
