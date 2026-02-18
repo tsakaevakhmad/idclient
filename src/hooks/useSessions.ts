@@ -27,7 +27,7 @@ export const useSessions = (): UseSessionsReturn => {
     setError(null);
     try {
       const data = await sessionService.getMySessions(status);
-      setSessions(data);
+      setSessions(Array.isArray(data) ? data : []);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch sessions';
       setError(errorMessage);

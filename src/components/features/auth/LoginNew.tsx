@@ -30,7 +30,9 @@ const Login: React.FC = () => {
   const { t } = useLanguage();
   const { settings } = useSettings();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('2FA');
-  const params = window.location.search.slice(1);
+  const rawSearch = new URLSearchParams(window.location.search);
+  rawSearch.delete('session_revoked');
+  const params = rawSearch.toString();
 
   useEffect(() => {
     loadExternalProviders(params);
