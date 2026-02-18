@@ -239,7 +239,7 @@ const MyDevices: React.FC = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 3,
+        padding: { xs: 1.5, sm: 3 },
         position: 'relative',
       }}
     >
@@ -251,7 +251,7 @@ const MyDevices: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: { xs: 2, sm: 3 } }}>
             <GlassButton
               onClick={() => navigate(ROUTES.PROFILE)}
               startIcon={<ArrowBackIcon />}
@@ -269,10 +269,17 @@ const MyDevices: React.FC = () => {
           transition={{ duration: 0.4 }}
         >
           <Box
-            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: { xs: 'flex-start', sm: 'center' },
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 0 },
+              mb: 1.5,
+            }}
           >
             <Typography
-              variant="h4"
+              variant="h5"
               sx={{
                 background: theme.gradients.button,
                 backgroundClip: 'text',
@@ -288,6 +295,7 @@ const MyDevices: React.FC = () => {
                 onClick={handleRevokeAllClick}
                 startIcon={<LogoutIcon />}
                 disabled={revoking}
+                sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
               >
                 {t('sessions.logoutOtherDevices') || 'Logout from Other Devices'}
               </GlassButton>
@@ -300,7 +308,11 @@ const MyDevices: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.4 }}
         >
-          <Typography variant="body2" color={theme.colors.text.secondary} sx={{ mb: 4 }}>
+          <Typography
+            variant="body2"
+            color={theme.colors.text.secondary}
+            sx={{ mb: { xs: 2, sm: 4 } }}
+          >
             {t('sessions.devicesDescription') ||
               'Manage your active login sessions. You can revoke sessions from devices you no longer use.'}
           </Typography>
@@ -320,7 +332,7 @@ const MyDevices: React.FC = () => {
             </GlassCard>
           </motion.div>
         ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
             {activeSessions.map((session, index) => (
               <motion.div
                 key={session.id}
@@ -333,6 +345,7 @@ const MyDevices: React.FC = () => {
                   sx={{
                     transition: 'all 0.3s ease',
                     cursor: 'pointer',
+                    p: { xs: 1.5, sm: 2 },
                     '&:hover': {
                       transform: 'translateY(-4px)',
                     },
@@ -343,22 +356,23 @@ const MyDevices: React.FC = () => {
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 3,
+                      gap: { xs: 1.5, sm: 3 },
                     }}
                   >
-                    {/* Device Icon with gradient background */}
+                    {/* Device Icon */}
                     <Box
                       sx={{
                         flexShrink: 0,
-                        width: 80,
-                        height: 80,
-                        borderRadius: '16px',
+                        width: { xs: 48, sm: 80 },
+                        height: { xs: 48, sm: 80 },
+                        borderRadius: { xs: '12px', sm: '16px' },
                         background: theme.gradients.button,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: '#fff',
                         boxShadow: `0 4px 20px ${theme.colors.primary}40`,
+                        '& svg': { fontSize: { xs: 28, sm: 48 } },
                       }}
                     >
                       {getDeviceIcon(session.deviceInfo.deviceType)}
@@ -367,31 +381,53 @@ const MyDevices: React.FC = () => {
                     {/* Session Info */}
                     <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography
-                        variant="h6"
-                        sx={{ color: theme.colors.text.primary, fontWeight: 600, mb: 0.5 }}
+                        variant="body1"
+                        sx={{
+                          color: theme.colors.text.primary,
+                          fontWeight: 600,
+                          mb: 0.25,
+                          fontSize: { xs: '0.875rem', sm: '1rem' },
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
                       >
                         {getDeviceName(session)}
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <LocationIcon sx={{ fontSize: 16, color: theme.colors.text.secondary }} />
-                          <Typography variant="body2" color={theme.colors.text.secondary}>
+                          <LocationIcon
+                            sx={{ fontSize: 13, color: theme.colors.text.secondary, flexShrink: 0 }}
+                          />
+                          <Typography
+                            variant="caption"
+                            color={theme.colors.text.secondary}
+                            sx={{
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
                             {session.ipAddress}
                           </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <UpdateIcon sx={{ fontSize: 16, color: theme.colors.text.secondary }} />
+                          <UpdateIcon
+                            sx={{ fontSize: 13, color: theme.colors.text.secondary, flexShrink: 0 }}
+                          />
                           <Typography variant="caption" color={theme.colors.text.secondary}>
                             {formatDate(session.lastActivityAt)}
                           </Typography>
                         </Box>
                       </Box>
                       {session.activeAuthorizationsCount > 0 && (
-                        <Box sx={{ mt: 1 }}>
+                        <Box sx={{ mt: 0.5 }}>
                           <Chip
                             label={`${session.activeAuthorizationsCount} ${t('sessions.activeApps') || 'active apps'}`}
                             size="small"
                             sx={{
+                              height: 20,
+                              fontSize: '0.7rem',
                               background: theme.colors.accent + '20',
                               color: theme.colors.accent,
                               fontWeight: 600,
@@ -403,8 +439,16 @@ const MyDevices: React.FC = () => {
                     </Box>
 
                     {/* Action Buttons */}
-                    <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        gap: 0.75,
+                        flexShrink: 0,
+                      }}
+                    >
                       <IconButton
+                        size="small"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleViewDetails(session);
@@ -414,6 +458,8 @@ const MyDevices: React.FC = () => {
                           background: theme.colors.glass.background,
                           backdropFilter: `blur(${theme.colors.glass.blur})`,
                           border: `1px solid ${theme.colors.primary}40`,
+                          width: { xs: 32, sm: 40 },
+                          height: { xs: 32, sm: 40 },
                           '&:hover': {
                             background: `${theme.colors.primary}20`,
                             borderColor: theme.colors.primary,
@@ -422,9 +468,10 @@ const MyDevices: React.FC = () => {
                           transition: 'all 0.2s',
                         }}
                       >
-                        <InfoIcon />
+                        <InfoIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
                       </IconButton>
                       <IconButton
+                        size="small"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleRevokeClick(session);
@@ -434,6 +481,8 @@ const MyDevices: React.FC = () => {
                           background: theme.colors.glass.background,
                           backdropFilter: `blur(${theme.colors.glass.blur})`,
                           border: `1px solid ${theme.colors.accent}40`,
+                          width: { xs: 32, sm: 40 },
+                          height: { xs: 32, sm: 40 },
                           '&:hover': {
                             background: `${theme.colors.accent}20`,
                             borderColor: theme.colors.accent,
@@ -442,7 +491,7 @@ const MyDevices: React.FC = () => {
                           transition: 'all 0.2s',
                         }}
                       >
-                        <DeleteIcon />
+                        <DeleteIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
                       </IconButton>
                     </Box>
                   </Box>

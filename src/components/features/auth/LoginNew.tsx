@@ -100,7 +100,7 @@ const Login: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Box sx={{ textAlign: 'center', mb: { xs: 2, sm: 4 } }}>
               <motion.div
                 animate={{
                   scale: [1, 1.1, 1],
@@ -114,22 +114,22 @@ const Login: React.FC = () => {
               >
                 <LoginIcon
                   sx={{
-                    fontSize: 64,
+                    fontSize: { xs: 44, sm: 64 },
                     color: theme.colors.primary,
                     filter: `drop-shadow(0 0 20px ${theme.colors.primary}80)`,
-                    mb: 2,
+                    mb: { xs: 1, sm: 2 },
                   }}
                 />
               </motion.div>
               <Typography
-                variant="h4"
                 fontWeight="bold"
                 sx={{
+                  fontSize: { xs: '1.35rem', sm: '2.125rem' },
                   background: theme.gradients.button,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  mb: 1,
+                  mb: 0.5,
                 }}
               >
                 {t('auth.login.title')}

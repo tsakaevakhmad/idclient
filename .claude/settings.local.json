@@ -8,7 +8,10 @@
       "Bash(git add:*)",
       "Bash(npx tsc:*)",
       "Bash(node_modules/.bin/tsc:*)",
-      "Bash(npx prettier:*)"
+      "Bash(npx prettier:*)",
+      "Bash(powershell.exe -Command \"Get-ChildItem ''C:\\\\Users\\\\ahmad\\\\OneDrive\\\\Рабочий стол\\\\Id\\\\ID''\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem ''C:\\\\Users\\\\ahmad\\\\OneDrive\\\\Рабочий стол\\\\Id\\\\IDAdmin''\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem ''C:\\\\Users\\\\ahmad\\\\OneDrive\\\\Рабочий стол\\\\Id\\\\IDAdmin\\\\src'' -Recurse | Where-Object { $_.Name -match ''logout|auth|login'' } | Select-Object FullName\")"
     ],
     "deny": [],
     "ask": []

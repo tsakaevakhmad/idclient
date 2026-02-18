@@ -235,7 +235,7 @@ const Profile: React.FC = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 3,
+        padding: { xs: 1.5, sm: 3 },
         position: 'relative',
       }}
     >
@@ -391,28 +391,32 @@ const Profile: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Box sx={{ textAlign: 'center', mb: 4 }}>
-              <motion.div
+            <Box sx={{ textAlign: 'center', mb: { xs: 2, sm: 4 } }}>
+              <Box
+                component={motion.div}
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 300 }}
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  margin: '0 auto 24px',
+                sx={{
+                  width: { xs: 80, sm: 120 },
+                  height: { xs: 80, sm: 120 },
+                  margin: '0 auto',
+                  mb: { xs: 1.5, sm: 3 },
                   borderRadius: '50%',
                   background: theme.gradients.button,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '48px',
+                  fontSize: { xs: '32px', sm: '48px' },
                   fontWeight: 700,
                   color: '#fff',
                   boxShadow: `0 0 40px ${theme.colors.primary}60`,
                   cursor: 'pointer',
                 }}
               >
-                {user.firstName?.[0]?.toUpperCase() || <AccountCircleIcon sx={{ fontSize: 64 }} />}
-              </motion.div>
+                {user.firstName?.[0]?.toUpperCase() || (
+                  <AccountCircleIcon sx={{ fontSize: { xs: 44, sm: 64 } }} />
+                )}
+              </Box>
 
               {/* Name Swap Animation */}
               <Box
@@ -436,9 +440,9 @@ const Profile: React.FC = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <Typography
-                        variant="h4"
                         fontWeight="bold"
                         sx={{
+                          fontSize: { xs: '1.35rem', sm: '2.125rem' },
                           background: theme.gradients.button,
                           backgroundClip: 'text',
                           WebkitBackgroundClip: 'text',
@@ -457,9 +461,9 @@ const Profile: React.FC = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <Typography
-                        variant="h4"
                         fontWeight="bold"
                         sx={{
+                          fontSize: { xs: '1.35rem', sm: '2.125rem' },
                           background: theme.gradients.button,
                           backgroundClip: 'text',
                           WebkitBackgroundClip: 'text',
@@ -481,14 +485,14 @@ const Profile: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Box sx={{ mb: 4 }}>
+            <Box sx={{ mb: { xs: 2, sm: 4 } }}>
               <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: 1,
-                  mb: 2,
+                  mb: 1.5,
                 }}
               >
                 <Typography variant="body1" color="text.primary">
@@ -545,7 +549,7 @@ const Profile: React.FC = () => {
 
           <Divider
             sx={{
-              my: 4,
+              my: { xs: 2, sm: 4 },
               borderColor: theme.colors.glass.border,
               opacity: 0.5,
             }}
