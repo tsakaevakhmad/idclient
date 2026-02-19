@@ -172,8 +172,9 @@ const Profile: React.FC = () => {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('ru-RU', {
+    const normalized = /Z|[+-]\d{2}:\d{2}$/.test(dateString) ? dateString : dateString + 'Z';
+    const date = new Date(normalized);
+    return new Intl.DateTimeFormat(undefined, {
       day: '2-digit',
       month: 'short',
       hour: '2-digit',
