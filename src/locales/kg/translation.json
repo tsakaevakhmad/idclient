@@ -156,7 +156,16 @@
       "location": "Жайгашкан жер",
       "loadingLocation": "Жайгашкан жер жүктөлүүдө...",
       "allSessions": "Бардык сеанстар",
-      "myDevices": "Менин түзмөктөрүм"
+      "myDevices": "Менин түзмөктөрүм",
+      "passkeys": {
+        "title": "Менин PassKey'лерим",
+        "noPasskeys": "Катталган PassKey жок",
+        "registeredOn": "Катталган",
+        "deleteConfirm": "Бул PassKey'ди өчүрүүнү каалайсызбы? Бул аракетти артка кайтаруу мүмкүн эмес.",
+        "namePromptTitle": "PassKey'ге ат коюңуз",
+        "namePromptSubtitle": "Бул PassKey'ди аныктоо үчүн ат киргизиңиз",
+        "namePlaceholder": "мис. Менин ноутбугум"
+      }
     }
   },
   "errors": {

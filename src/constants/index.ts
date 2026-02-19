@@ -16,6 +16,8 @@ export const API_ENDPOINTS = {
     GET_INFO: '/api/user/getUserInfo',
     SEND_PHONE_CODE: '/api/user/sendPhoneConfirmationCode',
     VERIFY_PHONE_CODE: '/api/user/verifiPhoneConfirmationCode',
+    GET_PASSKEYS: '/api/user/GetPasskeys',
+    DELETE_PASSKEY: '/api/user/DeletePasskey',
   },
   // Passkey endpoints
   PASSKEY: {

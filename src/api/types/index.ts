@@ -92,6 +92,17 @@ export interface PasskeyAssertionOptions {
   userVerification?: string;
 }
 
+// Passkey Management Types
+export interface FidoCredentialDto {
+  id: string;
+  credentialId: string;
+  credType: string;
+  registrationDate: string;
+  aaGuid?: string;
+  authenticatorDescription?: string;
+  transports?: string;
+}
+
 // QR Login Types
 export interface QRLoginToken {
   token: string;

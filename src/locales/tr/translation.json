@@ -156,7 +156,16 @@
       "location": "Konum",
       "loadingLocation": "Konum yükleniyor...",
       "allSessions": "Tüm Oturumlar",
-      "myDevices": "Cihazlarım"
+      "myDevices": "Cihazlarım",
+      "passkeys": {
+        "title": "Anahtarlarım",
+        "noPasskeys": "Kayıtlı anahtar yok",
+        "registeredOn": "Kayıt tarihi",
+        "deleteConfirm": "Bu anahtarı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+        "namePromptTitle": "Anahtarınızı Adlandırın",
+        "namePromptSubtitle": "Bu anahtarı tanımlamak için bir ad girin",
+        "namePlaceholder": "örn. Dizüstü bilgisayarım"
+      }
     }
   },
   "errors": {

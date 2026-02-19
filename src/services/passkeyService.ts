@@ -1,7 +1,11 @@
 import { apiClient } from '../api/client';
 import { API_ENDPOINTS, COSE_ALGORITHM_MAP } from '../constants';
 import { base64UrlToUint8Array } from '../utils';
-import { PasskeyCredentialCreationOptions, PasskeyAssertionOptions } from '../api/types';
+import {
+  PasskeyCredentialCreationOptions,
+  PasskeyAssertionOptions,
+  FidoCredentialDto,
+} from '../api/types';
 
 /**
  * Convert ArrayBuffer to base64url string
@@ -24,7 +28,7 @@ class PasskeyService {
   /**
    * Register a new passkey for the current user
    */
-  async registerPasskey(): Promise<void> {
+  async registerPasskey(passkeyName?: string): Promise<void> {
     try {
       // Get registration options from server
       const optionsResponse = await apiClient.post<PasskeyCredentialCreationOptions>(
@@ -74,6 +78,7 @@ class PasskeyService {
           attestationObject: arrayBufferToBase64Url(attestationResponse.attestationObject),
           clientDataJSON: arrayBufferToBase64Url(attestationResponse.clientDataJSON),
         },
+        passkeyName: passkeyName || undefined,
       };
 
       // Send credential to server
@@ -144,6 +149,32 @@ class PasskeyService {
       return result;
     } catch (error) {
       console.error('Passkey login error:', error);
+      throw error;
+    }
+  }
+  /**
+   * Get list of user's registered passkeys
+   */
+  async getPasskeys(): Promise<FidoCredentialDto[]> {
+    try {
+      const response = await apiClient.get<FidoCredentialDto[]>(API_ENDPOINTS.USER.GET_PASSKEYS);
+      return response.data;
+    } catch (error) {
+      console.error('Get passkeys error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a passkey by ID
+   */
+  async deletePasskey(passkeyId: string): Promise<void> {
+    try {
+      await apiClient.delete(
+        `${API_ENDPOINTS.USER.DELETE_PASSKEY}?passkeyId=${encodeURIComponent(passkeyId)}`
+      );
+    } catch (error) {
+      console.error('Delete passkey error:', error);
       throw error;
     }
   }

@@ -1,12 +1,18 @@
 import { useState, useCallback } from 'react';
 import { passkeyService } from '../services/passkeyService';
+import { FidoCredentialDto } from '../api/types';
 
 interface UsePasskeyReturn {
   isRegistering: boolean;
   isLoggingIn: boolean;
+  isLoadingPasskeys: boolean;
+  isDeletingPasskey: boolean;
   error: string | null;
-  registerPasskey: () => Promise<boolean>;
+  passkeys: FidoCredentialDto[];
+  registerPasskey: (passkeyName?: string) => Promise<boolean>;
   loginWithPasskey: () => Promise<boolean>;
+  fetchPasskeys: () => Promise<void>;
+  deletePasskey: (passkeyId: string) => Promise<boolean>;
   clearError: () => void;
 }
 
@@ -16,13 +22,16 @@ interface UsePasskeyReturn {
 export const usePasskey = (): UsePasskeyReturn => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isLoadingPasskeys, setIsLoadingPasskeys] = useState(false);
+  const [isDeletingPasskey, setIsDeletingPasskey] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [passkeys, setPasskeys] = useState<FidoCredentialDto[]>([]);
 
-  const registerPasskey = useCallback(async (): Promise<boolean> => {
+  const registerPasskey = useCallback(async (passkeyName?: string): Promise<boolean> => {
     try {
       setIsRegistering(true);
       setError(null);
-      await passkeyService.registerPasskey();
+      await passkeyService.registerPasskey(passkeyName);
       return true;
     } catch (err) {
       console.error('Passkey registration error:', err);
@@ -52,6 +61,36 @@ export const usePasskey = (): UsePasskeyReturn => {
     }
   }, []);
 
+  const fetchPasskeys = useCallback(async (): Promise<void> => {
+    try {
+      setIsLoadingPasskeys(true);
+      setError(null);
+      const data = await passkeyService.getPasskeys();
+      setPasskeys(data);
+    } catch (err) {
+      console.error('Fetch passkeys error:', err);
+      setError('Failed to load passkeys.');
+    } finally {
+      setIsLoadingPasskeys(false);
+    }
+  }, []);
+
+  const deletePasskey = useCallback(async (passkeyId: string): Promise<boolean> => {
+    try {
+      setIsDeletingPasskey(true);
+      setError(null);
+      await passkeyService.deletePasskey(passkeyId);
+      setPasskeys((prev) => prev.filter((p) => p.id !== passkeyId));
+      return true;
+    } catch (err) {
+      console.error('Delete passkey error:', err);
+      setError('Failed to delete passkey.');
+      return false;
+    } finally {
+      setIsDeletingPasskey(false);
+    }
+  }, []);
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
@@ -59,9 +98,14 @@ export const usePasskey = (): UsePasskeyReturn => {
   return {
     isRegistering,
     isLoggingIn,
+    isLoadingPasskeys,
+    isDeletingPasskey,
     error,
+    passkeys,
     registerPasskey,
     loginWithPasskey,
+    fetchPasskeys,
+    deletePasskey,
     clearError,
   };
 };
