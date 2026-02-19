@@ -4,6 +4,19 @@ import { base64UrlToUint8Array } from '../utils';
 import { PasskeyCredentialCreationOptions, PasskeyAssertionOptions } from '../api/types';
 
 /**
+ * Convert ArrayBuffer to base64url string
+ * Required because Safari doesn't support PublicKeyCredential.toJSON()
+ */
+function arrayBufferToBase64Url(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+/**
  * Passkey Service
  * Handles WebAuthn credential creation and authentication
  */
@@ -47,12 +60,24 @@ class PasskeyService {
       }
 
       // Create credential using WebAuthn API
-      const credential = await navigator.credentials.create({
+      const credential = (await navigator.credentials.create({
         publicKey: publicKey as PublicKeyCredentialCreationOptions,
-      });
+      })) as PublicKeyCredential;
+
+      // Manually serialize - Safari doesn't support PublicKeyCredential.toJSON()
+      const attestationResponse = credential.response as AuthenticatorAttestationResponse;
+      const serialized = {
+        id: credential.id,
+        rawId: arrayBufferToBase64Url(credential.rawId),
+        type: credential.type,
+        response: {
+          attestationObject: arrayBufferToBase64Url(attestationResponse.attestationObject),
+          clientDataJSON: arrayBufferToBase64Url(attestationResponse.clientDataJSON),
+        },
+      };
 
       // Send credential to server
-      await apiClient.post(API_ENDPOINTS.PASSKEY.FINISH_REGISTRATION, credential);
+      await apiClient.post(API_ENDPOINTS.PASSKEY.FINISH_REGISTRATION, serialized);
     } catch (error) {
       console.error('Passkey registration error:', error);
       throw error;
@@ -75,17 +100,15 @@ class PasskeyService {
 
       const options = optionsResponse.data;
 
-      // Convert challenge from base64 to Uint8Array
-      options.challenge = Uint8Array.from(atob(options.challenge as string), (c) =>
-        c.charCodeAt(0)
-      );
+      // Convert challenge from base64url to Uint8Array
+      options.challenge = base64UrlToUint8Array(options.challenge as string);
 
       // Convert allowed credential IDs
       if (options.allowCredentials) {
         options.allowCredentials = options.allowCredentials.map((cred) => {
           const mapped = {
             ...cred,
-            id: Uint8Array.from(atob(cred.id as string), (c) => c.charCodeAt(0)),
+            id: base64UrlToUint8Array(cred.id as string),
           };
           // Remove transports if it's not an array
           if (!Array.isArray(mapped.transports)) {
@@ -96,12 +119,28 @@ class PasskeyService {
       }
 
       // Get credential using WebAuthn API
-      const credential = await navigator.credentials.get({
+      const credential = (await navigator.credentials.get({
         publicKey: options as PublicKeyCredentialRequestOptions,
-      });
+      })) as PublicKeyCredential;
+
+      // Manually serialize - Safari doesn't support PublicKeyCredential.toJSON()
+      const assertionResponse = credential.response as AuthenticatorAssertionResponse;
+      const serialized = {
+        id: credential.id,
+        rawId: arrayBufferToBase64Url(credential.rawId),
+        type: credential.type,
+        response: {
+          authenticatorData: arrayBufferToBase64Url(assertionResponse.authenticatorData),
+          clientDataJSON: arrayBufferToBase64Url(assertionResponse.clientDataJSON),
+          signature: arrayBufferToBase64Url(assertionResponse.signature),
+          userHandle: assertionResponse.userHandle
+            ? arrayBufferToBase64Url(assertionResponse.userHandle)
+            : null,
+        },
+      };
 
       // Send credential to server
-      const result = await apiClient.post(API_ENDPOINTS.PASSKEY.FINISH_LOGIN, credential);
+      const result = await apiClient.post(API_ENDPOINTS.PASSKEY.FINISH_LOGIN, serialized);
       return result;
     } catch (error) {
       console.error('Passkey login error:', error);
