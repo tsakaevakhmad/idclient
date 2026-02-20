@@ -168,6 +168,19 @@
       }
     }
   },
+  "consent": {
+    "title": "Authorization Request",
+    "description": "{{appName}} is requesting access to your account",
+    "requestedAccess": "Requested permissions:",
+    "warning": "By clicking \"Allow\", you grant this application access to the listed permissions. You can revoke this access at any time from your profile.",
+    "accept": "Allow",
+    "deny": "Deny",
+    "error": {
+      "missingClientId": "Invalid authorization request: client_id is missing.",
+      "loadFailed": "Failed to load application information. Please try again.",
+      "unknown": "An unknown error occurred."
+    }
+  },
   "errors": {
     "invalidCredentials": "Invalid username or password",
     "invalidCode": "Invalid verification code",

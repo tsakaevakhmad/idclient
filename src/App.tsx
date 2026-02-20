@@ -62,6 +62,7 @@ const Login = lazyWithRetry(() => import('./components/features/auth/LoginNew'))
 const Registration = lazyWithRetry(() => import('./components/features/auth/RegistrationNew'));
 const Profile = lazyWithRetry(() => import('./components/features/profile/ProfileNew'));
 const MyDevices = lazyWithRetry(() => import('./components/features/profile/MyDevices'));
+const Consent = lazyWithRetry(() => import('./components/features/auth/ConsentPage'));
 
 /**
  * Router wrapper component to access useLocation hook
@@ -80,6 +81,7 @@ const AppRoutes: React.FC = () => {
             {settings?.registrationEnabled && (
               <Route path={ROUTES.REGISTRATION} element={<Registration />} />
             )}
+            <Route path={ROUTES.CONSENT} element={<Consent />} />
             <Route path={ROUTES.PROFILE} element={<PrivateRoute element={<Profile />} />} />
             <Route path={ROUTES.DEVICES} element={<PrivateRoute element={<MyDevices />} />} />
           </Routes>

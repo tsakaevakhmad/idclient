@@ -168,6 +168,19 @@
       }
     }
   },
+  "consent": {
+    "title": "Yetkilendirme İsteği",
+    "description": "{{appName}} hesabınıza erişim istiyor",
+    "requestedAccess": "İstenen izinler:",
+    "warning": "\"İzin Ver\" düğmesine tıklayarak bu uygulamaya listelenen izinlere erişim vermiş olursunuz. Profilinizden istediğiniz zaman bu erişimi iptal edebilirsiniz.",
+    "accept": "İzin Ver",
+    "deny": "Reddet",
+    "error": {
+      "missingClientId": "Geçersiz yetkilendirme isteği: client_id eksik.",
+      "loadFailed": "Uygulama bilgileri yüklenemedi. Lütfen tekrar deneyin.",
+      "unknown": "Bilinmeyen bir hata oluştu."
+    }
+  },
   "errors": {
     "invalidCredentials": "Geçersiz kullanıcı adı veya şifre",
     "invalidCode": "Geçersiz doğrulama kodu",

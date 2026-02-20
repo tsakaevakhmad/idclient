@@ -26,6 +26,10 @@ export const API_ENDPOINTS = {
     BEGIN_LOGIN: '/api/passkey/BeginLogin',
     FINISH_LOGIN: '/api/passkey/FinishLogin',
   },
+  // Consent endpoints
+  CONSENT: {
+    INFO: '/connect/consent-info',
+  },
 } as const;
 
 export const SIGNALR_HUBS = {
@@ -39,6 +43,7 @@ export const ROUTES = {
   REGISTRATION: '/registration',
   PROFILE: '/profile',
   DEVICES: '/devices',
+  CONSENT: '/consent',
 } as const;
 
 export const AUTH_METHODS = {
