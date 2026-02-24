@@ -53,8 +53,8 @@ class PasskeyService {
           (param.alg as unknown as number),
       }));
 
-      // Convert excluded credential IDs
-      for (const exCred of publicKey.excludeCredentials) {
+      // Convert excluded credential IDs (guard against null from server)
+      for (const exCred of publicKey.excludeCredentials ?? []) {
         exCred.id = base64UrlToUint8Array(exCred.id as string);
       }
 
@@ -70,10 +70,19 @@ class PasskeyService {
 
       // Manually serialize - Safari doesn't support PublicKeyCredential.toJSON()
       const attestationResponse = credential.response as AuthenticatorAttestationResponse;
+
+      // getTransports() is required for Android passkeys (returns ["internal"] or ["hybrid"])
+      // Without it the backend cannot store transport metadata and Android login may fail
+      const transports: string[] =
+        typeof (attestationResponse as any).getTransports === 'function'
+          ? (attestationResponse as any).getTransports()
+          : [];
+
       const serialized = {
         id: credential.id,
         rawId: arrayBufferToBase64Url(credential.rawId),
         type: credential.type,
+        transports,
         response: {
           attestationObject: arrayBufferToBase64Url(attestationResponse.attestationObject),
           clientDataJSON: arrayBufferToBase64Url(attestationResponse.clientDataJSON),

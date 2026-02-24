@@ -75,10 +75,9 @@ class ApiClient {
 
     if (error.response) {
       // Server responded with error status
-      apiError.message =
-        (error.response.data as { message?: string })?.message ||
-        error.message ||
-        'Server error occurred';
+      // Backend may return { error: "..." } or { message: "..." }
+      const data = error.response.data as { message?: string; error?: string } | undefined;
+      apiError.message = data?.message || data?.error || error.message || 'Server error occurred';
     } else if (error.request) {
       // Request made but no response
       apiError.message = 'No response from server. Please check your connection.';
