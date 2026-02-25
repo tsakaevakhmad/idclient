@@ -281,7 +281,6 @@ const Login: React.FC = () => {
               </motion.div>
             </AnimatePresence>
           )}
-
           {/* Registration Link */}
           {settings?.registrationEnabled && (
             <motion.div
