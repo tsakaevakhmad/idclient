@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ButtonGroup, Typography, Box } from '@mui/material';
+import { ButtonGroup, Typography, Box, SvgIcon } from '@mui/material';
+import { ReactComponent as LogoIcon } from '../../../tunduklogo.svg';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
@@ -101,26 +102,24 @@ const Login: React.FC = () => {
             transition={{ delay: 0.2 }}
           >
             <Box sx={{ textAlign: 'center', mb: 4 }}>
-              <motion.div
-                animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  repeatType: 'reverse',
-                }}
-              >
-                <LoginIcon
+              {/* <LoginIcon
                   sx={{
                     fontSize: 64,
                     color: theme.colors.primary,
                     filter: `drop-shadow(0 0 20px ${theme.colors.primary}80)`,
                     mb: 2,
                   }}
-                />
-              </motion.div>
+                /> */}
+              <SvgIcon
+                component={LogoIcon}
+                viewBox="0 0 92 93"
+                sx={{
+                  fontSize: 48,
+                  color: theme.colors.primary,
+                  filter: `drop-shadow(0 0 10px ${theme.colors.primary}80)`,
+                  mb: 2,
+                }}
+              ></SvgIcon>
               <Typography
                 variant="h4"
                 fontWeight="bold"
