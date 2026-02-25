@@ -1,5 +1,14 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ApiError } from './types';
+import i18n from '../i18n/config';
+
+// Map internal app language codes to BCP 47 codes for Accept-Language header
+const LANG_TO_BCP47: Record<string, string> = {
+  en: 'en',
+  ru: 'ru',
+  kg: 'ky',
+  tr: 'tr',
+};
 
 /**
  * Creates and configures the Axios instance with interceptors
@@ -26,7 +35,8 @@ class ApiClient {
     // Request interceptor
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        // You can add auth tokens or modify config here
+        const lang = i18n.language || 'en';
+        config.headers['Accept-Language'] = LANG_TO_BCP47[lang] ?? lang;
         return config;
       },
       (error: AxiosError) => {
@@ -40,6 +50,14 @@ class ApiClient {
         return response;
       },
       (error: AxiosError) => {
+        if (error.response?.status === 401) {
+          const url = error.config?.url ?? '';
+          // Skip redirect for auth endpoints — the login page uses them itself
+          const isAuthEndpoint = url.includes('/api/Authorization/');
+          if (!isAuthEndpoint && window.location.pathname !== '/') {
+            window.location.href = '/';
+          }
+        }
         return Promise.reject(this.handleError(error));
       }
     );
@@ -57,10 +75,9 @@ class ApiClient {
 
     if (error.response) {
       // Server responded with error status
-      apiError.message =
-        (error.response.data as { message?: string })?.message ||
-        error.message ||
-        'Server error occurred';
+      // Backend may return { error: "..." } or { message: "..." }
+      const data = error.response.data as { message?: string; error?: string } | undefined;
+      apiError.message = data?.message || data?.error || error.message || 'Server error occurred';
     } else if (error.request) {
       // Request made but no response
       apiError.message = 'No response from server. Please check your connection.';

@@ -1,6 +1,6 @@
 /**
  * Service for fetching geolocation data by IP address
- * Uses ip-api.com free API (no key required, 45 requests per minute)
+ * Uses ipapi.co free API (no key required, HTTPS, 1 000 req/day)
  */
 
 export interface GeolocationData {
@@ -18,7 +18,7 @@ export interface GeolocationData {
 }
 
 class GeolocationService {
-  private readonly API_URL = 'http://ip-api.com/json';
+  private readonly API_URL = 'https://ipapi.co';
   private cache: Map<string, GeolocationData> = new Map();
 
   /**
@@ -31,9 +31,7 @@ class GeolocationService {
         return this.cache.get(ipAddress) || null;
       }
 
-      const response = await fetch(
-        `${this.API_URL}/${ipAddress}?fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,org,as,query`
-      );
+      const response = await fetch(`${this.API_URL}/${ipAddress}/json/`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,15 +39,29 @@ class GeolocationService {
 
       const data = await response.json();
 
-      if (data.status === 'fail') {
-        console.error('Geolocation API error:', data.message);
+      if (data.error) {
+        console.error('Geolocation API error:', data.reason);
         return null;
       }
 
-      // Cache the result
-      this.cache.set(ipAddress, data);
+      // Map ipapi.co fields to our interface
+      const result: GeolocationData = {
+        country: data.country_name,
+        regionName: data.region,
+        city: data.city,
+        zip: data.postal,
+        lat: data.latitude,
+        lon: data.longitude,
+        timezone: data.timezone,
+        org: data.org,
+        as: data.asn,
+        query: data.ip,
+      };
 
-      return data;
+      // Cache the result
+      this.cache.set(ipAddress, result);
+
+      return result;
     } catch (error) {
       console.error('Error fetching geolocation:', error);
       return null;

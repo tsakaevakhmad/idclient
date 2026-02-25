@@ -1,7 +1,7 @@
 import { createContext, useState, useCallback, ReactNode } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ThemeName, GlassTheme } from '../types/theme';
 import { themes, themeConfigs } from '../themes';
 
@@ -68,28 +68,21 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     <ThemeContext.Provider value={value}>
       <MuiThemeProvider theme={themes[themeName]}>
         <CssBaseline />
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={themeName}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            style={{
-              width: '100%',
-              height: '100%',
-              minHeight: '100vh',
-            }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            minHeight: '100vh',
+          }}
+        >
+          {children}
+        </div>
 
         {/* Theme transition overlay */}
         {isTransitioning && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.3 }}
+            animate={{ opacity: 0.25 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             style={{
@@ -101,7 +94,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
               background: themeConfigs[themeName].colors.primary,
               pointerEvents: 'none',
               zIndex: 9999,
-              mixBlendMode: 'multiply',
             }}
           />
         )}

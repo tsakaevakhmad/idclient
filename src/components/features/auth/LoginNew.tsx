@@ -31,7 +31,9 @@ const Login: React.FC = () => {
   const { t } = useLanguage();
   const { settings } = useSettings();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('2FA');
-  const params = window.location.search.slice(1);
+  const rawSearch = new URLSearchParams(window.location.search);
+  rawSearch.delete('session_revoked');
+  const params = rawSearch.toString();
 
   useEffect(() => {
     loadExternalProviders(params);
@@ -104,10 +106,10 @@ const Login: React.FC = () => {
             <Box sx={{ textAlign: 'center', mb: 4 }}>
               {/* <LoginIcon
                   sx={{
-                    fontSize: 64,
+                    fontSize: { xs: 44, sm: 64 },
                     color: theme.colors.primary,
                     filter: `drop-shadow(0 0 20px ${theme.colors.primary}80)`,
-                    mb: 2,
+                    mb: { xs: 1, sm: 2 },
                   }}
                 /> */}
               <SvgIcon
@@ -121,14 +123,14 @@ const Login: React.FC = () => {
                 }}
               ></SvgIcon>
               <Typography
-                variant="h4"
                 fontWeight="bold"
                 sx={{
+                  fontSize: { xs: '1.35rem', sm: '2.125rem' },
                   background: theme.gradients.button,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  mb: 1,
+                  mb: 0.5,
                 }}
               >
                 {t('auth.login.title')}

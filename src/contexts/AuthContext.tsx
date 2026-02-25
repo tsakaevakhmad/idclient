@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const loadExternalProviders = useCallback(async (params?: string) => {
     try {
       const result = await authService.getExternalProviders(params);
-      if (result?.data) {
+      if (Array.isArray(result?.data)) {
         setExternalProviders(result.data);
       }
     } catch (error) {

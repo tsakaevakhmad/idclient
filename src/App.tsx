@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -7,15 +7,62 @@ import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 import { ErrorBoundary, LoadingSpinner } from './components/common';
 import { SettingsMenu } from './components/theme/SettingsMenu';
 import { PageTransition } from './components/animations';
+import { useAuth } from './hooks/useAuth';
 import { ROUTES } from './constants';
 import './i18n/config'; // Initialize i18n
 import './App.css';
 
+/**
+ * Retries a failed dynamic import up to `retries` times with a delay.
+ * If all retries fail, forces a hard reload to recover from stale chunk URLs.
+ */
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>,
+  retries = 3,
+  delay = 500
+): React.LazyExoticComponent<T> {
+  return lazy(
+    () =>
+      new Promise<{ default: T }>((resolve, reject) => {
+        const attempt = (remaining: number) => {
+          factory()
+            .then(resolve)
+            .catch((err: unknown) => {
+              if (remaining <= 0) {
+                // All retries exhausted — chunk URLs are stale after a rebuild.
+                // Force a full reload so the browser fetches the new HTML + chunks.
+                window.location.reload();
+                reject(err);
+              } else {
+                setTimeout(() => attempt(remaining - 1), delay);
+              }
+            });
+        };
+        attempt(retries);
+      })
+  );
+}
+
+/**
+ * Wraps protected routes: redirects to login if not authenticated.
+ * Shows a spinner while the initial auth check is in progress.
+ */
+const PrivateRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner message="Loading..." />;
+  }
+
+  return isAuthenticated ? <>{element}</> : <Navigate to={ROUTES.LOGIN} replace />;
+};
+
 // Lazy load route components (using new glassmorphism designs)
-const Login = lazy(() => import('./components/features/auth/LoginNew'));
-const Registration = lazy(() => import('./components/features/auth/RegistrationNew'));
-const Profile = lazy(() => import('./components/features/profile/ProfileNew'));
-const MyDevices = lazy(() => import('./components/features/profile/MyDevices'));
+const Login = lazyWithRetry(() => import('./components/features/auth/LoginNew'));
+const Registration = lazyWithRetry(() => import('./components/features/auth/RegistrationNew'));
+const Profile = lazyWithRetry(() => import('./components/features/profile/ProfileNew'));
+const MyDevices = lazyWithRetry(() => import('./components/features/profile/MyDevices'));
+const Consent = lazyWithRetry(() => import('./components/features/auth/ConsentPage'));
 
 /**
  * Router wrapper component to access useLocation hook
@@ -34,8 +81,9 @@ const AppRoutes: React.FC = () => {
             {settings?.registrationEnabled && (
               <Route path={ROUTES.REGISTRATION} element={<Registration />} />
             )}
-            <Route path={ROUTES.PROFILE} element={<Profile />} />
-            <Route path={ROUTES.DEVICES} element={<MyDevices />} />
+            <Route path={ROUTES.CONSENT} element={<Consent />} />
+            <Route path={ROUTES.PROFILE} element={<PrivateRoute element={<Profile />} />} />
+            <Route path={ROUTES.DEVICES} element={<PrivateRoute element={<MyDevices />} />} />
           </Routes>
         </PageTransition>
       </Suspense>

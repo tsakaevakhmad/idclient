@@ -16,6 +16,8 @@ export const API_ENDPOINTS = {
     GET_INFO: '/api/user/getUserInfo',
     SEND_PHONE_CODE: '/api/user/sendPhoneConfirmationCode',
     VERIFY_PHONE_CODE: '/api/user/verifiPhoneConfirmationCode',
+    GET_PASSKEYS: '/api/user/GetPasskeys',
+    DELETE_PASSKEY: '/api/user/DeletePasskey',
   },
   // Passkey endpoints
   PASSKEY: {
@@ -23,6 +25,10 @@ export const API_ENDPOINTS = {
     FINISH_REGISTRATION: '/api/passkey/FinishRegistration',
     BEGIN_LOGIN: '/api/passkey/BeginLogin',
     FINISH_LOGIN: '/api/passkey/FinishLogin',
+  },
+  // Consent endpoints
+  CONSENT: {
+    INFO: '/connect/consent-info',
   },
 } as const;
 
@@ -37,6 +43,7 @@ export const ROUTES = {
   REGISTRATION: '/registration',
   PROFILE: '/profile',
   DEVICES: '/devices',
+  CONSENT: '/consent',
 } as const;
 
 export const AUTH_METHODS = {
