@@ -114,7 +114,7 @@ const Login: React.FC = () => {
                 /> */}
               <SvgIcon
                 component={LogoIcon}
-                viewBox="0 0 92 93"
+                viewBox="0 0 764 764"
                 sx={{
                   fontSize: 48,
                   color: theme.colors.primary,

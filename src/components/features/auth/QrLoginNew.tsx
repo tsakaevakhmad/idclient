@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { motion } from 'framer-motion';
-import QRCode from 'react-qr-code';
+import { QRCode } from 'react-qrcode-logo';
 import { useQRLogin } from '../../../hooks/useQRLogin';
 import { useTheme } from '../../../hooks/useTheme';
 import { useLanguage } from '../../../hooks/useLanguage';
+import { TUNDUK_LOGO_PATH } from '../../../constants/tundukLogoPath';
 
 interface QrLoginProps {
   onSuccess: () => void;
@@ -13,6 +15,11 @@ const QrLogin: React.FC<QrLoginProps> = ({ onSuccess }) => {
   const { sessionId, status, isLoading, isAuthenticating } = useQRLogin(onSuccess);
   const { theme } = useTheme();
   const { t } = useLanguage();
+
+  const logoDataUrl = useMemo(() => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 764 764"><path fill-rule="evenodd" clip-rule="evenodd" d="${TUNDUK_LOGO_PATH}" fill="${theme.colors.primary}"/></svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }, [theme.colors.primary]);
 
   return (
     <motion.div
@@ -119,7 +126,21 @@ const QrLogin: React.FC<QrLoginProps> = ({ onSuccess }) => {
                     background: '#fff',
                   }}
                 >
-                  <QRCode value={sessionId} size={200} />
+                  <QRCode
+                    value={sessionId}
+                    size={200}
+                    qrStyle="dots"
+                    eyeRadius={10}
+                    fgColor={theme.colors.primary}
+                    bgColor="#ffffff"
+                    quietZone={8}
+                    logoImage={logoDataUrl}
+                    logoWidth={48}
+                    logoHeight={48}
+                    logoPadding={4}
+                    logoPaddingStyle="circle"
+                    removeQrCodeBehindLogo
+                  />
                 </motion.div>
               )}
             </motion.div>

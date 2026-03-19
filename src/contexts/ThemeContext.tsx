@@ -19,7 +19,7 @@ interface ThemeProviderProps {
 }
 
 const THEME_STORAGE_KEY = 'app-theme';
-const DEFAULT_THEME: ThemeName = 'warmRustic';
+const DEFAULT_THEME: ThemeName = 'tunduk';
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
@@ -45,6 +45,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   const toggleTheme = useCallback(() => {
     const themeOrder: ThemeName[] = [
+      'tunduk',
       'warmRustic',
       'oceanGlass',
       'classicLight',

@@ -1,4 +1,5 @@
 import { Theme } from '@mui/material/styles';
+import { tundukTheme, tundukConfig } from './tunduk';
 import { warmRusticTheme, warmRusticConfig } from './warmRustic';
 import { oceanGlassTheme, oceanGlassConfig } from './oceanGlass';
 import { darkGlassTheme, darkGlassConfig } from './darkGlass';
@@ -8,6 +9,7 @@ import { classicDarkTheme, classicDarkConfig } from './classicDark';
 import { ThemeName, GlassTheme } from '../types/theme';
 
 export const themes: Record<ThemeName, Theme> = {
+  tunduk: tundukTheme,
   warmRustic: warmRusticTheme,
   oceanGlass: oceanGlassTheme,
   darkGlass: darkGlassTheme,
@@ -17,6 +19,7 @@ export const themes: Record<ThemeName, Theme> = {
 };
 
 export const themeConfigs: Record<ThemeName, GlassTheme> = {
+  tunduk: tundukConfig,
   warmRustic: warmRusticConfig,
   oceanGlass: oceanGlassConfig,
   darkGlass: darkGlassConfig,
@@ -26,6 +29,7 @@ export const themeConfigs: Record<ThemeName, GlassTheme> = {
 };
 
 export {
+  tundukTheme,
   warmRusticTheme,
   oceanGlassTheme,
   darkGlassTheme,
@@ -34,6 +38,7 @@ export {
   classicDarkTheme,
 };
 export {
+  tundukConfig,
   warmRusticConfig,
   oceanGlassConfig,
   darkGlassConfig,

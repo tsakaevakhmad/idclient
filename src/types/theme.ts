@@ -1,4 +1,5 @@
 export type ThemeName =
+  | 'tunduk'
   | 'warmRustic'
   | 'oceanGlass'
   | 'darkGlass'

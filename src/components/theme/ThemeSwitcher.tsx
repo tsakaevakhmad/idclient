@@ -15,6 +15,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { ThemeName } from '../../types/theme';
 
 const themeIcons: Record<ThemeName, React.ReactElement> = {
+  tunduk: <PaletteIcon />,
   warmRustic: <EcoIcon />,
   oceanGlass: <OceanIcon />,
   darkGlass: <DarkIcon />,
@@ -24,6 +25,7 @@ const themeIcons: Record<ThemeName, React.ReactElement> = {
 };
 
 const themeColors: Record<ThemeName, { primary: string; secondary: string }> = {
+  tunduk: { primary: '#1560BD', secondary: '#1560BD' },
   warmRustic: { primary: '#805A3B', secondary: '#FD974F' },
   oceanGlass: { primary: '#06b6d4', secondary: '#0ea5e9' },
   darkGlass: { primary: '#a78bfa', secondary: '#c084fc' },
