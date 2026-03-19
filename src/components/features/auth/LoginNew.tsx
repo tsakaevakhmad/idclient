@@ -43,29 +43,35 @@ const Login: React.FC = () => {
     loadExternalProviders(params);
   }, [loadExternalProviders, params]);
 
+  const handlePostAuth = useCallback(() => {
+    if (params) {
+      // passkey_check_done=1 tells the backend not to redirect again for passkey prompt
+      window.location.href = getOAuthRedirectUrl(params + '&passkey_check_done=1');
+    } else {
+      navigate(ROUTES.PROFILE);
+    }
+  }, [params, navigate]);
+
   // Single entry point for all post-auth logic (runs once per auth event)
   const handleAuthConfirmed = useCallback(async () => {
     if (authHandledRef.current) return;
     authHandledRef.current = true;
 
-    if (params) {
-      window.location.href = getOAuthRedirectUrl(params);
-      return;
-    }
-
     if ('PublicKeyCredential' in window) {
       try {
         const existing = await passkeyService.getPasskeys();
-        if (existing.length === 0) {
+        if (!existing || existing.length === 0) {
           setShowPasskeyPrompt(true);
           return;
         }
       } catch {
-        // silently ignore — proceed to redirect
+        // API failed — default to showing the prompt so user can add or skip
+        setShowPasskeyPrompt(true);
+        return;
       }
     }
-    navigate(ROUTES.PROFILE);
-  }, [params, navigate]);
+    handlePostAuth();
+  }, [handlePostAuth]);
 
   // Covers: existing session on mount, external OAuth return
   useEffect(() => {
@@ -101,7 +107,7 @@ const Login: React.FC = () => {
   return (
     <>
       <AnimatePresence>
-        {showPasskeyPrompt && <PasskeyPromptModal onDone={() => navigate(ROUTES.PROFILE)} />}
+        {showPasskeyPrompt && <PasskeyPromptModal onDone={handlePostAuth} />}
       </AnimatePresence>
       <Box
         sx={{
