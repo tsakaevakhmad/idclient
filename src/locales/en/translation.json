@@ -188,6 +188,14 @@
     "networkError": "Network error. Please try again",
     "unknownError": "An unknown error occurred"
   },
+  "passkeyPrompt": {
+    "title": "Enable Quick Sign-In",
+    "subtitle": "Use your fingerprint or face to sign in faster next time",
+    "add": "Add Passkey",
+    "skip": "Skip",
+    "adding": "Adding...",
+    "success": "Passkey added successfully!"
+  },
   "success": {
     "loginSuccess": "Successfully logged in",
     "registrationSuccess": "Successfully registered",

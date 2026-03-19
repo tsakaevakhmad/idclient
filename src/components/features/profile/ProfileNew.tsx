@@ -12,7 +12,6 @@ import {
   IconButton,
   Chip,
   Collapse,
-  TextField,
 } from '@mui/material';
 import {
   CheckCircle,
@@ -21,31 +20,23 @@ import {
   Fingerprint as FingerprintIcon,
   PhoneAndroid as PhoneIcon,
   ExitToApp as LogoutIcon,
-  Laptop as DesktopIcon,
-  Smartphone as MobileIcon,
-  Tablet as TabletIcon,
-  DeviceUnknown as UnknownDeviceIcon,
   Delete as DeleteIcon,
   ExpandMore as ExpandMoreIcon,
   Devices as DevicesIcon,
-  Info as InfoIcon,
-  Close as CloseIcon,
-  LocationOn as LocationIcon,
 } from '@mui/icons-material';
 import OtpInput from 'react-otp-input';
 import { useAuth } from '../../../hooks/useAuth';
 import { useUser } from '../../../hooks/useUser';
 import { usePasskey } from '../../../hooks/usePasskey';
-import { useSessions } from '../../../hooks/useSessions';
 import { useTheme } from '../../../hooks/useTheme';
 import { useLanguage } from '../../../hooks/useLanguage';
 import { GlassCard } from '../../glass/GlassCard';
 import { GlassButton } from '../../glass/GlassButton';
 import { BackgroundGradient } from '../../theme/BackgroundGradient';
 import { ProfileSkeletonLoader } from '../../animations/SkeletonLoader';
+import { PasskeyPromptModal } from '../auth/PasskeyPromptModal';
 import { ROUTES } from '../../../constants';
-import { AuthorizationSession, FidoCredentialDto } from '../../../api/types';
-import { geolocationService, GeolocationData } from '../../../services/geolocationService';
+import { FidoCredentialDto } from '../../../api/types';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -54,14 +45,12 @@ const Profile: React.FC = () => {
     useUser();
   const {
     isRegistering,
-    registerPasskey,
     passkeys,
     isLoadingPasskeys,
     isDeletingPasskey,
     fetchPasskeys,
     deletePasskey,
   } = usePasskey();
-  const { sessions, loading: sessionsLoading, revokeSession } = useSessions();
   const { theme } = useTheme();
   const { t } = useLanguage();
 
@@ -70,17 +59,9 @@ const Profile: React.FC = () => {
   const [otp, setOtp] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [sendingCode, setSendingCode] = useState(false);
-  const [sessionsExpanded, setSessionsExpanded] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<AuthorizationSession | null>(null);
-  const [revoking, setRevoking] = useState(false);
-  const [allSessionsOpen, setAllSessionsOpen] = useState(false);
-  const [detailsSession, setDetailsSession] = useState<AuthorizationSession | null>(null);
-  const [locationData, setLocationData] = useState<GeolocationData | null>(null);
-  const [loadingLocation, setLoadingLocation] = useState(false);
   const [passkeysExpanded, setPasskeysExpanded] = useState(false);
   const [selectedPasskey, setSelectedPasskey] = useState<FidoCredentialDto | null>(null);
-  const [passkeyNameDialogOpen, setPasskeyNameDialogOpen] = useState(false);
-  const [passkeyName, setPasskeyName] = useState('');
+  const [showPasskeyModal, setShowPasskeyModal] = useState(false);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -125,18 +106,14 @@ const Profile: React.FC = () => {
   };
 
   const handleRegisterPasskey = () => {
-    setPasskeyName('');
-    setPasskeyNameDialogOpen(true);
+    setShowPasskeyModal(true);
   };
 
-  const handleConfirmRegisterPasskey = async () => {
-    setPasskeyNameDialogOpen(false);
-    const success = await registerPasskey(passkeyName || undefined);
-    if (success) {
-      await fetchUserInfo();
-      if (passkeysExpanded) {
-        await fetchPasskeys();
-      }
+  const handlePasskeyModalDone = async () => {
+    setShowPasskeyModal(false);
+    await fetchUserInfo();
+    if (passkeysExpanded) {
+      await fetchPasskeys();
     }
   };
 
@@ -156,20 +133,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  const getDeviceIcon = (deviceType?: string) => {
-    const iconProps = { sx: { fontSize: 28 } };
-    switch (deviceType?.toLowerCase()) {
-      case 'desktop':
-        return <DesktopIcon {...iconProps} />;
-      case 'mobile':
-        return <MobileIcon {...iconProps} />;
-      case 'tablet':
-        return <TabletIcon {...iconProps} />;
-      default:
-        return <UnknownDeviceIcon {...iconProps} />;
-    }
-  };
-
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A';
     const normalized = /Z|[+-]\d{2}:\d{2}$/.test(dateString) ? dateString : dateString + 'Z';
@@ -180,45 +143,6 @@ const Profile: React.FC = () => {
       hour: '2-digit',
       minute: '2-digit',
     }).format(date);
-  };
-
-  const handleRevokeClick = (session: AuthorizationSession) => {
-    setSelectedSession(session);
-  };
-
-  const handleConfirmRevoke = async () => {
-    if (!selectedSession) return;
-    setRevoking(true);
-    try {
-      await revokeSession(selectedSession.id);
-      setSelectedSession(null);
-    } catch (err) {
-      console.error('Failed to revoke session:', err);
-    } finally {
-      setRevoking(false);
-    }
-  };
-
-  const handleViewDetails = async (session: AuthorizationSession) => {
-    setDetailsSession(session);
-    setLocationData(null);
-
-    if (session.ipAddress) {
-      setLoadingLocation(true);
-      try {
-        const location = await geolocationService.getLocationByIP(session.ipAddress);
-        setLocationData(location);
-      } catch (err) {
-        console.error('Failed to load location:', err);
-      } finally {
-        setLoadingLocation(false);
-      }
-    }
-  };
-
-  const handleCloseDetails = () => {
-    setDetailsSession(null);
-    setLocationData(null);
   };
 
   if (isLoading) {
@@ -280,72 +204,9 @@ const Profile: React.FC = () => {
     >
       <BackgroundGradient />
 
-      {/* Session Revoke Confirmation Dialog - HIDDEN */}
-
-      <Dialog
-        open={!!selectedSession}
-        onClose={() => setSelectedSession(null)}
-        PaperProps={{
-          sx: {
-            background: theme.colors.glass.background,
-            backdropFilter: `blur(${theme.colors.glass.blur})`,
-            border: `1px solid ${theme.colors.glass.border}`,
-            borderRadius: '20px',
-            boxShadow: theme.colors.glass.shadow,
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            background: theme.gradients.button,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 700,
-          }}
-        >
-          {t('auth.profile.revokeSession')}
-        </DialogTitle>
-        <DialogContent sx={{ py: 3 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            {t('auth.profile.revokeSessionConfirm')}
-          </Typography>
-          {selectedSession && (
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                background: theme.colors.glass.background,
-                border: `1px solid ${theme.colors.glass.border}`,
-              }}
-            >
-              <Typography variant="body2" color="text.primary">
-                <strong>{t('auth.profile.device')}:</strong>{' '}
-                {selectedSession.deviceName || selectedSession.deviceType || 'Unknown'}
-              </Typography>
-              <Typography variant="body2" color="text.primary">
-                <strong>{t('auth.profile.ipAddress')}:</strong> {selectedSession.ipAddress || 'N/A'}
-              </Typography>
-              <Typography variant="body2" color="text.primary">
-                <strong>{t('auth.profile.created')}:</strong>{' '}
-                {formatDate(selectedSession.creationDate)}
-              </Typography>
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ p: 3, pt: 0 }}>
-          <GlassButton
-            gradient={false}
-            onClick={() => setSelectedSession(null)}
-            disabled={revoking}
-          >
-            {t('common.cancel')}
-          </GlassButton>
-          <GlassButton onClick={handleConfirmRevoke} loading={revoking}>
-            {t('common.revoke')}
-          </GlassButton>
-        </DialogActions>
-      </Dialog>
+      <AnimatePresence>
+        {showPasskeyModal && <PasskeyPromptModal onDone={handlePasskeyModalDone} />}
+      </AnimatePresence>
 
       {/* Phone Verification Dialog */}
       <Dialog
@@ -466,76 +327,6 @@ const Profile: React.FC = () => {
             }}
           >
             {t('auth.profile.deletePasskey')}
-          </GlassButton>
-        </DialogActions>
-      </Dialog>
-
-      {/* Passkey Name Dialog */}
-      <Dialog
-        open={passkeyNameDialogOpen}
-        onClose={() => setPasskeyNameDialogOpen(false)}
-        PaperProps={{
-          sx: {
-            background: theme.colors.glass.background,
-            backdropFilter: `blur(${theme.colors.glass.blur})`,
-            border: `1px solid ${theme.colors.glass.border}`,
-            borderRadius: '20px',
-            boxShadow: theme.colors.glass.shadow,
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            background: theme.gradients.button,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 700,
-          }}
-        >
-          {t('auth.profile.passkeys.namePromptTitle')}
-        </DialogTitle>
-        <DialogContent sx={{ py: 3 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            {t('auth.profile.passkeys.namePromptSubtitle')}
-          </Typography>
-          <TextField
-            autoFocus
-            fullWidth
-            value={passkeyName}
-            onChange={(e) => setPasskeyName(e.target.value)}
-            placeholder={t('auth.profile.passkeys.namePlaceholder')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleConfirmRegisterPasskey();
-              }
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '12px',
-                background: theme.colors.glass.background,
-                '& fieldset': {
-                  borderColor: theme.colors.glass.border,
-                },
-                '&:hover fieldset': {
-                  borderColor: theme.colors.primary,
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: theme.colors.primary,
-                },
-              },
-              '& .MuiInputBase-input': {
-                color: theme.colors.text.primary,
-              },
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 3, pt: 0 }}>
-          <GlassButton gradient={false} onClick={() => setPasskeyNameDialogOpen(false)}>
-            {t('common.cancel')}
-          </GlassButton>
-          <GlassButton onClick={handleConfirmRegisterPasskey}>
-            {t('auth.profile.registerPasskey')}
           </GlassButton>
         </DialogActions>
       </Dialog>
@@ -708,8 +499,6 @@ const Profile: React.FC = () => {
             </Box>
           </motion.div>
 
-          {/* Active Sessions Section - HIDDEN */}
-
           <Divider
             sx={{
               my: { xs: 2, sm: 4 },
@@ -718,166 +507,11 @@ const Profile: React.FC = () => {
             }}
           />
 
+          {/* My Passkeys Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-          >
-            <Box sx={{ mb: 3 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  mb: 2,
-                  cursor: 'pointer',
-                }}
-                onClick={() => setSessionsExpanded(!sessionsExpanded)}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <DevicesIcon sx={{ color: theme.colors.primary }} />
-                  <Typography variant="h6" fontWeight={600} color="text.primary">
-                    {t('auth.profile.activeSessions')}
-                  </Typography>
-                  <Chip
-                    label={sessions.length}
-                    size="small"
-                    sx={{
-                      background: theme.gradients.button,
-                      color: '#fff',
-                      fontWeight: 600,
-                      height: 20,
-                      fontSize: '0.75rem',
-                    }}
-                  />
-                </Box>
-                <IconButton
-                  size="small"
-                  sx={{
-                    transform: sessionsExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.3s',
-                  }}
-                >
-                  <ExpandMoreIcon />
-                </IconButton>
-              </Box>
-
-              <Collapse in={sessionsExpanded}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mt: 2 }}>
-                  {sessionsLoading ? (
-                    <Typography variant="body2" color="text.secondary" align="center">
-                      {t('common.loading') || 'Loading...'}
-                    </Typography>
-                  ) : sessions.length === 0 ? (
-                    <Typography variant="body2" color="text.secondary" align="center">
-                      {t('auth.profile.noActiveSessions')}
-                    </Typography>
-                  ) : (
-                    sessions.slice(0, 3).map((session) => (
-                      <motion.div
-                        key={session.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Box
-                          sx={{
-                            p: 2,
-                            borderRadius: 2,
-                            background: theme.colors.glass.background,
-                            border: `1px solid ${theme.colors.glass.border}`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 2,
-                            transition: 'all 0.2s',
-                            cursor: 'pointer',
-                            '&:hover': {
-                              borderColor: theme.colors.primary,
-                              boxShadow: `0 0 20px ${theme.colors.primary}40`,
-                            },
-                          }}
-                          onClick={() => handleViewDetails(session)}
-                        >
-                          <Box sx={{ color: theme.colors.primary }}>
-                            {getDeviceIcon(session.deviceType)}
-                          </Box>
-                          <Box sx={{ flex: 1, minWidth: 0 }}>
-                            <Typography
-                              variant="body2"
-                              fontWeight={600}
-                              color="text.primary"
-                              noWrap
-                            >
-                              {session.deviceName || session.deviceType || 'Unknown Device'}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary" noWrap>
-                              {session.ipAddress} • {formatDate(session.creationDate)}
-                            </Typography>
-                          </Box>
-                          <IconButton
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleViewDetails(session);
-                            }}
-                            sx={{
-                              color: theme.colors.primary,
-                              '&:hover': {
-                                backgroundColor: `${theme.colors.primary}20`,
-                              },
-                            }}
-                          >
-                            <InfoIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRevokeClick(session);
-                            }}
-                            sx={{
-                              color: theme.colors.accent,
-                              '&:hover': {
-                                backgroundColor: `${theme.colors.accent}20`,
-                              },
-                            }}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      </motion.div>
-                    ))
-                  )}
-                </Box>
-                {sessions.length > 3 && (
-                  <Box sx={{ mt: 2, textAlign: 'center' }}>
-                    <GlassButton
-                      size="small"
-                      gradient={false}
-                      onClick={() => setAllSessionsOpen(true)}
-                    >
-                      {t('common.viewAll')} ({sessions.length})
-                    </GlassButton>
-                  </Box>
-                )}
-              </Collapse>
-            </Box>
-          </motion.div>
-
-          {/* My Passkeys Section */}
-
-          <Divider
-            sx={{
-              my: 3,
-              borderColor: theme.colors.glass.border,
-              opacity: 0.5,
-            }}
-          />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
           >
             <Box sx={{ mb: 3 }}>
               <Box
@@ -1054,299 +688,6 @@ const Profile: React.FC = () => {
           </motion.div>
         </GlassCard>
       </motion.div>
-
-      {/* Session Details Dialog - HIDDEN */}
-      {/* All Sessions Dialog - HIDDEN */}
-
-      <Dialog
-        open={!!detailsSession}
-        onClose={handleCloseDetails}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: {
-            background: theme.colors.glass.background,
-            backdropFilter: `blur(${theme.colors.glass.blur})`,
-            border: `1px solid ${theme.colors.glass.border}`,
-            borderRadius: '20px',
-            boxShadow: theme.colors.glass.shadow,
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              background: theme.gradients.button,
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontWeight: 700,
-            }}
-          >
-            {t('auth.profile.sessionDetails')}
-          </Typography>
-          <IconButton onClick={handleCloseDetails} size="small">
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          {detailsSession && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                <Box sx={{ color: theme.colors.primary, fontSize: 64 }}>
-                  {getDeviceIcon(detailsSession.deviceType)}
-                </Box>
-              </Box>
-
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t('auth.profile.device')}
-                </Typography>
-                <Typography variant="body1" fontWeight={600} color="text.primary">
-                  {detailsSession.deviceName || detailsSession.deviceType || 'Unknown Device'}
-                </Typography>
-              </Box>
-
-              {detailsSession.deviceName?.includes('Chrome') && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t('auth.profile.browser')}
-                  </Typography>
-                  <Typography variant="body1" color="text.primary">
-                    {detailsSession.deviceName.split(' on ')[0]}
-                  </Typography>
-                </Box>
-              )}
-
-              {detailsSession.deviceName?.includes(' on ') && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t('auth.profile.operatingSystem')}
-                  </Typography>
-                  <Typography variant="body1" color="text.primary">
-                    {detailsSession.deviceName.split(' on ')[1]}
-                  </Typography>
-                </Box>
-              )}
-
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t('auth.profile.ipAddress')}
-                </Typography>
-                <Typography variant="body1" color="text.primary">
-                  {detailsSession.ipAddress || 'N/A'}
-                </Typography>
-              </Box>
-
-              <Box>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-                >
-                  <LocationIcon fontSize="small" />
-                  {t('auth.profile.location')}
-                </Typography>
-                {loadingLocation ? (
-                  <Typography variant="body2" color="text.secondary">
-                    {t('auth.profile.loadingLocation')}
-                  </Typography>
-                ) : (
-                  <Typography variant="body1" color="text.primary">
-                    {geolocationService.formatLocation(locationData)}
-                  </Typography>
-                )}
-                {locationData && locationData.city && (
-                  <Typography variant="caption" color="text.secondary">
-                    {locationData.timezone}
-                  </Typography>
-                )}
-              </Box>
-
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t('auth.profile.created')}
-                </Typography>
-                <Typography variant="body1" color="text.primary">
-                  {formatDate(detailsSession.creationDate)}
-                </Typography>
-              </Box>
-
-              {detailsSession.clientId && (
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t('auth.profile.client')}
-                  </Typography>
-                  <Typography variant="body1" color="text.primary">
-                    {detailsSession.clientId}
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ p: 3, pt: 0 }}>
-          <GlassButton gradient={false} onClick={handleCloseDetails}>
-            {t('common.close')}
-          </GlassButton>
-          {detailsSession && (
-            <GlassButton
-              onClick={() => {
-                handleCloseDetails();
-                handleRevokeClick(detailsSession);
-              }}
-              sx={{
-                background: 'rgba(239, 68, 68, 0.1)',
-                color: '#ef4444',
-                '&:hover': {
-                  background: 'rgba(239, 68, 68, 0.2)',
-                },
-              }}
-            >
-              {t('common.revoke')}
-            </GlassButton>
-          )}
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={allSessionsOpen}
-        onClose={() => setAllSessionsOpen(false)}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          sx: {
-            background: theme.colors.glass.background,
-            backdropFilter: `blur(${theme.colors.glass.blur})`,
-            border: `1px solid ${theme.colors.glass.border}`,
-            borderRadius: '20px',
-            boxShadow: theme.colors.glass.shadow,
-            maxHeight: '80vh',
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: `1px solid ${theme.colors.glass.border}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <DevicesIcon sx={{ color: theme.colors.primary }} />
-            <Typography
-              variant="h6"
-              sx={{
-                background: theme.gradients.button,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 700,
-              }}
-            >
-              {t('auth.profile.allSessions')}
-            </Typography>
-            <Chip
-              label={sessions.length}
-              size="small"
-              sx={{
-                background: theme.gradients.button,
-                color: '#fff',
-                fontWeight: 600,
-              }}
-            />
-          </Box>
-          <IconButton onClick={() => setAllSessionsOpen(false)} size="small">
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent sx={{ p: 3 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {sessions.map((session) => (
-              <motion.div
-                key={session.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Box
-                  sx={{
-                    p: 2,
-                    borderRadius: 2,
-                    background: theme.colors.glass.background,
-                    border: `1px solid ${theme.colors.glass.border}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 2,
-                    transition: 'all 0.2s',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      borderColor: theme.colors.primary,
-                      boxShadow: `0 0 20px ${theme.colors.primary}40`,
-                    },
-                  }}
-                  onClick={() => {
-                    setAllSessionsOpen(false);
-                    handleViewDetails(session);
-                  }}
-                >
-                  <Box sx={{ color: theme.colors.primary }}>
-                    {getDeviceIcon(session.deviceType)}
-                  </Box>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography variant="body2" fontWeight={600} color="text.primary" noWrap>
-                      {session.deviceName || session.deviceType || 'Unknown Device'}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" noWrap>
-                      {session.ipAddress} • {formatDate(session.creationDate)}
-                    </Typography>
-                  </Box>
-                  <IconButton
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setAllSessionsOpen(false);
-                      handleViewDetails(session);
-                    }}
-                    sx={{
-                      color: theme.colors.primary,
-                      '&:hover': {
-                        backgroundColor: `${theme.colors.primary}20`,
-                      },
-                    }}
-                  >
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setAllSessionsOpen(false);
-                      handleRevokeClick(session);
-                    }}
-                    sx={{
-                      color: theme.colors.accent,
-                      '&:hover': {
-                        backgroundColor: `${theme.colors.accent}20`,
-                      },
-                    }}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              </motion.div>
-            ))}
-          </Box>
-        </DialogContent>
-      </Dialog>
 
       {/* Footer */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>

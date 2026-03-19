@@ -188,6 +188,14 @@
     "networkError": "Ağ hatası. Lütfen tekrar deneyin",
     "unknownError": "Bilinmeyen bir hata oluştu"
   },
+  "passkeyPrompt": {
+    "title": "Hızlı Giriş",
+    "subtitle": "Bir sonraki girişte parmak izi veya yüzünüzü kullanın",
+    "add": "Anahtar Ekle",
+    "skip": "Atla",
+    "adding": "Ekleniyor...",
+    "success": "Anahtar başarıyla eklendi!"
+  },
   "success": {
     "loginSuccess": "Başarıyla giriş yapıldı",
     "registrationSuccess": "Başarıyla kayıt olundu",

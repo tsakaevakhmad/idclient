@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ButtonGroup, Typography, Box, SvgIcon } from '@mui/material';
 import { ReactComponent as LogoIcon } from '../../../tunduklogo.svg';
@@ -17,6 +17,8 @@ import { GlassButton } from '../../glass/GlassButton';
 import { BackgroundGradient } from '../../theme/BackgroundGradient';
 import LoginTwoFa from './LoginTwoFaNew';
 import QrLogin from './QrLoginNew';
+import { PasskeyPromptModal } from './PasskeyPromptModal';
+import { passkeyService } from '../../../services/passkeyService';
 import {
   Login as LoginIcon,
   Fingerprint as FingerprintIcon,
@@ -31,6 +33,8 @@ const Login: React.FC = () => {
   const { t } = useLanguage();
   const { settings } = useSettings();
   const [authMethod, setAuthMethod] = useState<AuthMethod>('2FA');
+  const [showPasskeyPrompt, setShowPasskeyPrompt] = useState(false);
+  const authHandledRef = useRef(false);
   const rawSearch = new URLSearchParams(window.location.search);
   rawSearch.delete('session_revoked');
   const params = rawSearch.toString();
@@ -39,24 +43,46 @@ const Login: React.FC = () => {
     loadExternalProviders(params);
   }, [loadExternalProviders, params]);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (params) {
-        window.location.href = getOAuthRedirectUrl(params);
-      } else {
-        navigate(ROUTES.PROFILE);
+  // Single entry point for all post-auth logic (runs once per auth event)
+  const handleAuthConfirmed = useCallback(async () => {
+    if (authHandledRef.current) return;
+    authHandledRef.current = true;
+
+    if (params) {
+      window.location.href = getOAuthRedirectUrl(params);
+      return;
+    }
+
+    if ('PublicKeyCredential' in window) {
+      try {
+        const existing = await passkeyService.getPasskeys();
+        if (existing.length === 0) {
+          setShowPasskeyPrompt(true);
+          return;
+        }
+      } catch {
+        // silently ignore — proceed to redirect
       }
     }
-  }, [isAuthenticated, navigate, params]);
+    navigate(ROUTES.PROFILE);
+  }, [params, navigate]);
 
+  // Covers: existing session on mount, external OAuth return
+  useEffect(() => {
+    if (isAuthenticated) {
+      handleAuthConfirmed();
+    }
+  }, [isAuthenticated, handleAuthConfirmed]);
+
+  // Called by 2FA / QR login components on success
   const handleSuccess = () => {
-    login();
+    login(); // sets isAuthenticated=true → triggers handleAuthConfirmed via useEffect
   };
 
   const handlePasskeyLogin = async () => {
     const success = await loginWithPasskey();
     if (success) {
-      handleSuccess();
+      login();
     }
   };
 
@@ -73,38 +99,42 @@ const Login: React.FC = () => {
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 3,
-        position: 'relative',
-      }}
-    >
-      <BackgroundGradient />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        style={{ width: '100%', maxWidth: 480 }}
+    <>
+      <AnimatePresence>
+        {showPasskeyPrompt && <PasskeyPromptModal onDone={() => navigate(ROUTES.PROFILE)} />}
+      </AnimatePresence>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 3,
+          position: 'relative',
+        }}
       >
-        <GlassCard
-          glowOnHover
-          sx={{
-            p: { xs: 3, sm: 4, md: 5 },
-          }}
+        <BackgroundGradient />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          style={{ width: '100%', maxWidth: 480 }}
         >
-          {/* Logo/Title */}
-          <motion.div
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
+          <GlassCard
+            glowOnHover
+            sx={{
+              p: { xs: 3, sm: 4, md: 5 },
+            }}
           >
-            <Box sx={{ textAlign: 'center', mb: 4 }}>
-              {/* <LoginIcon
+            {/* Logo/Title */}
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Box sx={{ textAlign: 'center', mb: 4 }}>
+                {/* <LoginIcon
                   sx={{
                     fontSize: { xs: 44, sm: 64 },
                     color: theme.colors.primary,
@@ -112,235 +142,236 @@ const Login: React.FC = () => {
                     mb: { xs: 1, sm: 2 },
                   }}
                 /> */}
-              <SvgIcon
-                component={LogoIcon}
-                viewBox="0 0 764 764"
-                sx={{
-                  fontSize: 48,
-                  color: theme.colors.primary,
-                  filter: `drop-shadow(0 0 10px ${theme.colors.primary}80)`,
-                  mb: 2,
-                }}
-              ></SvgIcon>
-              <Typography
-                fontWeight="bold"
-                sx={{
-                  fontSize: { xs: '1.35rem', sm: '2.125rem' },
-                  background: theme.gradients.button,
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  mb: 0.5,
-                }}
-              >
-                {t('auth.login.title')}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {t('auth.login.subtitle')}
-              </Typography>
-            </Box>
-          </motion.div>
-
-          {/* Auth Method Selector */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <ButtonGroup
-              fullWidth
-              variant="outlined"
-              sx={{
-                mb: 4,
-                '& .MuiButton-root': {
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
-                  padding: '12px 16px',
-                  background: theme.colors.glass.background,
-                  backdropFilter: `blur(${theme.colors.glass.blur})`,
-                  border: `1px solid ${theme.colors.glass.border}`,
-                  color: theme.colors.text.secondary,
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    background: theme.colors.glass.background,
-                    border: `1px solid ${theme.colors.primary}`,
-                    transform: 'translateY(-2px)',
-                  },
-                },
-              }}
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  padding: 0,
-                  flex: 1,
-                }}
-              >
-                <Box
-                  onClick={() => setAuthMethod('2FA')}
+                <SvgIcon
+                  component={LogoIcon}
+                  viewBox="0 0 764 764"
                   sx={{
-                    py: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    background: authMethod === '2FA' ? theme.gradients.button : 'transparent',
-                    color: authMethod === '2FA' ? '#fff' : theme.colors.text.secondary,
-                    borderRadius: '12px 0 0 12px',
-                    cursor: 'pointer',
-                    ...(authMethod === '2FA' && {
-                      boxShadow: `0 0 20px ${theme.colors.primary}40`,
-                    }),
-                  }}
-                >
-                  <LoginIcon fontSize="small" />
-                  <span>{t('auth.login.methods.2fa')}</span>
-                </Box>
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  padding: 0,
-                  flex: 1,
-                }}
-              >
-                <Box
-                  onClick={handlePasskeyLogin}
-                  sx={{
-                    py: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    background: authMethod === 'PassKey' ? theme.gradients.button : 'transparent',
-                    color: authMethod === 'PassKey' ? '#fff' : theme.colors.text.secondary,
-                    cursor: 'pointer',
-                    ...(authMethod === 'PassKey' && {
-                      boxShadow: `0 0 20px ${theme.colors.primary}40`,
-                    }),
-                  }}
-                >
-                  <FingerprintIcon fontSize="small" />
-                  <span>{t('auth.login.methods.passkey')}</span>
-                </Box>
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  padding: 0,
-                  flex: 1,
-                }}
-              >
-                <Box
-                  onClick={() => setAuthMethod('QR')}
-                  sx={{
-                    py: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    background: authMethod === 'QR' ? theme.gradients.button : 'transparent',
-                    color: authMethod === 'QR' ? '#fff' : theme.colors.text.secondary,
-                    borderRadius: '0 12px 12px 0',
-                    cursor: 'pointer',
-                    ...(authMethod === 'QR' && {
-                      boxShadow: `0 0 20px ${theme.colors.primary}40`,
-                    }),
-                  }}
-                >
-                  <QrCodeIcon fontSize="small" />
-                  <span>{t('auth.login.methods.qr')}</span>
-                </Box>
-              </motion.button>
-            </ButtonGroup>
-          </motion.div>
-
-          {/* Auth Method Component */}
-          {authMethod !== 'PassKey' && (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={authMethod}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                {loginComponent}
-              </motion.div>
-            </AnimatePresence>
-          )}
-          {/* Registration Link */}
-          {settings?.registrationEnabled && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Box sx={{ mt: 3, textAlign: 'center' }}>
-                <Link
-                  to={ROUTES.REGISTRATION}
-                  style={{
-                    textDecoration: 'none',
+                    fontSize: 48,
                     color: theme.colors.primary,
-                    fontWeight: '600',
-                    fontSize: '0.95rem',
+                    filter: `drop-shadow(0 0 10px ${theme.colors.primary}80)`,
+                    mb: 2,
+                  }}
+                ></SvgIcon>
+                <Typography
+                  fontWeight="bold"
+                  sx={{
+                    fontSize: { xs: '1.35rem', sm: '2.125rem' },
+                    background: theme.gradients.button,
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    mb: 0.5,
                   }}
                 >
-                  <motion.span whileHover={{ scale: 1.05 }} style={{ display: 'inline-block' }}>
-                    {t('auth.login.noAccount')} →
-                  </motion.span>
-                </Link>
-              </Box>
-            </motion.div>
-          )}
-
-          {/* External Providers */}
-          {externalProviders.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <Box sx={{ mt: 4 }}>
-                <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-                  {t('auth.login.orContinueWith')}
+                  {t('auth.login.title')}
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                  {externalProviders.map((provider, index) => (
-                    <motion.div
-                      key={provider.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.7 + index * 0.1 }}
-                    >
-                      <GlassButton
-                        fullWidth
-                        gradient={false}
-                        onClick={() => (window.location.href = provider.url)}
-                      >
-                        {provider.displayName || provider.name}
-                      </GlassButton>
-                    </motion.div>
-                  ))}
-                </Box>
+                <Typography variant="body2" color="text.secondary">
+                  {t('auth.login.subtitle')}
+                </Typography>
               </Box>
             </motion.div>
-          )}
-        </GlassCard>
-      </motion.div>
-    </Box>
+
+            {/* Auth Method Selector */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <ButtonGroup
+                fullWidth
+                variant="outlined"
+                sx={{
+                  mb: 4,
+                  '& .MuiButton-root': {
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    fontSize: '0.95rem',
+                    padding: '12px 16px',
+                    background: theme.colors.glass.background,
+                    backdropFilter: `blur(${theme.colors.glass.blur})`,
+                    border: `1px solid ${theme.colors.glass.border}`,
+                    color: theme.colors.text.secondary,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      background: theme.colors.glass.background,
+                      border: `1px solid ${theme.colors.primary}`,
+                      transform: 'translateY(-2px)',
+                    },
+                  },
+                }}
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    padding: 0,
+                    flex: 1,
+                  }}
+                >
+                  <Box
+                    onClick={() => setAuthMethod('2FA')}
+                    sx={{
+                      py: 1.5,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1,
+                      background: authMethod === '2FA' ? theme.gradients.button : 'transparent',
+                      color: authMethod === '2FA' ? '#fff' : theme.colors.text.secondary,
+                      borderRadius: '12px 0 0 12px',
+                      cursor: 'pointer',
+                      ...(authMethod === '2FA' && {
+                        boxShadow: `0 0 20px ${theme.colors.primary}40`,
+                      }),
+                    }}
+                  >
+                    <LoginIcon fontSize="small" />
+                    <span>{t('auth.login.methods.2fa')}</span>
+                  </Box>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    padding: 0,
+                    flex: 1,
+                  }}
+                >
+                  <Box
+                    onClick={handlePasskeyLogin}
+                    sx={{
+                      py: 1.5,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1,
+                      background: authMethod === 'PassKey' ? theme.gradients.button : 'transparent',
+                      color: authMethod === 'PassKey' ? '#fff' : theme.colors.text.secondary,
+                      cursor: 'pointer',
+                      ...(authMethod === 'PassKey' && {
+                        boxShadow: `0 0 20px ${theme.colors.primary}40`,
+                      }),
+                    }}
+                  >
+                    <FingerprintIcon fontSize="small" />
+                    <span>{t('auth.login.methods.passkey')}</span>
+                  </Box>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    padding: 0,
+                    flex: 1,
+                  }}
+                >
+                  <Box
+                    onClick={() => setAuthMethod('QR')}
+                    sx={{
+                      py: 1.5,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1,
+                      background: authMethod === 'QR' ? theme.gradients.button : 'transparent',
+                      color: authMethod === 'QR' ? '#fff' : theme.colors.text.secondary,
+                      borderRadius: '0 12px 12px 0',
+                      cursor: 'pointer',
+                      ...(authMethod === 'QR' && {
+                        boxShadow: `0 0 20px ${theme.colors.primary}40`,
+                      }),
+                    }}
+                  >
+                    <QrCodeIcon fontSize="small" />
+                    <span>{t('auth.login.methods.qr')}</span>
+                  </Box>
+                </motion.button>
+              </ButtonGroup>
+            </motion.div>
+
+            {/* Auth Method Component */}
+            {authMethod !== 'PassKey' && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={authMethod}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {loginComponent}
+                </motion.div>
+              </AnimatePresence>
+            )}
+            {/* Registration Link */}
+            {settings?.registrationEnabled && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <Box sx={{ mt: 3, textAlign: 'center' }}>
+                  <Link
+                    to={ROUTES.REGISTRATION}
+                    style={{
+                      textDecoration: 'none',
+                      color: theme.colors.primary,
+                      fontWeight: '600',
+                      fontSize: '0.95rem',
+                    }}
+                  >
+                    <motion.span whileHover={{ scale: 1.05 }} style={{ display: 'inline-block' }}>
+                      {t('auth.login.noAccount')} →
+                    </motion.span>
+                  </Link>
+                </Box>
+              </motion.div>
+            )}
+
+            {/* External Providers */}
+            {externalProviders.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <Box sx={{ mt: 4 }}>
+                  <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+                    {t('auth.login.orContinueWith')}
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                    {externalProviders.map((provider, index) => (
+                      <motion.div
+                        key={provider.name}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.7 + index * 0.1 }}
+                      >
+                        <GlassButton
+                          fullWidth
+                          gradient={false}
+                          onClick={() => (window.location.href = provider.url)}
+                        >
+                          {provider.displayName || provider.name}
+                        </GlassButton>
+                      </motion.div>
+                    ))}
+                  </Box>
+                </Box>
+              </motion.div>
+            )}
+          </GlassCard>
+        </motion.div>
+      </Box>
+    </>
   );
 };
 
