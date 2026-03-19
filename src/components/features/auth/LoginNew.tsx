@@ -45,8 +45,10 @@ const Login: React.FC = () => {
 
   const handlePostAuth = useCallback(() => {
     if (params) {
-      // passkey_check_done=1 tells the backend not to redirect again for passkey prompt
-      window.location.href = getOAuthRedirectUrl(params + '&passkey_check_done=1');
+      // Set a short-lived cookie so the backend knows passkey prompt was already shown.
+      // Using a cookie instead of a URL param avoids OpenIddict stripping unknown parameters.
+      document.cookie = 'passkey_check_done=1; path=/; max-age=60; SameSite=Lax';
+      window.location.href = getOAuthRedirectUrl(params);
     } else {
       navigate(ROUTES.PROFILE);
     }
