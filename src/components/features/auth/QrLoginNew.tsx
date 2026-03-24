@@ -128,18 +128,26 @@ const QrLogin: React.FC<QrLoginProps> = ({ onSuccess }) => {
                 >
                   <QRCode
                     value={sessionId}
-                    size={200}
+                    size={220}
                     qrStyle="dots"
-                    eyeRadius={10}
+                    eyeRadius={[
+                      { outer: [8, 8, 0, 8], inner: [4, 4, 0, 4] },
+                      { outer: [8, 8, 8, 0], inner: [4, 4, 4, 0] },
+                      { outer: [8, 0, 8, 8], inner: [4, 0, 4, 4] },
+                    ]}
+                    eyeColor={[
+                      { outer: theme.colors.primary, inner: theme.colors.primary },
+                      { outer: theme.colors.primary, inner: theme.colors.primary },
+                      { outer: theme.colors.primary, inner: theme.colors.primary },
+                    ]}
                     fgColor={theme.colors.primary}
                     bgColor="#ffffff"
-                    quietZone={8}
+                    quietZone={12}
                     logoImage={logoDataUrl}
-                    logoWidth={48}
-                    logoHeight={48}
-                    logoPadding={4}
+                    logoWidth={40}
+                    logoHeight={40}
+                    logoPadding={3}
                     logoPaddingStyle="circle"
-                    removeQrCodeBehindLogo
                   />
                 </motion.div>
               )}
