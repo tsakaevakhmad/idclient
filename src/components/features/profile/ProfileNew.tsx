@@ -9,48 +9,31 @@ import {
   Typography,
   Box,
   Divider,
-  IconButton,
-  Chip,
-  Collapse,
 } from '@mui/material';
 import {
   CheckCircle,
   Cancel,
   AccountCircle as AccountCircleIcon,
-  Fingerprint as FingerprintIcon,
   PhoneAndroid as PhoneIcon,
   ExitToApp as LogoutIcon,
-  Delete as DeleteIcon,
-  ExpandMore as ExpandMoreIcon,
-  Devices as DevicesIcon,
+  ManageAccounts as ManageAccountsIcon,
 } from '@mui/icons-material';
 import OtpInput from 'react-otp-input';
 import { useAuth } from '../../../hooks/useAuth';
 import { useUser } from '../../../hooks/useUser';
-import { usePasskey } from '../../../hooks/usePasskey';
 import { useTheme } from '../../../hooks/useTheme';
 import { useLanguage } from '../../../hooks/useLanguage';
 import { GlassCard } from '../../glass/GlassCard';
 import { GlassButton } from '../../glass/GlassButton';
 import { BackgroundGradient } from '../../theme/BackgroundGradient';
 import { ProfileSkeletonLoader } from '../../animations/SkeletonLoader';
-import { PasskeyPromptModal } from '../auth/PasskeyPromptModal';
 import { ROUTES } from '../../../constants';
-import { FidoCredentialDto } from '../../../api/types';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { user, isLoading, error, fetchUserInfo, sendPhoneVerificationCode, verifyPhoneCode } =
     useUser();
-  const {
-    isRegistering,
-    passkeys,
-    isLoadingPasskeys,
-    isDeletingPasskey,
-    fetchPasskeys,
-    deletePasskey,
-  } = usePasskey();
   const { theme } = useTheme();
   const { t } = useLanguage();
 
@@ -59,9 +42,6 @@ const Profile: React.FC = () => {
   const [otp, setOtp] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [sendingCode, setSendingCode] = useState(false);
-  const [passkeysExpanded, setPasskeysExpanded] = useState(false);
-  const [selectedPasskey, setSelectedPasskey] = useState<FidoCredentialDto | null>(null);
-  const [showPasskeyModal, setShowPasskeyModal] = useState(false);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -103,46 +83,6 @@ const Profile: React.FC = () => {
       setDialogOpen(false);
       setOtp('');
     }
-  };
-
-  const handleRegisterPasskey = () => {
-    setShowPasskeyModal(true);
-  };
-
-  const handlePasskeyModalDone = async () => {
-    setShowPasskeyModal(false);
-    await fetchUserInfo();
-    if (passkeysExpanded) {
-      await fetchPasskeys();
-    }
-  };
-
-  const handlePasskeysToggle = () => {
-    const newExpanded = !passkeysExpanded;
-    setPasskeysExpanded(newExpanded);
-    if (newExpanded) {
-      fetchPasskeys();
-    }
-  };
-
-  const handleConfirmDeletePasskey = async () => {
-    if (!selectedPasskey) return;
-    const success = await deletePasskey(selectedPasskey.id);
-    if (success) {
-      setSelectedPasskey(null);
-    }
-  };
-
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'N/A';
-    const normalized = /Z|[+-]\d{2}:\d{2}$/.test(dateString) ? dateString : dateString + 'Z';
-    const date = new Date(normalized);
-    return new Intl.DateTimeFormat(undefined, {
-      day: '2-digit',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
   };
 
   if (isLoading) {
@@ -203,10 +143,6 @@ const Profile: React.FC = () => {
       }}
     >
       <BackgroundGradient />
-
-      <AnimatePresence>
-        {showPasskeyModal && <PasskeyPromptModal onDone={handlePasskeyModalDone} />}
-      </AnimatePresence>
 
       {/* Phone Verification Dialog */}
       <Dialog
@@ -273,60 +209,6 @@ const Profile: React.FC = () => {
           </GlassButton>
           <GlassButton onClick={handleVerifyPhone} loading={verifying} disabled={otp.length !== 6}>
             {t('auth.profile.phoneVerification.confirm')}
-          </GlassButton>
-        </DialogActions>
-      </Dialog>
-
-      {/* Passkey Delete Confirmation Dialog */}
-      <Dialog
-        open={!!selectedPasskey}
-        onClose={() => setSelectedPasskey(null)}
-        PaperProps={{
-          sx: {
-            background: theme.colors.glass.background,
-            backdropFilter: `blur(${theme.colors.glass.blur})`,
-            border: `1px solid ${theme.colors.glass.border}`,
-            borderRadius: '20px',
-            boxShadow: theme.colors.glass.shadow,
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            background: theme.gradients.button,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 700,
-          }}
-        >
-          {t('auth.profile.deletePasskey')}
-        </DialogTitle>
-        <DialogContent sx={{ py: 3 }}>
-          <Typography variant="body2" color="text.secondary">
-            {t('auth.profile.passkeys.deleteConfirm')}
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ p: 3, pt: 0 }}>
-          <GlassButton
-            gradient={false}
-            onClick={() => setSelectedPasskey(null)}
-            disabled={isDeletingPasskey}
-          >
-            {t('common.cancel')}
-          </GlassButton>
-          <GlassButton
-            onClick={handleConfirmDeletePasskey}
-            loading={isDeletingPasskey}
-            sx={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              color: '#ef4444',
-              '&:hover': {
-                background: 'rgba(239, 68, 68, 0.2)',
-              },
-            }}
-          >
-            {t('auth.profile.deletePasskey')}
           </GlassButton>
         </DialogActions>
       </Dialog>
@@ -507,136 +389,11 @@ const Profile: React.FC = () => {
             }}
           />
 
-          {/* My Passkeys Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Box sx={{ mb: 3 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  mb: 2,
-                  cursor: 'pointer',
-                }}
-                onClick={handlePasskeysToggle}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <FingerprintIcon sx={{ color: theme.colors.primary }} />
-                  <Typography variant="h6" fontWeight={600} color="text.primary">
-                    {t('auth.profile.passkeys.title')}
-                  </Typography>
-                  <Chip
-                    label={passkeys.length}
-                    size="small"
-                    sx={{
-                      background: theme.gradients.button,
-                      color: '#fff',
-                      fontWeight: 600,
-                      height: 20,
-                      fontSize: '0.75rem',
-                    }}
-                  />
-                </Box>
-                <IconButton
-                  size="small"
-                  sx={{
-                    transform: passkeysExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.3s',
-                  }}
-                >
-                  <ExpandMoreIcon />
-                </IconButton>
-              </Box>
-
-              <Collapse in={passkeysExpanded}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mt: 2 }}>
-                  {isLoadingPasskeys ? (
-                    <Typography variant="body2" color="text.secondary" align="center">
-                      {t('common.loading') || 'Loading...'}
-                    </Typography>
-                  ) : passkeys.length === 0 ? (
-                    <Typography variant="body2" color="text.secondary" align="center">
-                      {t('auth.profile.passkeys.noPasskeys')}
-                    </Typography>
-                  ) : (
-                    passkeys.map((passkey) => (
-                      <motion.div
-                        key={passkey.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Box
-                          sx={{
-                            p: 2,
-                            borderRadius: 2,
-                            background: theme.colors.glass.background,
-                            border: `1px solid ${theme.colors.glass.border}`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 2,
-                            transition: 'all 0.2s',
-                            '&:hover': {
-                              borderColor: theme.colors.primary,
-                              boxShadow: `0 0 20px ${theme.colors.primary}40`,
-                            },
-                          }}
-                        >
-                          <Box sx={{ color: theme.colors.primary }}>
-                            <FingerprintIcon sx={{ fontSize: 28 }} />
-                          </Box>
-                          <Box sx={{ flex: 1, minWidth: 0 }}>
-                            <Typography
-                              variant="body2"
-                              fontWeight={600}
-                              color="text.primary"
-                              noWrap
-                            >
-                              {passkey.authenticatorDescription || 'Passkey'}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary" noWrap>
-                              {t('auth.profile.passkeys.registeredOn')}{' '}
-                              {formatDate(passkey.registrationDate)}
-                            </Typography>
-                          </Box>
-                          <IconButton
-                            size="small"
-                            onClick={() => setSelectedPasskey(passkey)}
-                            sx={{
-                              color: theme.colors.accent,
-                              '&:hover': {
-                                backgroundColor: `${theme.colors.accent}20`,
-                              },
-                            }}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      </motion.div>
-                    ))
-                  )}
-                </Box>
-              </Collapse>
-            </Box>
-          </motion.div>
-
-          <Divider
-            sx={{
-              my: 3,
-              borderColor: theme.colors.glass.border,
-              opacity: 0.5,
-            }}
-          />
-
           {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.4 }}
           >
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {!user.phoneNumberConfirmed && (
@@ -652,20 +409,11 @@ const Profile: React.FC = () => {
 
               <GlassButton
                 fullWidth
-                onClick={handleRegisterPasskey}
-                loading={isRegistering}
-                startIcon={<FingerprintIcon />}
-              >
-                {t('auth.profile.registerPasskey')}
-              </GlassButton>
-
-              <GlassButton
-                fullWidth
                 gradient={false}
-                onClick={() => navigate(ROUTES.DEVICES)}
-                startIcon={<DevicesIcon />}
+                onClick={() => navigate(ROUTES.ACCOUNT_SETTINGS)}
+                startIcon={<ManageAccountsIcon />}
               >
-                {t('auth.profile.myDevices') || 'My Devices'}
+                {t('accountSettings.title')}
               </GlassButton>
 
               <GlassButton
@@ -690,7 +438,7 @@ const Profile: React.FC = () => {
       </motion.div>
 
       {/* Footer */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
         <Typography
           variant="body2"
           color="text.secondary"

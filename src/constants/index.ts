@@ -18,6 +18,10 @@ export const API_ENDPOINTS = {
     VERIFY_PHONE_CODE: '/api/user/verifiPhoneConfirmationCode',
     GET_PASSKEYS: '/api/user/GetPasskeys',
     DELETE_PASSKEY: '/api/user/DeletePasskey',
+    CHANGE_PHONE: '/api/user/ChangePhone',
+    CONFIRM_PHONE_CHANGE: '/api/user/ConfirmPhoneChange',
+    CHANGE_EMAIL: '/api/user/ChangeEmail',
+    CONFIRM_EMAIL_CHANGE: '/api/user/ConfirmEmailChange',
   },
   // Passkey endpoints
   PASSKEY: {
@@ -44,6 +48,8 @@ export const ROUTES = {
   PROFILE: '/profile',
   DEVICES: '/devices',
   CONSENT: '/consent',
+  ACCOUNT_SETTINGS: '/account-settings',
+  CONFIRM_EMAIL_CHANGE: '/confirm-email-change',
 } as const;
 
 export const AUTH_METHODS = {

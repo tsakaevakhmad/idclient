@@ -220,5 +220,34 @@
     "revokeAllConfirm": "Diğer cihazlardan çıkış yapmak istediğinizden emin misiniz?",
     "revokeAllSuccess": "Oturumlar başarıyla iptal edildi",
     "revokeAllError": "Oturumlar iptal edilemedi"
+  },
+  "accountSettings": {
+    "title": "Hesap Ayarları",
+    "email": "E-posta",
+    "phone": "Telefon Numarası",
+    "change": "Değiştir",
+    "changeEmail": "E-posta Değiştir",
+    "changeEmailSubtitle": "Yeni e-posta adresinizi girin. Onay bağlantısı oraya gönderilecektir.",
+    "newEmail": "Yeni E-posta",
+    "sendLink": "Bağlantı Gönder",
+    "emailSent": "Onay e-postası gönderildi",
+    "emailSentSubtitle": "Onay bağlantısı {{email}} adresine gönderildi. Değişikliği tamamlamak için tıklayın.",
+    "changePhone": "Telefon Numarasını Değiştir",
+    "changePhoneSubtitle": "Yeni telefon numaranızı girin. Doğrulama kodu oraya gönderilecektir.",
+    "newPhone": "Yeni Telefon Numarası",
+    "sendCode": "Kod Gönder",
+    "otpSubtitle": "{{phone}} numarasına gönderilen 6 haneli kodu girin",
+    "phoneChanged": "Telefon numarası başarıyla güncellendi",
+    "confirmEmailChange": {
+      "successTitle": "E-posta Değiştirildi",
+      "successSubtitle": "E-posta adresiniz başarıyla güncellendi.",
+      "errorTitle": "Bağlantı Geçersiz",
+      "errorSubtitle": "Onay bağlantısı geçersiz veya süresi dolmuş. Lütfen yeni bir tane isteyin."
+    },
+    "errors": {
+      "sendCodeFailed": "Doğrulama kodu gönderilemedi",
+      "sendEmailFailed": "Onay e-postası gönderilemedi",
+      "invalidCode": "Geçersiz veya süresi dolmuş kod"
+    }
   }
 }

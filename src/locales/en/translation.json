@@ -220,5 +220,34 @@
     "revokeAllConfirm": "Are you sure you want to logout from other devices?",
     "revokeAllSuccess": "Sessions revoked successfully",
     "revokeAllError": "Failed to revoke sessions"
+  },
+  "accountSettings": {
+    "title": "Account Settings",
+    "email": "Email",
+    "phone": "Phone Number",
+    "change": "Change",
+    "changeEmail": "Change Email",
+    "changeEmailSubtitle": "Enter your new email address. A confirmation link will be sent to it.",
+    "newEmail": "New Email",
+    "sendLink": "Send Link",
+    "emailSent": "Confirmation email sent",
+    "emailSentSubtitle": "A confirmation link has been sent to {{email}}. Click it to complete the change.",
+    "changePhone": "Change Phone Number",
+    "changePhoneSubtitle": "Enter your new phone number. A verification code will be sent to it.",
+    "newPhone": "New Phone Number",
+    "sendCode": "Send Code",
+    "otpSubtitle": "Enter the 6-digit code sent to {{phone}}",
+    "phoneChanged": "Phone number updated successfully",
+    "confirmEmailChange": {
+      "successTitle": "Email Changed",
+      "successSubtitle": "Your email address has been successfully updated.",
+      "errorTitle": "Link Expired or Invalid",
+      "errorSubtitle": "The confirmation link is invalid or has expired. Please request a new one."
+    },
+    "errors": {
+      "sendCodeFailed": "Failed to send verification code",
+      "sendEmailFailed": "Failed to send confirmation email",
+      "invalidCode": "Invalid or expired code"
+    }
   }
 }

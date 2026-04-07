@@ -10,6 +10,12 @@ This is a TypeScript + React authentication frontend (`idclient`) that integrate
 
 ## Development Commands
 
+### Installing Dependencies
+
+```bash
+npm install --legacy-peer-deps   # Required: react-scripts@5 conflicts with typescript@5
+```
+
 ### Starting Development
 
 ```bash
@@ -49,12 +55,9 @@ src/
 │   └── types/             # API request/response interfaces
 ├── components/
 │   ├── common/            # Reusable UI (LoadingButton, ErrorBoundary, etc.)
-│   ├── features/          # Feature-specific components
-│   │   ├── auth/          # Login, Registration, 2FA, QR
-│   │   └── profile/       # Profile management
 │   ├── animations/        # PageTransition, SkeletonLoader
-│   ├── glass/             # Glassmorphism components
-│   └── theme/             # Theme-related UI components
+│   ├── glass/             # Glassmorphism components (GlassCard, GlassButton, GlassInput)
+│   └── theme/             # Theme-related UI (BackgroundGradient, ThemeSwitcher, SettingsMenu)
 ├── contexts/              # React Context providers
 │   ├── AuthContext.tsx    # Authentication state
 │   ├── UserContext.tsx    # User profile state

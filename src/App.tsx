@@ -63,6 +63,8 @@ const Registration = lazyWithRetry(() => import('./components/features/auth/Regi
 const Profile = lazyWithRetry(() => import('./components/features/profile/ProfileNew'));
 const MyDevices = lazyWithRetry(() => import('./components/features/profile/MyDevices'));
 const Consent = lazyWithRetry(() => import('./components/features/auth/ConsentPage'));
+const AccountSettings = lazyWithRetry(() => import('./components/features/settings/AccountSettings'));
+const EmailChangeConfirm = lazyWithRetry(() => import('./components/features/settings/EmailChangeConfirm'));
 
 /**
  * Router wrapper component to access useLocation hook
@@ -84,6 +86,8 @@ const AppRoutes: React.FC = () => {
             <Route path={ROUTES.CONSENT} element={<Consent />} />
             <Route path={ROUTES.PROFILE} element={<PrivateRoute element={<Profile />} />} />
             <Route path={ROUTES.DEVICES} element={<PrivateRoute element={<MyDevices />} />} />
+            <Route path={ROUTES.ACCOUNT_SETTINGS} element={<PrivateRoute element={<AccountSettings />} />} />
+            <Route path={ROUTES.CONFIRM_EMAIL_CHANGE} element={<EmailChangeConfirm />} />
           </Routes>
         </PageTransition>
       </Suspense>
