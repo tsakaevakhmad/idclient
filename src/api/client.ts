@@ -15,6 +15,7 @@ const LANG_TO_BCP47: Record<string, string> = {
  */
 class ApiClient {
   private client: AxiosInstance;
+  private isRedirecting = false;
 
   constructor() {
     this.client = axios.create({
@@ -54,7 +55,8 @@ class ApiClient {
           const url = error.config?.url ?? '';
           // Skip redirect for auth endpoints — the login page uses them itself
           const isAuthEndpoint = url.includes('/api/Authorization/');
-          if (!isAuthEndpoint && window.location.pathname !== '/') {
+          if (!isAuthEndpoint && window.location.pathname !== '/' && !this.isRedirecting) {
+            this.isRedirecting = true;
             window.location.href = '/';
           }
         }
