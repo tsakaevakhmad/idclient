@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Divider, CircularProgress, Avatar } from '@mui/material';
+import { Box, Typography, Divider, CircularProgress, Avatar, Chip } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Shield as ShieldIcon, CheckCircle as CheckIcon } from '@mui/icons-material';
+import {
+  Shield as ShieldIcon,
+  CheckCircle as CheckIcon,
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+  Person as PersonIcon,
+  LocationOn as AddressIcon,
+  PrivacyTip as PrivacyIcon,
+} from '@mui/icons-material';
 import { useTheme } from '../../../hooks/useTheme';
 import { useLanguage } from '../../../hooks/useLanguage';
 import { GlassCard } from '../../glass/GlassCard';
@@ -14,6 +22,7 @@ interface ScopeInfo {
   name: string;
   displayName?: string;
   description?: string;
+  isPersonalData?: boolean;
 }
 
 interface ConsentInfo {
@@ -24,6 +33,13 @@ interface ConsentInfo {
   logoUri?: string;
   requestedScopes: ScopeInfo[];
 }
+
+const SCOPE_ICONS: Record<string, React.ReactNode> = {
+  email: <EmailIcon sx={{ fontSize: 18 }} />,
+  phone: <PhoneIcon sx={{ fontSize: 18 }} />,
+  profile: <PersonIcon sx={{ fontSize: 18 }} />,
+  address: <AddressIcon sx={{ fontSize: 18 }} />,
+};
 
 const ConsentPage: React.FC = () => {
   const { theme } = useTheme();
@@ -225,61 +241,90 @@ const ConsentPage: React.FC = () => {
 
           <Divider sx={{ borderColor: theme.colors.glass.border, mb: 3 }} />
 
-          {/* Запрошенные права */}
-          {consentInfo.requestedScopes.length > 0 && (
+          {/* Личные данные */}
+          {consentInfo.requestedScopes.some((s) => s.isPersonalData) && (
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
               <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+                  <PrivacyIcon sx={{ fontSize: 18, color: theme.colors.accent }} />
+                  <Typography variant="body2" fontWeight={600} sx={{ color: theme.colors.text.primary }}>
+                    {t('consent.personalData') || 'Личные данные'}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {consentInfo.requestedScopes
+                    .filter((s) => s.isPersonalData)
+                    .map((s) => (
+                      <Chip
+                        key={s.name}
+                        icon={<Box sx={{ display: 'flex', pl: 0.5 }}>{SCOPE_ICONS[s.name] ?? <CheckIcon sx={{ fontSize: 18 }} />}</Box>}
+                        label={s.displayName ?? s.name}
+                        size="small"
+                        sx={{
+                          background: `${theme.colors.accent}18`,
+                          border: `1px solid ${theme.colors.accent}40`,
+                          color: theme.colors.text.primary,
+                          fontWeight: 500,
+                          '& .MuiChip-icon': { color: theme.colors.accent },
+                        }}
+                      />
+                    ))}
+                </Box>
+              </Box>
+            </motion.div>
+          )}
+
+          {/* Остальные права доступа */}
+          {consentInfo.requestedScopes.some((s) => !s.isPersonalData) && (
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.45 }}
+            >
+              <Box sx={{ mb: 3 }}>
                 <Typography
                   variant="body2"
                   fontWeight={600}
-                  sx={{ mb: 2, color: theme.colors.text.primary }}
+                  sx={{ mb: 1.5, color: theme.colors.text.primary }}
                 >
                   {t('consent.requestedAccess')}
                 </Typography>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                  {consentInfo.requestedScopes.map((s) => (
-                    <Box
-                      key={s.name}
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: 1.5,
-                        p: 1.5,
-                        borderRadius: 2,
-                        background: theme.colors.glass.background,
-                        backdropFilter: `blur(${theme.colors.glass.blur})`,
-                        border: `1px solid ${theme.colors.glass.border}`,
-                      }}
-                    >
-                      <CheckIcon
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  {consentInfo.requestedScopes
+                    .filter((s) => !s.isPersonalData)
+                    .map((s) => (
+                      <Box
+                        key={s.name}
                         sx={{
-                          color: theme.colors.primary,
-                          fontSize: 20,
-                          mt: 0.2,
-                          flexShrink: 0,
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: 1.5,
+                          p: 1.5,
+                          borderRadius: 2,
+                          background: theme.colors.glass.background,
+                          backdropFilter: `blur(${theme.colors.glass.blur})`,
+                          border: `1px solid ${theme.colors.glass.border}`,
                         }}
-                      />
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          sx={{ color: theme.colors.text.primary }}
-                        >
-                          {s.displayName ?? s.name}
-                        </Typography>
-                        {s.description && (
-                          <Typography variant="caption" color="text.secondary">
-                            {s.description}
+                      >
+                        <CheckIcon sx={{ color: theme.colors.primary, fontSize: 18, mt: 0.2, flexShrink: 0 }} />
+                        <Box>
+                          <Typography variant="body2" fontWeight={500} sx={{ color: theme.colors.text.primary }}>
+                            {s.displayName ?? s.name}
                           </Typography>
-                        )}
+                          {s.description && (
+                            <Typography variant="caption" color="text.secondary">
+                              {s.description}
+                            </Typography>
+                          )}
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    ))}
                 </Box>
               </Box>
             </motion.div>
