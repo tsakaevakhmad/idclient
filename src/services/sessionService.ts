@@ -79,12 +79,12 @@ class SessionService {
   async getSessionAuthorizations(sessionId: string): Promise<SessionAuthorizationDto[]> {
     try {
       const response = await apiClient.get<SessionAuthorizationDto[]>(
-        `${this.USER_SESSION_URL}/${sessionId}/authorizations`
+        `${this.USER_SESSION_URL}/Authorizations/${sessionId}`
       );
-      return response.data;
+      return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
       console.error('Error fetching session authorizations:', error);
-      throw error;
+      return [];
     }
   }
 

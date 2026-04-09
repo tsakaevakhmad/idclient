@@ -719,7 +719,7 @@ const MyDevices: React.FC = () => {
                       </Typography>
                     ) : (
                       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
-                        {authorizations.map((auth, i) => (
+                        {(Array.isArray(authorizations) ? authorizations : []).map((auth, i) => (
                           <Box
                             key={i}
                             sx={{
