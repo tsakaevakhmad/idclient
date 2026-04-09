@@ -179,3 +179,9 @@ export interface RevokeAllSessionsResponse {
   message: string;
   count: number;
 }
+
+export interface SessionAuthorizationDto {
+  appName?: string;
+  status?: string;
+  createdAt?: string;
+}

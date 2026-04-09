@@ -1,5 +1,10 @@
 import apiClient from '../api/client';
-import { AuthorizationSession, UserSessionDto, RevokeAllSessionsResponse } from '../api/types';
+import {
+  AuthorizationSession,
+  UserSessionDto,
+  RevokeAllSessionsResponse,
+  SessionAuthorizationDto,
+} from '../api/types';
 
 /**
  * Service for managing user authorization sessions and user login sessions
@@ -64,6 +69,21 @@ class SessionService {
       await apiClient.delete(`${this.USER_SESSION_URL}/Revoke/${sessionId}`);
     } catch (error) {
       console.error('Error revoking user session:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get authorizations (active applications) for a specific session
+   */
+  async getSessionAuthorizations(sessionId: string): Promise<SessionAuthorizationDto[]> {
+    try {
+      const response = await apiClient.get<SessionAuthorizationDto[]>(
+        `${this.USER_SESSION_URL}/${sessionId}/authorizations`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching session authorizations:', error);
       throw error;
     }
   }

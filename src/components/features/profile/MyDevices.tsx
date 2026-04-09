@@ -35,9 +35,10 @@ import { GlassCard } from '../../glass/GlassCard';
 import { GlassButton } from '../../glass/GlassButton';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 import { BackgroundGradient } from '../../theme/BackgroundGradient';
-import { UserSessionDto } from '../../../api/types';
+import { UserSessionDto, SessionAuthorizationDto } from '../../../api/types';
 import { ROUTES } from '../../../constants';
 import { geolocationService, GeolocationData } from '../../../services/geolocationService';
+import { sessionService } from '../../../services/sessionService';
 
 const MyDevices: React.FC = () => {
   const navigate = useNavigate();
@@ -50,6 +51,8 @@ const MyDevices: React.FC = () => {
   const [showRevokeAllDialog, setShowRevokeAllDialog] = useState(false);
   const [locationData, setLocationData] = useState<GeolocationData | null>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const [authorizations, setAuthorizations] = useState<SessionAuthorizationDto[]>([]);
+  const [loadingAuthorizations, setLoadingAuthorizations] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -100,21 +103,25 @@ const MyDevices: React.FC = () => {
   const handleViewDetails = async (session: UserSessionDto) => {
     setDetailsSession(session);
     setLoadingLocation(true);
+    setLoadingAuthorizations(true);
     setLocationData(null);
+    setAuthorizations([]);
 
-    try {
-      const location = await geolocationService.getLocationByIP(session.ipAddress);
-      setLocationData(location);
-    } catch (err) {
-      console.error('Failed to load location:', err);
-    } finally {
-      setLoadingLocation(false);
-    }
+    geolocationService.getLocationByIP(session.ipAddress)
+      .then(setLocationData)
+      .catch((err) => console.error('Failed to load location:', err))
+      .finally(() => setLoadingLocation(false));
+
+    sessionService.getSessionAuthorizations(session.id)
+      .then(setAuthorizations)
+      .catch((err) => console.error('Failed to load authorizations:', err))
+      .finally(() => setLoadingAuthorizations(false));
   };
 
   const handleCloseDetails = () => {
     setDetailsSession(null);
     setLocationData(null);
+    setAuthorizations([]);
   };
 
   const handleRevokeClick = (session: UserSessionDto) => {
@@ -697,7 +704,7 @@ const MyDevices: React.FC = () => {
                 </Box>
 
                 {/* Active Apps */}
-                {detailsSession.activeAuthorizationsCount > 0 && (
+                {(detailsSession.activeAuthorizationsCount > 0 || loadingAuthorizations) && (
                   <Box>
                     <Typography
                       variant="caption"
@@ -706,16 +713,51 @@ const MyDevices: React.FC = () => {
                     >
                       {t('sessions.activeApps') || 'Active Applications'}
                     </Typography>
-                    <Chip
-                      label={detailsSession.activeAuthorizationsCount}
-                      sx={{
-                        mt: 1,
-                        background: theme.gradients.button,
-                        color: '#fff',
-                        fontWeight: 700,
-                        fontSize: '1rem',
-                      }}
-                    />
+                    {loadingAuthorizations ? (
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                        {t('common.loading') || 'Loading...'}
+                      </Typography>
+                    ) : (
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
+                        {authorizations.map((auth, i) => (
+                          <Box
+                            key={i}
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              px: 1.5,
+                              py: 1,
+                              borderRadius: '10px',
+                              background: theme.colors.glass.background,
+                              border: `1px solid ${theme.colors.glass.border}`,
+                            }}
+                          >
+                            <Typography variant="body2" color="text.primary" fontWeight={500}>
+                              {auth.appName || 'Unknown App'}
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              {auth.createdAt && (
+                                <Typography variant="caption" color="text.secondary">
+                                  {formatDate(auth.createdAt)}
+                                </Typography>
+                              )}
+                              <Chip
+                                label={auth.status || 'valid'}
+                                size="small"
+                                sx={{
+                                  height: 18,
+                                  fontSize: '0.65rem',
+                                  background: theme.colors.accent + '20',
+                                  color: theme.colors.accent,
+                                  fontWeight: 600,
+                                }}
+                              />
+                            </Box>
+                          </Box>
+                        ))}
+                      </Box>
+                    )}
                   </Box>
                 )}
               </Box>
